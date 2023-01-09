@@ -2,12 +2,13 @@ import { IonApp, IonIcon, IonLabel, IonRouterOutlet, IonTabBar, IonTabButton, Io
 import { IonReactRouter } from '@ionic/react-router';
 import { home as homeIcon, settings as settingsIcon } from 'ionicons/icons';
 import { useState } from 'react';
-import { Redirect, Route } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import AppMenu from './AppMenu';
 import { AuthContext } from './auth';
 import EntryPage from './pages/EntryPage';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
+import NotFoundPage from './pages/NotFoundPage';
 import SettingsPage from './pages/SettingsPage';
 
 const App: React.FC = () => {
@@ -22,7 +23,7 @@ const App: React.FC = () => {
       <AuthContext.Provider value = {{loggedIn}}>
         <IonReactRouter>
     
-            <IonRouterOutlet>
+            <Switch>
               <Route exact path = "/login">
                 {/* Si el estado del usuario ya es verdadero se redirige a la pagina principal y si no, se carga la pagina de inicio de sesion con estado loggedIn verdadero  */}
                   <LoginPage onLogin={()=>setLoggedIn(true)}/>
@@ -33,7 +34,10 @@ const App: React.FC = () => {
                 <AppMenu/>
               </Route>
               <Redirect exact path="/" to="my/entries" />
-            </IonRouterOutlet>
+              <Route>
+                <NotFoundPage/>
+              </Route>
+            </Switch>
 
 
         </IonReactRouter>
