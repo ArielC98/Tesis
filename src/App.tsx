@@ -3,7 +3,7 @@ import { IonReactRouter } from '@ionic/react-router';
 import { home as homeIcon, settings as settingsIcon } from 'ionicons/icons';
 import { useState } from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import EntryPage from './pages/EntryPage';
+import EntryPage from './pages/DashboardPage';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import SettingsPage from './pages/SettingsPage';
@@ -23,24 +23,24 @@ const App: React.FC = () => {
             <Route exact path = "/login">
               {/* Si el estado del usuario ya es verdadero se redirige a la pagina principal y si no, se carga la pagina de inicio de sesion con estado loggedIn verdadero  */}
               {loggedIn ? 
-                <Redirect to='/entries' />:
+                <Redirect to='/dashboard' />:
                 <LoginPage loggedIn = {loggedIn}
                   onLogin={()=>setLoggedIn(true)}/>
               }
             </Route>
-            <Route exact path="/entries">
+            <Route exact path="/dashboard">
               {loggedIn? <HomePage />: <Redirect to="/login"/>}
             </Route>
-            <Route exact path="/entries/:id">
+            <Route exact path="/dashboard/:id">
               <EntryPage />
             </Route>
             <Route exact path="/settings">
               <SettingsPage />
             </Route>
-            <Redirect exact path="/" to="/entries" />
+            <Redirect exact path="/" to="/dashboard" />
           </IonRouterOutlet>
           <IonTabBar slot="bottom">
-            <IonTabButton tab="home" href="/entries">
+            <IonTabButton tab="home" href="/dashboard">
               <IonIcon icon={homeIcon} />
               <IonLabel>Home</IonLabel>
             </IonTabButton>

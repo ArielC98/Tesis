@@ -6,7 +6,7 @@ interface RouteParams {
   id: string;
 }
 
-const EntryPage: React.FC = () => {
+const DashboardPage: React.FC = () => {
   const { id } = useParams<RouteParams>();
   const entry = entries.find((entry) => entry.id === id);
   if (!entry) {
@@ -29,4 +29,4 @@ const EntryPage: React.FC = () => {
   );
 };
 
-export default EntryPage;
+export default DashboardPage;
