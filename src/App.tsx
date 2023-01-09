@@ -23,11 +23,9 @@ const App: React.FC = () => {
           <IonRouterOutlet>
             <Route exact path = "/login">
               {/* Si el estado del usuario ya es verdadero se redirige a la pagina principal y si no, se carga la pagina de inicio de sesion con estado loggedIn verdadero  */}
-              {loggedIn ? 
-                <Redirect to='/dashboard' />:
                 <LoginPage loggedIn = {loggedIn}
                   onLogin={()=>setLoggedIn(true)}/>
-              }
+
             </Route>
 
             <Route path={"/my"}>
