@@ -4,6 +4,7 @@ import { home as homeIcon, settings as settingsIcon } from 'ionicons/icons';
 import { useState } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import AppMenu from './AppMenu';
+import { AuthContext } from './auth';
 import EntryPage from './pages/EntryPage';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
@@ -18,24 +19,25 @@ const App: React.FC = () => {
   
   return (
     <IonApp>
-      <IonReactRouter>
-  
-          <IonRouterOutlet>
-            <Route exact path = "/login">
-              {/* Si el estado del usuario ya es verdadero se redirige a la pagina principal y si no, se carga la pagina de inicio de sesion con estado loggedIn verdadero  */}
-                <LoginPage loggedIn = {loggedIn}
-                  onLogin={()=>setLoggedIn(true)}/>
+      <AuthContext.Provider value = {{loggedIn}}>
+        <IonReactRouter>
+    
+            <IonRouterOutlet>
+              <Route exact path = "/login">
+                {/* Si el estado del usuario ya es verdadero se redirige a la pagina principal y si no, se carga la pagina de inicio de sesion con estado loggedIn verdadero  */}
+                  <LoginPage onLogin={()=>setLoggedIn(true)}/>
 
-            </Route>
+              </Route>
 
-            <Route path={"/my"}>
-              <AppMenu loggedIn={loggedIn}/>
-            </Route>
-            <Redirect exact path="/" to="my/entries" />
-          </IonRouterOutlet>
+              <Route path={"/my"}>
+                <AppMenu/>
+              </Route>
+              <Redirect exact path="/" to="my/entries" />
+            </IonRouterOutlet>
 
 
-      </IonReactRouter>
+        </IonReactRouter>
+      </AuthContext.Provider>
     </IonApp>
   );
 };
