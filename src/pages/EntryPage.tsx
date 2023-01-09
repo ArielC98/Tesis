@@ -28,5 +28,5 @@ const EntryPage: React.FC = () => {
     </IonPage>
   );
 };
-
+// comentario
 export default EntryPage;
