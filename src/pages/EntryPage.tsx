@@ -6,7 +6,7 @@ interface RouteParams {
   id: string;
 }
 
-const DashboardPage: React.FC = () => {
+const EntryPage: React.FC = () => {
   const { id } = useParams<RouteParams>();
   const entry = entries.find((entry) => entry.id === id);
   if (!entry) {
@@ -28,5 +28,5 @@ const DashboardPage: React.FC = () => {
     </IonPage>
   );
 };
-
-export default DashboardPage;
+// comentario
+export default EntryPage;
