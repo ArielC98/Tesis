@@ -1,4 +1,4 @@
-import { IonApp, IonIcon, IonLabel, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs } from '@ionic/react';
+import { IonApp, IonIcon, IonLabel, IonRouterOutlet, IonSplitPane, IonTabBar, IonTabButton, IonTabs } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { home as homeIcon, settings as settingsIcon } from 'ionicons/icons';
 import { useState } from 'react';
@@ -21,8 +21,9 @@ const App: React.FC = () => {
   return (
     <IonApp>
       <AuthContext.Provider value = {{loggedIn}}>
-        <IonReactRouter>
-    
+  
+          <IonReactRouter>
+            {/* Se usa Switch para renderizar exclusivamente una ruta */}
             <Switch>
               <Route exact path = "/login">
                 {/* Si el estado del usuario ya es verdadero se redirige a la pagina principal y si no, se carga la pagina de inicio de sesion con estado loggedIn verdadero  */}
@@ -39,8 +40,8 @@ const App: React.FC = () => {
               </Route>
             </Switch>
 
-
-        </IonReactRouter>
+          </IonReactRouter>
+      
       </AuthContext.Provider>
     </IonApp>
   );

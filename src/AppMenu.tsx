@@ -1,8 +1,9 @@
-import { IonApp, IonIcon, IonLabel, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs } from '@ionic/react';
+import { IonApp, IonIcon, IonLabel, IonPage, IonRouterOutlet, IonSplitPane, IonTabBar, IonTabButton, IonTabs } from '@ionic/react';
 
 import { home as homeIcon, settings as settingsIcon } from 'ionicons/icons';
 import { Redirect, Route } from 'react-router-dom';
 import { useAuth } from './auth';
+import Menu from './components/Menu';
 import EntryPage from './pages/EntryPage';
 import HomePage from './pages/HomePage';
 import SettingsPage from './pages/SettingsPage';
@@ -19,30 +20,24 @@ const AppMenu: React.FC = () => {
   }
   
   return (
+    <IonPage>
+      <IonSplitPane contentId="main">
+          <Menu />
+        <IonRouterOutlet id='main'>
+          <Route exact path="/my/entries">
+            <HomePage />
+          </Route>
+          <Route exact path="/my/entries/:id">
+            <EntryPage />
+          </Route>
+          <Route exact path="/my/settings">
+            <SettingsPage />
+          </Route>
+        </IonRouterOutlet>
+      </IonSplitPane>
+    </IonPage>
 
-    <IonTabs>
-    <IonRouterOutlet>
-      <Route exact path="/my/entries">
-        <HomePage />
-      </Route>
-      <Route exact path="/my/entries/:id">
-        <EntryPage />
-      </Route>
-      <Route exact path="/my/settings">
-        <SettingsPage />
-      </Route>
-    </IonRouterOutlet>
-    <IonTabBar slot="bottom">
-      <IonTabButton tab="home" href="/my/entries">
-        <IonIcon icon={homeIcon} />
-        <IonLabel>Home</IonLabel>
-      </IonTabButton>
-      <IonTabButton tab="settings" href="/my/settings">
-        <IonIcon icon={settingsIcon} />
-        <IonLabel>Settings</IonLabel>
-      </IonTabButton>
-    </IonTabBar>
-  </IonTabs>
+
 
   );
 };
