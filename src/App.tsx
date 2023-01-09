@@ -10,6 +10,7 @@ import SettingsPage from './pages/SettingsPage';
 
 const App: React.FC = () => {
 
+  //Se crean variables con el hook useState para declarar el estado inicial de inicio de sesion del usuario
   const [loggedIn, setLoggedIn] = useState(false);
   console.log(`rendering App wih loggedIn: ${loggedIn}`);
   
@@ -19,10 +20,12 @@ const App: React.FC = () => {
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
-          <Route exact path = "/login">
+            <Route exact path = "/login">
+              {/* Si el estado del usuario ya es verdadero se redirige a la pagina principal y si no, se carga la pagina de inicio de sesion con estado loggedIn verdadero  */}
               {loggedIn ? 
                 <Redirect to='/entries' />:
-                <LoginPage onLogin={()=>setLoggedIn(true)}/>
+                <LoginPage loggedIn = {loggedIn}
+                  onLogin={()=>setLoggedIn(true)}/>
               }
             </Route>
             <Route exact path="/entries">

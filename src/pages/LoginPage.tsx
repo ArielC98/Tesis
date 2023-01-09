@@ -1,11 +1,20 @@
 import { IonButton, IonCol, IonContent, IonGrid, IonHeader, IonImg, IonPage, IonRow, IonTitle, IonToolbar } from '@ionic/react';
+import { Redirect } from 'react-router';
 
 
 interface Props{
+  loggedIn: boolean,
   onLogin: () => void;
 }
 
-const LoginPage: React.FC<Props> = ({onLogin}) => {
+const LoginPage: React.FC<Props> = ({loggedIn, onLogin}) => {
+
+  //Si la propiedad loggedIn es verdadera retornara la ruta de la pagina principal
+  if(loggedIn){
+    return <Redirect to ='/entries'/>
+  }
+
+  //Si no es verdadera retorna el contenido de la pagina de inicio de sesion
   return (
     <IonPage>
       <IonHeader>
