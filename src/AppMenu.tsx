@@ -1,6 +1,6 @@
-import { IonApp, IonIcon, IonLabel, IonPage, IonRouterOutlet, IonSplitPane, IonTabBar, IonTabButton, IonTabs } from '@ionic/react';
+import { IonPage, IonRouterOutlet, IonSplitPane } from '@ionic/react';
 
-import { home as homeIcon, settings as settingsIcon } from 'ionicons/icons';
+
 import { Redirect, Route } from 'react-router-dom';
 import { useAuth } from './auth';
 import Menu from './components/Menu';
@@ -14,11 +14,13 @@ import SettingsPage from './pages/SettingsPage';
 const AppMenu: React.FC = () => {
 
   const {loggedIn} = useAuth();
+  console.log("App Menu", loggedIn);
+  
 
   if(!loggedIn){
-    return <Redirect to={"/login"}/>
+    return <Redirect to="/login"/>
   }
-  
+  console.log("App Menu2", loggedIn);
   return (
     <IonPage>
       <IonSplitPane contentId="main">

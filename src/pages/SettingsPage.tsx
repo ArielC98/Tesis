@@ -1,6 +1,14 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 
 const SettingsPage: React.FC = () => {
+
+  const handleLogout = () => {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("user");
+    window.location.href = "/";
+  };
+
+
   return (
     <IonPage>
       <IonHeader>
@@ -9,7 +17,7 @@ const SettingsPage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
-        This is the settings page.
+        <IonButton color="medium" onClick={handleLogout}>Cerrar Sesión</IonButton>
       </IonContent>
     </IonPage>
   );
