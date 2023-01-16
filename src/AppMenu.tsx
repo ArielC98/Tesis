@@ -2,10 +2,10 @@ import { IonPage, IonRouterOutlet, IonSplitPane } from '@ionic/react';
 
 
 import { Redirect, Route } from 'react-router-dom';
-import { useAuth } from './auth';
+import { useAuth } from './data/auth';
 import Menu from './components/Menu';
-import EntryPage from './pages/EntryPage';
 import HomePage from './pages/HomePage';
+import ProfilePage from './pages/ProfilePage';
 import SettingsPage from './pages/SettingsPage';
 
 
@@ -29,8 +29,8 @@ const AppMenu: React.FC = () => {
           <Route exact path="/my/entries">
             <HomePage />
           </Route>
-          <Route exact path="/my/entries/:id">
-            <EntryPage />
+          <Route exact path="/my/profile">
+            <ProfilePage/>
           </Route>
           <Route exact path="/my/settings">
             <SettingsPage />

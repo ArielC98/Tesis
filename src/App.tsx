@@ -3,7 +3,7 @@ import { IonReactRouter } from '@ionic/react-router';
 import { useState } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import AppMenu from './AppMenu';
-import { AuthContext} from './auth';
+import { AuthContext} from './data/auth';
 import LoginPage from './pages/LoginPage';
 import NotFoundPage from './pages/NotFoundPage';
 
@@ -11,7 +11,7 @@ import NotFoundPage from './pages/NotFoundPage';
 const App: React.FC = () => {
 
   //Se crean variables con el hook useState para declarar el estado inicial de inicio de sesion del usuario
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
   console.log(`rendering App wih loggedIn: ${loggedIn}`);
   
   

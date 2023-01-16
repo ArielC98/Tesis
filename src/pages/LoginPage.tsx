@@ -2,7 +2,7 @@ import { IonButton, IonCol, IonContent, IonGrid, IonHeader, IonImg, IonInput, Io
 import { useState } from 'react';
 import { Redirect } from 'react-router';
 import swal from 'sweetalert';
-import { useAuth} from '../auth';
+import { loginUser, useAuth} from '../data/auth';
 
 
 
@@ -22,19 +22,7 @@ const LoginPage: React.FC<Props> = ({onLogin}) => {
   const [identification, setIdentification] = useState("");
   const [password, setPassword] = useState("");
 
-async function loginUser(credentials) {
-  console.log(credentials);
-  
-  return fetch('https://sismds.herokuapp.com/api/login', {
-    method: 'POST',
-    
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(credentials)
-  })
-    .then(data => data.json())
-}
+
 
 const handleSubmit = async e => {
   e.preventDefault();
