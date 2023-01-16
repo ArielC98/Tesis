@@ -1,6 +1,6 @@
-import { IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonImg, IonInput, IonItem, IonLabel, IonList, IonLoading, IonMenuButton, IonPage, IonRow, IonSelect, IonSelectOption, IonTextarea, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonImg, IonInput, IonItem, IonLabel, IonList, IonLoading, IonMenuButton, IonPage, IonRow, IonSelect, IonSelectOption, IonTextarea, IonTitle, IonToolbar } from '@ionic/react';
 import { useEffect, useState } from 'react';
-import { userData } from '../data/information';
+import { userData, updateProfileData } from '../data/information';
 
 
 const ProfilePage: React.FC = () => {
@@ -69,19 +69,19 @@ const ProfilePage: React.FC = () => {
             <IonList className='ion-margin-bottom'>
                 <IonItem>
                     <IonLabel position='stacked'>Nombres</IonLabel>
-                    <IonInput type='text'>{name}</IonInput>
+                    <IonInput type='text' value={name}/>
                 </IonItem>
                 <IonItem>
                     <IonLabel position='stacked'>Apellidos</IonLabel>
-                    <IonInput type='text'>{lastName}</IonInput>
+                    <IonInput type='text' value={lastName}/>
                 </IonItem>
                 <IonItem>
                     <IonLabel position='stacked'>Identificación</IonLabel>
-                    <IonInput type='text'>{id}</IonInput>
+                    <IonInput type='text' value={id}/>
                 </IonItem>
                 <IonItem>
                     <IonLabel position='stacked'>Fecha de nacimiento</IonLabel>
-                    <IonInput type='text'>{birthDate}</IonInput>
+                    <IonInput type='text' value={birthDate}/>
                 </IonItem>
             </IonList>
 
@@ -92,20 +92,23 @@ const ProfilePage: React.FC = () => {
             <IonList>
                 <IonItem>
                     <IonLabel position='stacked'>Correo</IonLabel>
-                    <IonInput type='email'>{email}</IonInput>
+                    <IonInput type='email' value={email}/>
                 </IonItem>
                 <IonItem>
                     <IonLabel position='stacked'>Teléfono fijo</IonLabel>
-                    <IonInput type='text'>{homePhone}</IonInput>
+                    <IonInput type='text' value={homePhone}/>
                 </IonItem>
                 <IonItem>
                     <IonLabel position='stacked'>Teléfono celular</IonLabel>
-                    <IonInput type='text'>{mobilePhone}</IonInput>
+                    <IonInput type='text' value={mobilePhone}/>
                 </IonItem>
                 <IonItem>
                     <IonLabel position='stacked'>Dirección</IonLabel>
-                    <IonTextarea>{address}</IonTextarea>
+                    <IonTextarea  value={address}/>
                 </IonItem>
+                
+                    <IonButton expand='block'>Guardar</IonButton>
+                
             </IonList>
         </IonContent>
         </IonPage>
