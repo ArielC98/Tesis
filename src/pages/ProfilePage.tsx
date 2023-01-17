@@ -15,6 +15,41 @@ const ProfilePage: React.FC = () => {
     const [homePhone, setHomePhone] = useState(null);
     const [mobilePhone, setMobilePhone] = useState(null);
     const [address, setAddress] = useState(null);
+    const [aux, setAux] = useState(null);
+
+
+    
+    const changeEmail = (e) =>{
+        e.preventDefault();
+        setEmail(e.target.value);
+        
+    }
+    const changeHomePhone = (e) =>{
+        e.preventDefault();
+        setHomePhone(e.target.value);
+        
+    }
+    const changeMobilePhone = (e) =>{
+        e.preventDefault();
+        setMobilePhone(e.target.value);
+        
+    }
+    const changeAddress = (e) =>{
+        e.preventDefault();
+        setAddress(e.target.value);
+        
+    }
+    async function updateInput(){
+    
+        const response = await updateProfileData({
+            "personal_phone":mobilePhone,
+            "home_phone":homePhone,
+            "email":email,
+            "address":address
+        })
+        console.log(response);
+    }
+    
     
 
     useEffect(() => {
@@ -69,19 +104,19 @@ const ProfilePage: React.FC = () => {
             <IonList className='ion-margin-bottom'>
                 <IonItem>
                     <IonLabel position='stacked'>Nombres</IonLabel>
-                    <IonInput type='text' value={name}/>
+                    <IonInput type='text' value={name} readonly/>
                 </IonItem>
                 <IonItem>
                     <IonLabel position='stacked'>Apellidos</IonLabel>
-                    <IonInput type='text' value={lastName}/>
+                    <IonInput type='text' value={lastName} readonly/>
                 </IonItem>
                 <IonItem>
                     <IonLabel position='stacked'>Identificación</IonLabel>
-                    <IonInput type='text' value={id}/>
+                    <IonInput type='text' value={id} readonly/>
                 </IonItem>
                 <IonItem>
                     <IonLabel position='stacked'>Fecha de nacimiento</IonLabel>
-                    <IonInput type='text' value={birthDate}/>
+                    <IonInput type='text' value={birthDate} readonly/>
                 </IonItem>
             </IonList>
 
@@ -92,22 +127,22 @@ const ProfilePage: React.FC = () => {
             <IonList>
                 <IonItem>
                     <IonLabel position='stacked'>Correo</IonLabel>
-                    <IonInput type='email' value={email}/>
+                    <IonInput type='email' value={email} onIonChange={changeEmail}/>
                 </IonItem>
                 <IonItem>
                     <IonLabel position='stacked'>Teléfono fijo</IonLabel>
-                    <IonInput type='text' value={homePhone}/>
+                    <IonInput type='text' value={homePhone} onIonChange={changeHomePhone}/>
                 </IonItem>
                 <IonItem>
                     <IonLabel position='stacked'>Teléfono celular</IonLabel>
-                    <IonInput type='text' value={mobilePhone}/>
+                    <IonInput type='text' value={mobilePhone} onIonChange={changeMobilePhone}/>
                 </IonItem>
                 <IonItem>
                     <IonLabel position='stacked'>Dirección</IonLabel>
-                    <IonTextarea  value={address}/>
+                    <IonTextarea  value={address} onIonChange={changeAddress}/>
                 </IonItem>
                 
-                    <IonButton expand='block'>Guardar</IonButton>
+                    <IonButton expand='block' onClick={updateInput}>Guardar</IonButton>
                 
             </IonList>
         </IonContent>
