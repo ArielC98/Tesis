@@ -7,6 +7,7 @@ import Menu from './components/Menu';
 import HomePage from './pages/HomePage';
 import ProfilePage from './pages/ProfilePage';
 import SettingsPage from './pages/SettingsPage';
+import SubjectPage from './pages/SubjectPage';
 
 
 
@@ -26,8 +27,11 @@ const AppMenu: React.FC = () => {
       <IonSplitPane contentId="main">
           <Menu />
         <IonRouterOutlet id='main'>
-          <Route exact path="/my/entries">
+          <Route exact path="/my/dashboard">
             <HomePage />
+          </Route>
+          <Route exact path = "/my/subjects/:id">
+            <SubjectPage/>
           </Route>
           <Route exact path="/my/profile">
             <ProfilePage/>

@@ -12,7 +12,7 @@ interface Props{
 
 }
 
-const LoginPage: React.FC<Props> = ({onLogin}) => {
+const PasswordPage: React.FC<Props> = ({onLogin}) => {
   
   
 
@@ -100,6 +100,6 @@ console.log("Loggedin 3",loggedIn);
   );
 };
 
-export default LoginPage;
+export default PasswordPage;
 
 

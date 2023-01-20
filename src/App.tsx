@@ -11,7 +11,7 @@ import NotFoundPage from './pages/NotFoundPage';
 const App: React.FC = () => {
 
   //Se crean variables con el hook useState para declarar el estado inicial de inicio de sesion del usuario
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
   console.log(`rendering App wih loggedIn: ${loggedIn}`);
   
   
@@ -32,7 +32,7 @@ const App: React.FC = () => {
               <Route path={"/my"}>        
                 <AppMenu/>
               </Route>
-              <Redirect exact path="/" to="/my/entries" />
+              <Redirect exact path="/" to="/my/dashboard" />
               <Route>
                 <NotFoundPage/>
               </Route>

@@ -1,4 +1,6 @@
 import { IonButtons, IonContent, IonHeader, IonItem, IonList, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { subjects } from '../data/subjects';
+import SubjectPage from './SubjectPage';
 
 
 const HomePage: React.FC = () => {
@@ -9,17 +11,21 @@ const HomePage: React.FC = () => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle>Home</IonTitle>
+          <IonTitle>Inicio</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
+        <IonTitle>Materias</IonTitle>
         <IonList>
-          {/* {entries.map((entry) =>
-            <IonItem button key={entry.id}
-              routerLink={`/my/entries/${entry.id}`}>
-            </IonItem>
+          {subjects.map((subject)=>
+            <IonItem 
+              button 
+              key={subject.id}
+              routerLink={`/my/subjects/${subject.id}`}
+              >
+                {subject.name + " " + subject.curso + " " + subject.paralelo}
+              </IonItem>
           )}
-              {entry.title} */}
         </IonList>
       </IonContent>
     </IonPage>
