@@ -1,9 +1,14 @@
 import { IonButtons, IonContent, IonHeader, IonItem, IonList, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { useAuth } from '../data/auth';
 import { subjects } from '../data/subjects';
 import SubjectPage from './SubjectPage';
 
 
 const HomePage: React.FC = () => {
+  const {role} = useAuth();
+  console.log("role ->",role);
+  
+  
   return (
     <IonPage>
       <IonHeader>

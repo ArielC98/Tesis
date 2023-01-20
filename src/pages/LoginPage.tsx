@@ -7,7 +7,7 @@ import { loginUser, useAuth} from '../data/auth';
 
 
 interface Props{
-  onLogin: () => void,
+  onLogin: (string) => void,
 
 
 }
@@ -17,8 +17,10 @@ const LoginPage: React.FC<Props> = ({onLogin}) => {
   
 
   //Si la propiedad loggedIn es verdadera retornara la ruta de la pagina principal
-  const {loggedIn} = useAuth();
+  const {loggedIn, role} = useAuth();
   console.log("Login Page",loggedIn);
+  console.log("Role", role);
+  
   const [identification, setIdentification] = useState("");
   const [password, setPassword] = useState("");
   
@@ -35,6 +37,7 @@ const handleSubmit = async e => {
   if ('access_token' in response.data) {
     console.log(response.data);
     
+    
     swal("Success", response.message, "success", {
       timer: 2000,
       buttons:{}
@@ -46,7 +49,7 @@ const handleSubmit = async e => {
       
     });
     console.log("success");
-    onLogin();
+    onLogin(response.data.user.role);
   } else {
     
     
