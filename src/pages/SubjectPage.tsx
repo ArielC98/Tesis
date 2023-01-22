@@ -73,7 +73,7 @@ const SubjectPage: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>{subject.name.toUpperCase() + " " + subject.curso + " " + subject.paralelo}</IonTitle>
+          <IonTitle>Materia</IonTitle>
           <IonButtons slot="start">
           <IonBackButton defaultHref="/my/dashboard" />
         </IonButtons>

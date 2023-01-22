@@ -37,17 +37,14 @@ const handleSubmit = async e => {
   if ('access_token' in response.data) {
     console.log(response.data);
     
+    localStorage.setItem('access_token', response.data['access_token']);
+    localStorage.setItem('user', JSON.stringify(response.data['user']));
     
     swal("Success", response.message, "success", {
       timer: 2000,
       buttons:{}
     })
-    .then((value) => {
-      localStorage.setItem('access_token', response.data['access_token']);
-      localStorage.setItem('user', JSON.stringify(response.data['user']));
-
-      
-    });
+    
     console.log("success");
     onLogin(response.data.user.role);
   } else {
