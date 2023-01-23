@@ -40,7 +40,7 @@ export async function teacherSubjects() {
             'Authorization': 'Bearer ' + localStorage.getItem("access_token")
         }
     })
-    .then(response => response.json())
+    .then(response => response.json()).then(response => response.data)
     
     
 }

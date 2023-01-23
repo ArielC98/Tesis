@@ -11,26 +11,11 @@ const HomePage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   
   
-  
-
-  
-  async function handleSubjects(){
-    await fetch('https://sismds.herokuapp.com/api/teacher/mySubjects', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem("access_token")
-      }
-    })
-    .then(response => response.json()).then((response) => response.data).then((response) => response.subjects.map((subject) => subjectList.push(subject)));
-    setIsLoading(false);
-  }
-  
-  
 
   useEffect(() => {
   
-    handleSubjects();
+    const materias = teacherSubjects().then((response) => response.subjects.map((subject) => {subjectList.push(subject);setIsLoading(false);}));
+  
     console.log(subjectList);
     
     
