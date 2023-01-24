@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 export async function loginUser(credentials) {
     console.log(credentials);
     
-    return fetch('https://sismds.herokuapp.com/api/login', {
+    return await fetch('https://sismds.herokuapp.com/api/login', {
         method: 'POST',
     
         headers: {

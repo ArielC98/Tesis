@@ -1,8 +1,7 @@
+export async function studentGrades(studentId:string, subjectId: string) {
 
-export async function teacherSubjects() {
-
-    return await fetch('https://sismds.herokuapp.com/api/teacher/mySubjects', {
-        method: 'POST',
+    return await fetch(`https://sismds.herokuapp.com/api/teacher/${studentId}/${subjectId}/grades`, {
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem("access_token")

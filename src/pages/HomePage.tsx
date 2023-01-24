@@ -1,7 +1,6 @@
 import { IonButton, IonButtons, IonContent, IonHeader, IonItem, IonLabel, IonList, IonLoading, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../data/auth';
-import { subjects } from '../data/subjects';
 import { teacherSubjects } from '../data/subjects';
 
 

@@ -1,11 +1,11 @@
-import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonItem, IonLabel, IonPage, IonSelect, IonSelectOption, IonTitle, IonToolbar } from '@ionic/react';
+import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonItem, IonLabel, IonLoading, IonPage, IonSelect, IonSelectOption, IonTitle, IonToolbar } from '@ionic/react';
 import { AgGridReact } from 'ag-grid-react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { subjects } from '../data/subjects';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
-import { students, studentsList } from '../data/students';
+import { studentsList } from '../data/students';
+import { studentGrades } from '../data/grades';
 
 
 interface RouteParams {
@@ -13,31 +13,39 @@ interface RouteParams {
 }
 
 const SubjectPage: React.FC = () => {
-  const [idEst,setIdEst] = useState(0);
+
   const [students] = useState([]);
   const {id} = useParams<RouteParams>(); //return an object with the parameters passed in the URL
+  const [studentId, setStudentId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [grades, setGrades] = useState([{}]);
+  
   
 
   useEffect(() => {
   
-    const estudiantes = studentsList(id).then((response) => response.students.map((student) => {students.push(student);setIsLoading(false);}));
-  
-    console.log(students);
-    
-    
-    
+    studentsList(id).then((response) => response.students.map((student) => {students.push(student);setIsLoading(false);}));
+    console.log(students);  
   },[]);
 
+  async function handleGrades (studentId: string, subjectId: string) {
+    
+    await studentGrades(studentId,subjectId).then(response =>{grades.push(response.grades[0]);grades.shift()});
+    
+    console.log(grades)
 
-
-  
-  const subject = subjects.find((subject) => subject.id === id);
+    setRowData([
+      {descripcion: "Nota 10", puntaje: grades[0]["p1q1"]},
+      {descripcion: "Nota 2", puntaje: grades[0]["p2q1"]},
+      {descripcion: "Nota 3", puntaje: grades[0]["p3q1"]}
+    ])
+    
+  }
 
   const [rowData, setRowData] = useState([
-    {descripcion: "Nota 1", puntaje: 10, price: 35000},
-    {descripcion: "Nota 2", puntaje: 9, price: 32000},
-    {descripcion: "Nota 3", puntaje: 8, price: 72000}
+    {descripcion: "Nota 1", puntaje: grades[0]["p1q1"]},
+    {descripcion: "Nota 2", puntaje: grades[0]["p2q1"]},
+    {descripcion: "Nota 3", puntaje: grades[0]["p3q1"]}
   ]);
 
   const [columnDefs] = useState([
@@ -46,7 +54,9 @@ const SubjectPage: React.FC = () => {
       
   ])
 
-  
+  if(isLoading){
+    return <IonLoading isOpen/>
+  }
 
   return (
     <IonPage>
@@ -59,12 +69,21 @@ const SubjectPage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
-        <IonSelect placeholder='Seleccionar estudiante'>
-        {students.map((student)=>
-            <IonSelectOption id={student.id}>
+        <IonSelect placeholder='Seleccionar estudiante' onIonChange={(e)=>{
+          console.log(e.detail.value); 
+            students.map((student,i)=>{
+              if(e.detail.value === student.name){ //Compara el nombre seleccionado con el del arreglo de estudiantes
+                handleGrades(student.id,id) //Pasa los parametros del id del estudiante y materia
+              }      
+            })
+            
+          }}>
+          {students.map((student)=>
+              <IonSelectOption id={student.id}>
                 {student.name}
               </IonSelectOption>
-          )}
+            )
+          }
         </IonSelect>
 
 
@@ -77,7 +96,9 @@ const SubjectPage: React.FC = () => {
         </div>
         
           <IonButton style={{marginLeft:50}}>Anterior</IonButton>
-          <IonButton>Siguiente</IonButton>
+          <IonButton onClick={()=>{
+            
+          }}>Siguiente</IonButton>
           <IonButton color="success" style={{marginLeft:105}}>Guardar</IonButton>
           
       </IonContent>
