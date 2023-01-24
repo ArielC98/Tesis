@@ -6,6 +6,7 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { studentsList } from '../data/students';
 import { studentGrades } from '../data/grades';
+import { updateGrades } from '../data/grades';
 
 
 interface RouteParams {
@@ -42,6 +43,18 @@ const SubjectPage: React.FC = () => {
     
   }
 
+  async function handleUpdate (studentId: string, subjectId: string) {
+    
+    const tempGrades = {
+      p1q1:3,
+      p2q1:4,
+      p3q1:5
+    }
+
+    await updateGrades(studentId,subjectId,tempGrades)
+        
+  }
+
   const [rowData, setRowData] = useState([
     {descripcion: "Nota 1", puntaje: grades[0]["p1q1"]},
     {descripcion: "Nota 2", puntaje: grades[0]["p2q1"]},
@@ -71,8 +84,9 @@ const SubjectPage: React.FC = () => {
       <IonContent className="ion-padding">
         <IonSelect placeholder='Seleccionar estudiante' onIonChange={(e)=>{
           console.log(e.detail.value); 
-            students.map((student,i)=>{
+            students.map((student)=>{
               if(e.detail.value === student.name){ //Compara el nombre seleccionado con el del arreglo de estudiantes
+                setStudentId(student.id);
                 handleGrades(student.id,id) //Pasa los parametros del id del estudiante y materia
               }      
             })
@@ -97,9 +111,11 @@ const SubjectPage: React.FC = () => {
         
           <IonButton style={{marginLeft:50}}>Anterior</IonButton>
           <IonButton onClick={()=>{
-            
+            console.log(rowData[0].descripcion)
           }}>Siguiente</IonButton>
-          <IonButton color="success" style={{marginLeft:105}}>Guardar</IonButton>
+          <IonButton color="success" style={{marginLeft:105}}
+            onClick={e => handleUpdate(studentId,id)}
+          >Guardar</IonButton>
           
       </IonContent>
     </IonPage>
