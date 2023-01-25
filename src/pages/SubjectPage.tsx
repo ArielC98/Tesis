@@ -20,6 +20,7 @@ const SubjectPage: React.FC = () => {
   const [studentId, setStudentId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [grades, setGrades] = useState([{}]);
+
   
   
 
@@ -46,12 +47,19 @@ const SubjectPage: React.FC = () => {
   async function handleUpdate (studentId: string, subjectId: string) {
     
     const tempGrades = {
-      p1q1:3,
-      p2q1:4,
-      p3q1:5
+      p1q1:9,
+      p2q1:8,
+      p3q1:5,
+      p1q2:6,
+      p2q2:7,
+      p3q2:80,
+      supletorio:null,
+      remedial:null,
+      gracia:null
     }
 
-    await updateGrades(studentId,subjectId,tempGrades)
+    await updateGrades(studentId,subjectId,tempGrades).then(response => console.log(response.message));
+    
         
   }
 
@@ -93,7 +101,7 @@ const SubjectPage: React.FC = () => {
             
           }}>
           {students.map((student)=>
-              <IonSelectOption id={student.id}>
+              <IonSelectOption key={student.id}>
                 {student.name}
               </IonSelectOption>
             )
