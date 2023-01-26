@@ -1,12 +1,13 @@
-import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonItem, IonLabel, IonLoading, IonPage, IonSelect, IonSelectOption, IonTitle, IonToolbar, useIonLoading } from '@ionic/react';
+import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonItem, IonLabel, IonLoading, IonPage, IonSelect, IonSelectOption, IonTitle, IonToolbar, useIonAlert, useIonLoading } from '@ionic/react';
 import { AgGridReact } from 'ag-grid-react';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { studentsList } from '../data/students';
 import { studentGrades } from '../data/grades';
 import { updateGrades } from '../data/grades';
+import { useAuth } from '../data/auth';
 
 
 interface RouteParams {
@@ -16,71 +17,88 @@ interface RouteParams {
 const SubjectPage: React.FC = () => {
 
   const [students] = useState([]);
+  const {role} = useAuth();
   const {id} = useParams<RouteParams>(); //return an object with the parameters passed in the URL
   const [actualStudent, setActualStudent] = useState("");
   const [count, setCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [grades, setGrades] = useState([{}]);
   const [present, dismiss] = useIonLoading();
+  const [showAlert, hideAlert] = useIonAlert();
 
 
   
 
 
   useEffect(() => {
+    console.log(role);
     
     studentsList(id).then((response) => {response.students.map((student) => {students.push(student)});setIsLoading(false);
     
     })
-    
+    console.log("El rol es", role);
     
   },[]);
 
   async function handleGrades (studentId: string, subjectId: string) {
     
     present({
-      message: 'Dismissing after 3 seconds...',
-      duration: 3000
+      message: 'Cargando...',
+      duration: 4000
     })
     await studentGrades(studentId,subjectId).then(response =>{grades.push(response.grades[0]);grades.shift()});
     
     console.log(grades)
 
     setRowData([
-      {descripcion: "Nota 1", puntaje: grades[0]["p1q1"]},
-      {descripcion: "Nota 2", puntaje: grades[0]["p2q1"]},
-      {descripcion: "Nota 3", puntaje: grades[0]["p3q1"]}
+      {descripcion: "Parcial 1 Q 1", puntaje: grades[0]["p1q1"]},
+      {descripcion: "Parcial 2 Q 1", puntaje: grades[0]["p2q1"]},
+      {descripcion: "Parcial 3 Q 1", puntaje: grades[0]["p3q1"]},
+      {descripcion: "Parcial 1 Q 2", puntaje: grades[0]["p1q2"]},
+      {descripcion: "Parcial 2 Q 2", puntaje: grades[0]["p2q2"]},
+      {descripcion: "Parcial 3 Q 2", puntaje: grades[0]["p3q2"]},
+      {descripcion: "Quimestre 1", puntaje: grades[0]["q1"]},
+      {descripcion: "Quimestre 2", puntaje: grades[0]["q2"]},
+      
     ])
     
   }
 
   async function handleUpdate (studentId: string, subjectId: string) {
-    
+    present({
+      message: 'Cargando...',
+      duration: 3000
+    })
     const tempGrades = {
       p1q1:grades[0]["p1q1"],
       p2q1:grades[0]["p2q1"],
       p3q1:grades[0]["p3q1"],
-      p1q2:6,
-      p2q2:7,
-      p3q2:8,
+      p1q2:grades[0]["p1q2"],
+      p2q2:grades[0]["p2q2"],
+      p3q2:grades[0]["p3q2"],
       supletorio:null,
       remedial:null,
       gracia:null
     }
 
-    await updateGrades(studentId,subjectId,tempGrades).then(response => console.log(response.message));
+    await updateGrades(studentId,subjectId,tempGrades).then(response =>showAlert(response.message));
     
         
   }
 
   const [rowData, setRowData] = useState([
-    {descripcion: "Nota 1", puntaje: grades[0]["p1q1"]},
-    {descripcion: "Nota 2", puntaje: grades[0]["p2q1"]},
-    {descripcion: "Nota 3", puntaje: grades[0]["p3q1"]}
+      {descripcion: "Parcial 1 Q 1", puntaje: grades[0]["p1q1"]},
+      {descripcion: "Parcial 2 Q 1", puntaje: grades[0]["p2q1"]},
+      {descripcion: "Parcial 3 Q 1", puntaje: grades[0]["p3q1"]},
+      {descripcion: "Parcial 1 Q 2", puntaje: grades[0]["p1q2"]},
+      {descripcion: "Parcial 2 Q 2", puntaje: grades[0]["p2q2"]},
+      {descripcion: "Parcial 3 Q 2", puntaje: grades[0]["p3q2"]},
+      {descripcion: "Quimestre 1", puntaje: grades[0]["q1"]},
+      {descripcion: "Quimestre 2", puntaje: grades[0]["q2"]},
   ]);
 
   const [columnDefs] = useState([
-      { field: 'descripcion', width: 120, editable: true},
+      { field: 'descripcion', width: 120, editable:true},
       { field: 'puntaje', width: 120, editable: true},
       
   ])
@@ -89,7 +107,7 @@ const SubjectPage: React.FC = () => {
     return <IonLoading isOpen/>
   }
 
- 
+
 
   return (
     <IonPage>

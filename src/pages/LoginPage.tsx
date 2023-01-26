@@ -45,7 +45,7 @@ const handleSubmit = async e => {
       buttons:{}
     })
     
-    console.log("success");
+    console.log("success", response.data.user.role);
     onLogin(response.data.user.role);
   } else {
     

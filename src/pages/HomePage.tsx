@@ -16,6 +16,7 @@ const HomePage: React.FC = () => {
     const materias = teacherSubjects().then((response) => response.subjects.map((subject) => {subjectList.push(subject);setIsLoading(false);}));
   
     console.log(subjectList);
+    console.log("El rol es", role);
     
     
     
