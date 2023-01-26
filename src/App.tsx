@@ -11,7 +11,7 @@ import NotFoundPage from './pages/NotFoundPage';
 const App: React.FC = () => {
 
   //Se crean variables con el hook useState para declarar el estado inicial de inicio de sesion del usuario
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
   const [role, setRole] = useState("");
   console.log(`rendering App wih loggedIn: ${loggedIn}`);
   
@@ -19,7 +19,6 @@ const App: React.FC = () => {
   return (
     <IonApp>
       <AuthContext.Provider value = {{loggedIn, role}}>
-  
           <IonReactRouter>
             {/* Se usa Switch para renderizar exclusivamente una ruta */}
             <Switch>
