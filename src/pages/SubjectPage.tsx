@@ -48,7 +48,7 @@ const SubjectPage: React.FC = () => {
     })
     await studentGrades(studentId,subjectId).then(response =>{grades.push(response.grades[0]);grades.shift()});
     
-    console.log(grades)
+    console.log("Antes de editar ", grades)
 
     setRowData([
       {descripcion: "Parcial 1 Q 1", puntaje: grades[0]["p1q1"]},
@@ -62,6 +62,7 @@ const SubjectPage: React.FC = () => {
       
     ])
     
+
   }
 
   async function handleUpdate (studentId: string, subjectId: string) {
@@ -81,6 +82,9 @@ const SubjectPage: React.FC = () => {
       gracia:null
     }
 
+    console.log("notas temporales",tempGrades);
+    
+
     await updateGrades(studentId,subjectId,tempGrades).then(response =>showAlert(response.message));
     
         
@@ -99,7 +103,7 @@ const SubjectPage: React.FC = () => {
 
   const [columnDefs] = useState([
       { field: 'descripcion', width: 120, editable:true},
-      { field: 'puntaje', width: 120, editable: true},
+      { field: 'puntaje', width: 120, editable: role === "teacher"},
       
   ])
 
