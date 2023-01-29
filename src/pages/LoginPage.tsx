@@ -5,65 +5,53 @@ import swal from 'sweetalert';
 import { loginUser, useAuth} from '../data/auth';
 
 
-
 interface Props{
   onLogin: (string) => void,
-
-
 }
 
 const LoginPage: React.FC<Props> = ({onLogin}) => {
-  
-  
 
   //Si la propiedad loggedIn es verdadera retornara la ruta de la pagina principal
-  const {loggedIn, role} = useAuth();
-  console.log("Login Page",loggedIn);
-  console.log("Role", role);
-  
+  const {loggedIn} = useAuth();
   const [identification, setIdentification] = useState("");
   const [password, setPassword] = useState("");
   
 
 
-const handleSubmit = async e => {
-  e.preventDefault();
-  const response = await loginUser({
-    identification,
-    password
-  });
+  const handleSubmit = async e => {
+    e.preventDefault();
+    loginUser({
+      identification,
+      password
+    }).then(response => {
+
+      if ('access_token' in response.data) {
+      
+        localStorage.setItem('access_token', response.data['access_token']);
+        localStorage.setItem('user', JSON.stringify(response.data['user']));
+        
+        swal("Success", response.message, "success", {
+          timer: 2000,
+          buttons:{}
+        })
+          
+        onLogin(response.data.user.role);
+      } 
+    }).catch(error => swal("Error", "Usuario o contraseña incorrecta", "error"))
+    
 
   
-  if ('access_token' in response.data) {
-    console.log(response.data);
     
-    localStorage.setItem('access_token', response.data['access_token']);
-    localStorage.setItem('user', JSON.stringify(response.data['user']));
-    
-    swal("Success", response.message, "success", {
-      timer: 2000,
-      buttons:{}
-    })
-    
-    console.log("success", response.data.user.role);
-    onLogin(response.data.user.role);
-  } else {
-    
-    
-    swal("Failed", response.message, "error");
-    console.log(response.data.access_token);
-    
+
+  
   }
 
-  
-}
 
-console.log("Loggedin 2",loggedIn);
   
   if(loggedIn){
     return <Redirect to ='/my/dashboard'/>
   }
-console.log("Loggedin 3",loggedIn);
+
 
 
   //Si no es verdadera retorna el contenido de la pagina de inicio de sesion

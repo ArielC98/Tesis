@@ -15,13 +15,13 @@ import SubjectPage from './pages/SubjectPage';
 const AppMenu: React.FC = () => {
 
   const {loggedIn} = useAuth();
-  console.log("App Menu", loggedIn);
+  
   
 
   if(!loggedIn){
     return <Redirect to="/login"/>
   }
-  console.log("App Menu2", loggedIn);
+  
   return (
     <IonPage>
       <IonSplitPane contentId="main">

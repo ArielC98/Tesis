@@ -38,7 +38,7 @@ const SubjectPage: React.FC = () => {
     
     })
     console.log("El rol es", role);
-    
+
   },[id,role,students]);
 
   async function handleGrades (studentId: string, subjectId: string) {
@@ -49,7 +49,7 @@ const SubjectPage: React.FC = () => {
     })
     await studentGrades(studentId,subjectId).then(response =>{grades.push(response.grades[0]);grades.shift()});
     
-    console.log("Antes de editar ", grades)
+    
 
     setRowData([
       {descripcion: "Parcial 1 Q 1", puntaje: grades[0]["p1q1"]},
