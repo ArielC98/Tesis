@@ -1,4 +1,4 @@
-import { IonButton, IonCol, IonContent, IonGrid, IonHeader, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, IonRow, IonText, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonCol, IonContent, IonGrid, IonHeader, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, IonRow, IonText, IonTitle, IonToolbar, useIonLoading } from '@ionic/react';
 import { useState } from 'react';
 import { Redirect } from 'react-router';
 import swal from 'sweetalert';
@@ -15,18 +15,24 @@ const LoginPage: React.FC<Props> = ({onLogin}) => {
   const {loggedIn} = useAuth();
   const [identification, setIdentification] = useState("");
   const [password, setPassword] = useState("");
+  const [present, dismiss] = useIonLoading();
+  const [isLoading, setIsLoading] = useState(false);
   
 
 
   const handleSubmit = async e => {
     e.preventDefault();
+    setIsLoading(true);
+    present({
+      message: "cargando"
+    })
     loginUser({
       identification,
       password
     }).then(response => {
 
       if ('access_token' in response.data) {
-      
+        dismiss();
         localStorage.setItem('access_token', response.data['access_token']);
         localStorage.setItem('user', JSON.stringify(response.data['user']));
         
@@ -38,13 +44,10 @@ const LoginPage: React.FC<Props> = ({onLogin}) => {
         onLogin(response.data.user.role);
       } 
     }).catch(error => swal("Error", "Usuario o contraseña incorrecta", "error"))
-    
-
-  
-    
-
   
   }
+
+  
 
 
   
