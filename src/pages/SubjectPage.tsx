@@ -1,6 +1,6 @@
-import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonItem, IonLabel, IonLoading, IonPage, IonSelect, IonSelectOption, IonTitle, IonToolbar, useIonAlert, useIonLoading } from '@ionic/react';
+import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonLoading, IonPage, IonSelect, IonSelectOption, IonTitle, IonToolbar, useIonAlert, useIonLoading } from '@ionic/react';
 import { AgGridReact } from 'ag-grid-react';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
@@ -19,7 +19,7 @@ const SubjectPage: React.FC = () => {
   const [students] = useState([]);
   const {role} = useAuth();
   const {id} = useParams<RouteParams>(); //return an object with the parameters passed in the URL
-  const [actualStudent, setActualStudent] = useState("");
+  //const [actualStudent, setActualStudent] = useState("");
   const [count, setCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [grades, setGrades] = useState([{}]);
@@ -38,7 +38,7 @@ const SubjectPage: React.FC = () => {
     })
     console.log("El rol es", role);
     
-  },[]);
+  },[id,role,students]);
 
   async function handleGrades (studentId: string, subjectId: string) {
     
@@ -71,18 +71,18 @@ const SubjectPage: React.FC = () => {
       duration: 3000
     })
     const tempGrades = {
-      p1q1:grades[0]["p1q1"],
-      p2q1:grades[0]["p2q1"],
-      p3q1:grades[0]["p3q1"],
-      p1q2:grades[0]["p1q2"],
-      p2q2:grades[0]["p2q2"],
-      p3q2:grades[0]["p3q2"],
+      p1q1:rowData[0].puntaje,
+      p2q1:rowData[1].puntaje,
+      p3q1:rowData[2].puntaje,
+      p1q2:rowData[3].puntaje,
+      p2q2:rowData[4].puntaje,
+      p3q2:rowData[5].puntaje,
       supletorio:null,
       remedial:null,
       gracia:null
     }
 
-    console.log("notas temporales",tempGrades);
+    console.log("notas temporales",{tempGrades,studentId,subjectId});
     
 
     await updateGrades(studentId,subjectId,tempGrades).then(response =>showAlert(response.message));
@@ -159,7 +159,7 @@ const SubjectPage: React.FC = () => {
           <IonButton onClick={()=>{console.log("countInicial",count);setCount(count+1);
           }}>Siguiente</IonButton>
           <IonButton color="success" style={{marginLeft:105}}
-            onClick={e => {handleUpdate(students[count].id,id)}}
+            onClick={e =>  handleUpdate (students[count].id,id)}
           >Guardar</IonButton>
           
       </IonContent>
