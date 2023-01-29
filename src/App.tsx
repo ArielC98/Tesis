@@ -6,6 +6,7 @@ import AppMenu from './AppMenu';
 import { AuthContext} from './data/auth';
 import LoginPage from './pages/LoginPage';
 import NotFoundPage from './pages/NotFoundPage';
+import PasswordPage from './pages/PasswordPage';
 
 
 const App: React.FC = () => {
@@ -29,7 +30,9 @@ const App: React.FC = () => {
                   }/>
 
               </Route>
-
+              <Route exact path = "/password">
+                <PasswordPage />
+              </Route>
               <Route path={"/my"}>        
                 <AppMenu/>
               </Route>

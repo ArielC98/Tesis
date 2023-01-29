@@ -1,6 +1,7 @@
 import { IonButton, IonCol, IonContent, IonGrid, IonHeader, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, IonRow, IonText, IonTitle, IonToolbar, useIonLoading } from '@ionic/react';
 import { useState } from 'react';
 import { Redirect } from 'react-router';
+import { Link } from 'react-router-dom';
 import swal from 'sweetalert';
 import { loginUser, useAuth} from '../data/auth';
 
@@ -86,6 +87,9 @@ const LoginPage: React.FC<Props> = ({onLogin}) => {
           </IonItem>
         </IonList>
         <IonButton expand='block' onClick={handleSubmit}>Login</IonButton>
+        <div className='ion-text-center ion-margin-top'>
+          <a  href="/password">¿Olvidó su contraseña?</a>
+        </div>
       </IonContent>
     </IonPage>
   );
