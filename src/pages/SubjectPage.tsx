@@ -31,13 +31,16 @@ const SubjectPage: React.FC = () => {
 
 
   useEffect(() => {
-    console.log(role);
     
-    studentsList(id).then((response) => {response.students.map((student) => {students.push(student)});
-    handleGrades(students[0].id,id);setIsLoading(false);
     
-    })
-    console.log("El rol es", role);
+    if(role === "teacher"){
+      studentsList(id).then((response) => {response.students.map((student) => {students.push(student)});
+      handleGrades(students[0].id,id);setIsLoading(false);
+      })
+    }
+    else{
+      
+    }
 
   },[id,role,students]);
 
