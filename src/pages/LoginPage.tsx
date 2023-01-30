@@ -87,9 +87,9 @@ const LoginPage: React.FC<Props> = ({onLogin}) => {
           </IonItem>
         </IonList>
         <IonButton expand='block' onClick={handleSubmit}>Login</IonButton>
-        <div className='ion-text-center ion-margin-top'>
-          <a  href="/password">¿Olvidó su contraseña?</a>
-        </div>
+        <IonItem routerLink="/password">
+            <IonLabel>¿Olvidó su contraseña?</IonLabel>
+        </IonItem>
       </IonContent>
     </IonPage>
   );

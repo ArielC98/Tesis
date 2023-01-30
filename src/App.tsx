@@ -1,4 +1,4 @@
-import { IonApp} from '@ionic/react';
+import { IonApp, IonRouterOutlet} from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { useState } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
@@ -23,6 +23,7 @@ const App: React.FC = () => {
           <IonReactRouter>
             {/* Se usa Switch para renderizar exclusivamente una ruta */}
             <Switch>
+          <IonRouterOutlet>
               <Route exact path = "/login">
 
                   <LoginPage   onLogin={(roleAux)=>{setLoggedIn(true); setRole(roleAux); console.log("Role ->",loggedIn);
@@ -30,9 +31,11 @@ const App: React.FC = () => {
                   }/>
 
               </Route>
+              
               <Route exact path = "/password">
                 <PasswordPage />
               </Route>
+              </IonRouterOutlet>
               <Route path={"/my"}>        
                 <AppMenu/>
               </Route>
@@ -40,8 +43,8 @@ const App: React.FC = () => {
               <Route>
                 <NotFoundPage/>
               </Route>
+            
             </Switch>
-
           </IonReactRouter>
       
       </AuthContext.Provider>
