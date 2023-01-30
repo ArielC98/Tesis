@@ -1,12 +1,35 @@
 import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonList, IonPage, IonRow, IonTitle, IonToolbar } from '@ionic/react';
+import { useState } from 'react';
 
 const SettingsPage: React.FC = () => {
+
+  const [passwd, setPasswd] = useState("");
+  const [passwdConf, setPasswdConf] = useState("");
 
   const handleLogout = () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("user");
     window.location.href = "/";
   };
+
+  
+  const handlePasswordChange = async () => {
+      return await fetch('https://sismds.herokuapp.com/api/teacher/update-password', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + localStorage.getItem("access_token")
+          },
+          body: JSON.stringify({
+            password:passwd,
+            password_confirmation:passwdConf
+          })
+      })
+      .then(response => response.json()).then(response => console.log(response)
+      )
+      console.log(passwd, passwdConf);
+      
+  }
 
 
   return (
@@ -30,11 +53,15 @@ const SettingsPage: React.FC = () => {
           </IonItem>
           <IonItem>
             <IonLabel position='stacked'>Contraseña nueva</IonLabel>
-            <IonInput></IonInput>
+            <IonInput  onIonChange={e => setPasswd(e.detail.value)}></IonInput>
+          </IonItem>
+          <IonItem>
+            <IonLabel position='stacked'>Confirmar contraseña</IonLabel>
+            <IonInput  onIonChange={e => setPasswdConf(e.detail.value)}></IonInput>
           </IonItem>
           <IonRow>
             <IonCol></IonCol>
-            <IonCol><IonButton>Cambiar</IonButton></IonCol>
+            <IonCol><IonButton onClick={handlePasswordChange}>Cambiar</IonButton></IonCol>
             <IonCol></IonCol>
           </IonRow>
           </IonList>
