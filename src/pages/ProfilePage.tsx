@@ -1,6 +1,10 @@
 import { IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonImg, IonInput, IonItem, IonLabel, IonList, IonLoading, IonMenuButton, IonPage, IonRow, IonSelect, IonSelectOption, IonTextarea, IonTitle, IonToolbar } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { userData, updateProfileData } from '../data/information';
+import { usePhotoGallery } from '../data/information';
+
+
+
 
 
 const ProfilePage: React.FC = () => {
@@ -15,8 +19,7 @@ const ProfilePage: React.FC = () => {
     const [homePhone, setHomePhone] = useState(null);
     const [mobilePhone, setMobilePhone] = useState(null);
     const [address, setAddress] = useState(null);
-    const [aux, setAux] = useState(null);
-
+    const {photos,takePhoto} = usePhotoGallery();
 
     
     const changeEmail = (e) =>{
@@ -90,8 +93,20 @@ const ProfilePage: React.FC = () => {
                 <IonRow>
                     <IonCol></IonCol>
                     <IonCol size='6'>
-                        <IonImg src={avatar}/>
+                        <IonImg src={photos.length>0? photos[0].webviewPath:avatar}/>
                     </IonCol>
+                    <IonCol></IonCol>
+                </IonRow>
+                {/* <IonRow>
+                    {photos.map((photo, index) => (
+                        <IonCol size="6" key={index}>
+                        <IonImg src={photo.webviewPath} />
+                        </IonCol>
+                    ))}
+                </IonRow> */}
+                <IonRow>
+                    <IonCol></IonCol>
+                    <IonCol><IonButton onClick={()=>takePhoto()}>Editar foto</IonButton></IonCol>
                     <IonCol></IonCol>
                 </IonRow>
             </IonGrid>
