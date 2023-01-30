@@ -4,6 +4,7 @@ import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import swal from 'sweetalert';
 import { loginUser, useAuth} from '../data/auth';
+import "./LoginPage.css"
 
 
 interface Props{
@@ -86,10 +87,11 @@ const LoginPage: React.FC<Props> = ({onLogin}) => {
             <IonInput type='text' onIonChange={e => setPassword(e.detail.value)}/>
           </IonItem>
         </IonList>
-        <IonButton expand='block' onClick={handleSubmit}>Login</IonButton>
-        <IonItem routerLink="/password">
+        <IonButton className='ion-margin-vertical' expand='block' onClick={handleSubmit}>Login</IonButton>
+        <IonItem  lines='none' routerLink="/password" className='ion-text-center' id="passwd">
             <IonLabel>¿Olvidó su contraseña?</IonLabel>
         </IonItem>
+      
       </IonContent>
     </IonPage>
   );
