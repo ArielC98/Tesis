@@ -5,7 +5,7 @@ import { useParams } from 'react-router';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { studentsList } from '../data/students';
-import { studentGrades } from '../data/grades';
+import { teacherGrades } from '../data/grades';
 import { updateGrades } from '../data/grades';
 import { useAuth } from '../data/auth';
 
@@ -47,7 +47,7 @@ const SubjectPage: React.FC = () => {
       message: 'Cargando...',
       duration: 4000
     })
-    await studentGrades(studentId,subjectId).then(response =>{grades.push(response.grades[0]);grades.shift()});
+    await teacherGrades(studentId,subjectId).then(response =>{grades.push(response.grades[0]);grades.shift()});
     
     
 

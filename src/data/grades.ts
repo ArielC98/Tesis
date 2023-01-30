@@ -1,4 +1,4 @@
-export async function studentGrades(studentId:string, subjectId: string) {
+export async function teacherGrades(studentId:string, subjectId: string) {
 
     return await fetch(`https://sismds.herokuapp.com/api/teacher/${studentId}/${subjectId}/grades`, {
         method: 'GET',
@@ -22,4 +22,18 @@ export async function updateGrades(studentId:string, subjectId: string, newGrade
         body: JSON.stringify(newGrades)
     })
     .then(response => response.json())
+}
+
+
+//Student
+
+export async function studentGrades(academicPeriod: string){
+    return await fetch(`https://sismds.herokuapp.com/api/student/${academicPeriod}/grades`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem("access_token")
+        }
+    })
+    .then(response => response.json()).then(response => response.data)
 }

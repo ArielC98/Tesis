@@ -1,4 +1,4 @@
-import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonList, IonPage, IonRow, IonTitle, IonToolbar } from '@ionic/react';
+import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonList, IonMenuButton, IonPage, IonRow, IonTitle, IonToolbar } from '@ionic/react';
 import { useState } from 'react';
 
 const SettingsPage: React.FC = () => {
@@ -37,8 +37,8 @@ const SettingsPage: React.FC = () => {
       <IonHeader>
         <IonToolbar>
           <IonTitle>Ajustes</IonTitle>
-          <IonButtons slot='start'>
-            <IonBackButton defaultHref="/my/dashboard"/>
+          <IonButtons slot="start">
+            <IonMenuButton />
           </IonButtons>
         </IonToolbar>
       </IonHeader>

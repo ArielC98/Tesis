@@ -1,6 +1,7 @@
 import { IonButton, IonButtons, IonContent, IonHeader, IonItem, IonLabel, IonList, IonLoading, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../data/auth';
+import { studentGrades } from '../data/grades';
 import { teacherSubjects } from '../data/subjects';
 
 
@@ -8,16 +9,22 @@ const HomePage: React.FC = () => {
   const {role} = useAuth();
   const [subjectList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [academicPeriod, setAcademicPeriod] = useState("1");
   
   
 
   useEffect(() => {
-  
-    const materias = teacherSubjects().then((response) => response.subjects.map((subject) => {subjectList.push(subject);setIsLoading(false);}));
-  
-    console.log(subjectList);
-    console.log("El rol es", role);
     
+    if(role === "teacher"){
+      const materias = teacherSubjects().then((response) => response.subjects.map((subject) => {subjectList.push(subject);setIsLoading(false);}));
+    
+      console.log(subjectList);
+      console.log("El rol es", role);
+    }
+    else{
+      const materias = studentGrades(academicPeriod).then(response => response.grades.map((subject) => {subjectList.push(subject);setIsLoading(false);})
+      )
+    }
     
     
   },[]);
@@ -39,22 +46,37 @@ const HomePage: React.FC = () => {
       </IonHeader>
       <IonContent className="ion-padding">
         <IonTitle>Materias</IonTitle>
-        <IonList>
-          {
-          subjectList.map((subject)=>
-            <IonItem 
-              button 
-              detail
-              key={subject.id}
-              routerLink={`/my/subjects/${subject.id}`}
-              >
-                
-                <IonLabel>
-                  <h3>{subject.name}</h3>
-                  <p>{subject.course + " " + subject.parallel}</p>
-                </IonLabel>
-              </IonItem>
-          )}
+        <IonList className='ion-margin-top'>
+          {role==="teacher"?
+            subjectList.map((subject)=>
+              <IonItem 
+                button 
+                detail
+                key={subject.id}
+                routerLink={`/my/subjects/${subject.id}`}
+                >
+                  
+                  <IonLabel>
+                    <h3>{subject.name}</h3>
+                    <p>{subject.course + " " + subject.parallel}</p>
+                  </IonLabel>
+                </IonItem>
+            ):
+            subjectList.map((subject)=>
+              <IonItem 
+                button 
+                detail
+                key={subject.id}
+                routerLink={`/my/subjects/${subject.subject_id}`}
+                >
+                  
+                  <IonLabel>
+                    <h2>{subject.subject_name}</h2>
+                  
+                  </IonLabel>
+                </IonItem>
+            )
+          }
         </IonList>
         
       </IonContent>

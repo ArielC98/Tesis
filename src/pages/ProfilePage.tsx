@@ -49,7 +49,8 @@ const ProfilePage: React.FC = () => {
             "home_phone":homePhone,
             "email":email,
             "address":address
-        })
+        });
+        
         console.log(response);
     }
     
@@ -93,17 +94,11 @@ const ProfilePage: React.FC = () => {
                 <IonRow>
                     <IonCol></IonCol>
                     <IonCol size='6'>
-                        <IonImg src={photos.length>0? photos[0].webviewPath:avatar}/>
+                        <IonImg style={{width:"150px", height:"200px"}} src={photos.length>0? photos[0].webviewPath:avatar}/>
                     </IonCol>
                     <IonCol></IonCol>
                 </IonRow>
-                {/* <IonRow>
-                    {photos.map((photo, index) => (
-                        <IonCol size="6" key={index}>
-                        <IonImg src={photo.webviewPath} />
-                        </IonCol>
-                    ))}
-                </IonRow> */}
+        
                 <IonRow>
                     <IonCol></IonCol>
                     <IonCol><IonButton onClick={()=>takePhoto()}>Editar foto</IonButton></IonCol>
