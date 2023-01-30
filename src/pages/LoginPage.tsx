@@ -4,7 +4,7 @@ import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import swal from 'sweetalert';
 import { loginUser, useAuth} from '../data/auth';
-import "./LoginPage.css"
+
 
 
 interface Props{

@@ -12,7 +12,7 @@ import PasswordPage from './pages/PasswordPage';
 const App: React.FC = () => {
 
   //Se crean variables con el hook useState para declarar el estado inicial de inicio de sesion del usuario
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
   const [role, setRole] = useState("");
   
   
@@ -35,7 +35,6 @@ const App: React.FC = () => {
               <Route exact path = "/password">
                 <PasswordPage />
               </Route>
-              </IonRouterOutlet>
               <Route path={"/my"}>        
                 <AppMenu/>
               </Route>
@@ -44,6 +43,7 @@ const App: React.FC = () => {
                 <NotFoundPage/>
               </Route>
             
+              </IonRouterOutlet>
             </Switch>
           </IonReactRouter>
       
