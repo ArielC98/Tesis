@@ -8,6 +8,7 @@ import HomePage from './pages/HomePage';
 import ProfilePage from './pages/ProfilePage';
 import SettingsPage from './pages/SettingsPage';
 import SubjectPage from './pages/SubjectPage';
+import ReportPage from './pages/ReportPage';
 
 
 
@@ -35,6 +36,9 @@ const AppMenu: React.FC = () => {
           </Route>
           <Route exact path="/my/profile">
             <ProfilePage/>
+          </Route>
+          <Route exact path="/my/reports">
+            <ReportPage/>
           </Route>
           <Route exact path="/my/settings">
             <SettingsPage />
