@@ -1,5 +1,5 @@
 import React from "react";
-import {Page, Text, Document, StyleSheet} from "@react-pdf/renderer"
+import {Page, Text, Document, StyleSheet,Image} from "@react-pdf/renderer"
 
 
 const styles = StyleSheet.create({
@@ -48,7 +48,7 @@ const PDFFile = () => {
             <Document>
                 <Page style={styles.body}>
                 <Text style={styles.header} fixed></Text>
-                
+                <Image src="../assets/icon/icon.png"></Image>
                 <Text style={styles.text}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam dolorem praesentium, omnis amet obcaecati incidunt minima quas totam qui consequatur blanditiis ut vero inventore eius. Minus adipisci nam alias exercitationem! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sed harum, corrupti tempora officiis quasi sit necessitatibus inventore recusandae ad velit? Repudiandae, recusandae. Error, quibusdam modi suscipit sit adipisci doloremque ipsum? Lorem ipsum, dolor sit amet consectetur adipisicing elit. Exercitationem sequi animi eligendi cupiditate eveniet quae doloremque. Culpa, aperiam! Laborum consequuntur asperiores soluta dolor velit inventore tenetur nesciunt beatae cum dicta. Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas fugiat similique aliquid nisi odit tempore nostrum natus debitis repellat possimus. In nisi optio dicta iste cumque amet neque et consequuntur. Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere ipsam nostrum dicta culpa? Ex, rerum? Culpa error quibusdam numquam laboriosam laudantium repudiandae earum pariatur placeat rerum ut? Dolorum, repellendus itaque.
                 </Text>
                 <Text
