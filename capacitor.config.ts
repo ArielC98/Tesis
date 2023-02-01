@@ -1,10 +1,10 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'org.example.dailymoments',
-  appName: 'daily-moments',
+  appId: 'epn.edu.tesis',
+  appName: 'tesis',
   webDir: 'build',
-  bundledWebRuntime: false
+  bundledWebRuntime: false,
 };
 
 export default config;
