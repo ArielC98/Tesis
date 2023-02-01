@@ -1,13 +1,13 @@
 import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonList, IonMenuButton, IonPage, IonRow, IonTitle, IonToolbar } from '@ionic/react';
-import { useState } from 'react';
-import PDFFile from '../components/PDFFile';
-import {PDFDownloadLink} from "@react-pdf/renderer";
+import { useState, useEffect } from 'react';
+import { createPDF } from '../data/report';
+
+
 
 
 
 
 const ReportPage: React.FC = () => {
-  
 
 
   return (
@@ -22,9 +22,9 @@ const ReportPage: React.FC = () => {
       </IonHeader>
       <IonContent className="ion-padding">
         <h1>Pagina de reporte</h1>
-        <PDFDownloadLink document={<PDFFile/>} fileName="Reporte">
-          <IonButton>Download</IonButton>
-        </PDFDownloadLink>
+
+          <IonButton onClick ={createPDF}>Download</IonButton>
+          
 
       </IonContent>
     </IonPage>

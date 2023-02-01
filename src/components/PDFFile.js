@@ -56,6 +56,8 @@ const PDFFile = () => {
                     render = {({pageNumber,totalPages}) => `${pageNumber} / ${totalPages}`}
                     fixed
                 />
+
+
                 </Page>
             </Document>
 
