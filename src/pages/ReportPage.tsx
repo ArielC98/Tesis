@@ -4,9 +4,6 @@ import { createPDF } from '../data/report';
 
 
 
-
-
-
 const ReportPage: React.FC = () => {
 
 

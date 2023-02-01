@@ -1,12 +1,16 @@
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { useState } from 'react';
+import { Plugin } from '@capacitor/core';
+import { Filesystem } from '@capacitor/filesystem';
+
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 
 const rector = "Rector";
 const secretario = "Secretario";
+
 
 
 const docDefinition = {
@@ -71,6 +75,7 @@ const docDefinition = {
 
 export const createPDF = () => {
     const pdfGenerator = pdfMake.createPdf(docDefinition);
-    pdfGenerator.download();
+    pdfGenerator.open();
+
 }
 
