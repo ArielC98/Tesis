@@ -7,13 +7,16 @@ import { AuthContext} from './data/auth';
 import LoginPage from './pages/LoginPage';
 import NotFoundPage from './pages/NotFoundPage';
 import PasswordPage from './pages/PasswordPage';
+import "@ionic/react/css/core.css"
+import "./theme/variables.css"
+
 
 
 const App: React.FC = () => {
 
   //Se crean variables con el hook useState para declarar el estado inicial de inicio de sesion del usuario
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [role, setRole] = useState("");
+  const [loggedIn, setLoggedIn] = useState(true);
+  const [role, setRole] = useState("teacher");
   
   
   

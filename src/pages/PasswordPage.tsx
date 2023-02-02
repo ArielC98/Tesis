@@ -40,14 +40,14 @@ const PasswordPage: React.FC = () => {
           <IonRow>
             <IonCol></IonCol>
             <IonCol size='6'>
-              <IonImg src='../assets/icon/logo.jpg'/>
+              <IonImg src='../assets/icon/logo.png'/>
             </IonCol>
             <IonCol></IonCol>
           </IonRow>
         </IonGrid>
         <IonList>
           <IonItem>
-            <IonLabel position='stacked'>Identificación</IonLabel>
+            <IonLabel position='floating'>Identificación</IonLabel>
             <IonInput type='text' onIonChange={e => setIdentification(e.detail.value)}/>
           </IonItem>
           

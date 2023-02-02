@@ -1,9 +1,10 @@
 import { IonButton, IonCol, IonContent, IonGrid, IonHeader, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, IonRow, IonText, IonTitle, IonToolbar, useIonLoading } from '@ionic/react';
 import { useState } from 'react';
 import { Redirect } from 'react-router';
-import { Link } from 'react-router-dom';
 import swal from 'sweetalert';
 import { loginUser, useAuth} from '../data/auth';
+import "@ionic/react/css/core.css"
+import "../theme/variables.css"
 
 
 
@@ -26,7 +27,7 @@ const LoginPage: React.FC<Props> = ({onLogin}) => {
     e.preventDefault();
     setIsLoading(true);
     present({
-      message: "cargando"
+      message: "Cargando..."
     })
     loginUser({
       identification,
@@ -45,7 +46,7 @@ const LoginPage: React.FC<Props> = ({onLogin}) => {
           
         onLogin(response.data.user.role);
       } 
-    }).catch(error => {swal("Error", "Usuario o contraseña incorrecta", "error"); dismiss()})
+    }).catch(error => {swal("Error", "Usuario o contraseña incorrecta"); dismiss()})
   
   }
 
@@ -72,25 +73,25 @@ const LoginPage: React.FC<Props> = ({onLogin}) => {
           <IonRow>
             <IonCol></IonCol>
             <IonCol size='6'>
-              <IonImg src='../assets/icon/logo.jpg'/>
+              <IonImg src='../assets/icon/logo.png'/>
             </IonCol>
             <IonCol></IonCol>
           </IonRow>
         </IonGrid>
         <IonList>
           <IonItem>
-            <IonLabel position='stacked'>Identificación</IonLabel>
+            <IonLabel position='floating'><h2>Identificación</h2></IonLabel>
             <IonInput type='text' onIonChange={e => setIdentification(e.detail.value)}/>
           </IonItem>
           <IonItem>
-            <IonLabel position='stacked'>Contraseña</IonLabel>
+            <IonLabel position='floating'>Contraseña</IonLabel>
             <IonInput type='text' onIonChange={e => setPassword(e.detail.value)}/>
           </IonItem>
+          <IonItem  lines='none' routerLink="/password" className='ion-text-center' >
+              <IonLabel><h4>¿Olvidó su contraseña?</h4></IonLabel>
+          </IonItem>
         </IonList>
-        <IonButton className='ion-margin-vertical' expand='block' onClick={handleSubmit}>Login</IonButton>
-        <IonItem  lines='none' routerLink="/password" className='ion-text-center' id="passwd">
-            <IonLabel>¿Olvidó su contraseña?</IonLabel>
-        </IonItem>
+        <IonButton className='ion-margin-vertical' expand='block' onClick={handleSubmit}color="primary">Ingresar</IonButton>
       
       </IonContent>
     </IonPage>

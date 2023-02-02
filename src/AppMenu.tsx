@@ -1,6 +1,4 @@
 import { IonPage, IonRouterOutlet, IonSplitPane } from '@ionic/react';
-
-
 import { Redirect, Route } from 'react-router-dom';
 import { useAuth } from './data/auth';
 import Menu from './components/Menu';
@@ -9,7 +7,8 @@ import ProfilePage from './pages/ProfilePage';
 import SettingsPage from './pages/SettingsPage';
 import SubjectPage from './pages/SubjectPage';
 import ReportPage from './pages/ReportPage';
-
+import "@ionic/react/css/core.css"
+import "./theme/variables.css"
 
 
 
