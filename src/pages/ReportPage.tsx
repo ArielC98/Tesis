@@ -1,4 +1,4 @@
-import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonList, IonLoading, IonMenuButton, IonPage, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar } from '@ionic/react';
+import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonList, IonLoading, IonMenuButton, IonPage, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar, useIonLoading } from '@ionic/react';
 import { useState, useEffect } from 'react';
 import { createPDF } from '../data/PDFFile';
 import { Browser } from '@capacitor/browser';
@@ -16,6 +16,7 @@ const ReportPage: React.FC = () => {
   const [info,setInfo] = useState([]);
   const [subjectList] = useState([]);
   const [academicPeriod, setAcademicPeriod] = useState("1");
+  const [present, dismiss] = useIonLoading();
 
   useEffect(()=>{
 
@@ -37,7 +38,9 @@ const ReportPage: React.FC = () => {
   },[])
 
   async function handleReport(id: string){
-    
+    present({
+      message: 'Creando reporte...',
+    })
     teacherReport(id).then(response => { 
       
       console.log(response);
@@ -82,7 +85,7 @@ const ReportPage: React.FC = () => {
           }); 
           
 
-          setIsLoading(false)
+          dismiss();
     });
   }
 
