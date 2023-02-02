@@ -1,9 +1,11 @@
-import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonList, IonLoading, IonMenuButton, IonPage, IonRow, IonTitle, IonToolbar } from '@ionic/react';
+import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonList, IonLoading, IonMenuButton, IonPage, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar } from '@ionic/react';
 import { useState, useEffect } from 'react';
 import { createPDF } from '../data/PDFFile';
 import { Browser } from '@capacitor/browser';
 import { useAuth } from '../data/auth';
 import { teacherReport } from '../data/report';
+import { teacherSubjects } from '../data/subjects';
+import { studentGrades } from '../data/grades';
 
 
 const ReportPage: React.FC = () => {
@@ -12,11 +14,31 @@ const ReportPage: React.FC = () => {
   const [isLoading,setIsLoading] = useState(false);
   const [data, setData] = useState([]);
   const [info,setInfo] = useState([]);
+  const [subjectList] = useState([]);
+  const [academicPeriod, setAcademicPeriod] = useState("1");
 
   useEffect(()=>{
 
     setIsLoading(true);
-    teacherReport("1").then(response => { 
+
+    if(role === "teacher"){
+      teacherSubjects().then((response) => response.subjects.map((subject) => {subjectList.push(subject);setIsLoading(false);}));
+    
+      console.log(subjectList);
+    
+    }
+    else{
+      studentGrades(academicPeriod).then(response => response.grades.map((subject) => {subjectList.push(subject);setIsLoading(false);})
+      )
+    }
+
+    
+    
+  },[])
+
+  async function handleReport(id: string){
+    
+    teacherReport(id).then(response => { 
       
       console.log(response);
       const information = [];
@@ -36,9 +58,8 @@ const ReportPage: React.FC = () => {
       .then(studentList =>
         {
           console.log(studentList);
-          
           studentList.map((student,i)=>{
-
+            
             const datos = []
 
             datos.push({text:student.student_name + " " + student.student_last_name,style:"names"})
@@ -56,13 +77,14 @@ const ReportPage: React.FC = () => {
             datos.push({text:student.final,style:"grades"})
 
             data.push(datos);
+            console.log("data",data);
+            
           }); 
           
 
           setIsLoading(false)
-        });
-    
-  },[])
+    });
+  }
 
   if(isLoading){
     return <IonLoading isOpen />
@@ -81,7 +103,26 @@ const ReportPage: React.FC = () => {
       <IonContent className="ion-padding">
         <h1>Pagina de reporte</h1>
 
-          <IonButton onClick ={e=>createPDF(role,data, info)}>Reporte</IonButton>
+        <IonSelect placeholder='Seleccionar materia'  onIonChange={(e)=>{
+            
+            subjectList.map((subject)=>{
+              if(e.detail.value === subject.name){ //Compara el nombre seleccionado con el del arreglo de estudiantes
+                handleReport(subject.id);
+              }      
+            });
+            
+          }}>
+          {subjectList.map((subject)=>
+              <IonSelectOption key={subject.id}>
+                {subject.name}
+              </IonSelectOption>
+            )
+          }
+        </IonSelect>
+
+
+
+          <IonButton onClick ={e=>{createPDF(role,data, info);setData([])}}>Reporte</IonButton>
           
           
 

@@ -16,13 +16,13 @@ const HomePage: React.FC = () => {
   useEffect(() => {
     
     if(role === "teacher"){
-      const materias = teacherSubjects().then((response) => response.subjects.map((subject) => {subjectList.push(subject);setIsLoading(false);}));
+      teacherSubjects().then((response) => response.subjects.map((subject) => {subjectList.push(subject);setIsLoading(false);}));
     
       console.log(subjectList);
-      console.log("El rol es", role);
+    
     }
     else{
-      const materias = studentGrades(academicPeriod).then(response => response.grades.map((subject) => {subjectList.push(subject);setIsLoading(false);})
+      studentGrades(academicPeriod).then(response => response.grades.map((subject) => {subjectList.push(subject);setIsLoading(false);})
       )
     }
     
@@ -47,7 +47,7 @@ const HomePage: React.FC = () => {
       <IonContent className="ion-padding">
         <IonTitle>Materias</IonTitle>
         <IonList className='ion-margin-top'>
-          {role==="teacher"?
+          {role==="teacher"? //Si el rol es de profesor
             subjectList.map((subject)=>
               <IonItem 
                 button 
@@ -61,7 +61,7 @@ const HomePage: React.FC = () => {
                     <p>{subject.course + " " + subject.parallel}</p>
                   </IonLabel>
                 </IonItem>
-            ):
+            ): //Si el rol es de estudiante
             subjectList.map((subject)=>
               <IonItem 
                 button 
