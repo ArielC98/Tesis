@@ -1,7 +1,8 @@
-import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonItem, IonLabel, IonLoading, IonPage, IonSelect, IonSelectOption, IonTitle, IonToolbar, useIonAlert, useIonLoading } from '@ionic/react';
+import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonItem, IonLabel, IonLoading, IonPage, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar, useIonAlert, useIonLoading } from '@ionic/react';
 import { AgGridReact } from 'ag-grid-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router';
+import swal from 'sweetalert';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { studentsList } from '../data/students';
@@ -26,7 +27,7 @@ const SubjectPage: React.FC = () => {
   const [present, dismiss] = useIonLoading();
   const [showAlert, hideAlert] = useIonAlert();
   const [subjectName, setSubjectName] = useState("");
-
+  const gridRef = useRef<AgGridReact>();
   
 
 
@@ -42,6 +43,8 @@ const SubjectPage: React.FC = () => {
       
     }
 
+    
+
   },[id,role,students]);
 
   async function handleGrades (studentId: string, subjectId: string) {
@@ -55,14 +58,17 @@ const SubjectPage: React.FC = () => {
     
 
     setRowData([
-      {descripcion: "Parcial 1 Q 1", puntaje: grades[0]["p1q1"]},
-      {descripcion: "Parcial 2 Q 1", puntaje: grades[0]["p2q1"]},
-      {descripcion: "Parcial 3 Q 1", puntaje: grades[0]["p3q1"]},
-      {descripcion: "Parcial 1 Q 2", puntaje: grades[0]["p1q2"]},
-      {descripcion: "Parcial 2 Q 2", puntaje: grades[0]["p2q2"]},
-      {descripcion: "Parcial 3 Q 2", puntaje: grades[0]["p3q2"]},
-      {descripcion: "Quimestre 1", puntaje: grades[0]["q1"]},
-      {descripcion: "Quimestre 2", puntaje: grades[0]["q2"]},
+      {'descripción': "Parcial 1 Q 1", puntaje: grades[0]["p1q1"]},
+      {'descripción': "Parcial 2 Q 1", puntaje: grades[0]["p2q1"]},
+      {'descripción': "Parcial 3 Q 1", puntaje: grades[0]["p3q1"]},
+      {'descripción': "Parcial 1 Q 2", puntaje: grades[0]["p1q2"]},
+      {'descripción': "Parcial 2 Q 2", puntaje: grades[0]["p2q2"]},
+      {'descripción': "Parcial 3 Q 2", puntaje: grades[0]["p3q2"]},
+      {'descripción': "Quimestre 1", puntaje: grades[0]["q1"]},
+      {'descripción': "Quimestre 2", puntaje: grades[0]["q2"]},
+      {'descripción': "Supletorio", puntaje: grades[0]["supletorio"]},
+      {'descripción': "Remedial", puntaje: grades[0]["remedial"]},
+      {'descripción': "Gracia", puntaje: grades[0]["gracia"]},
       
     ])
     
@@ -70,10 +76,7 @@ const SubjectPage: React.FC = () => {
   }
 
   async function handleUpdate (studentId: string, subjectId: string) {
-    present({
-      message: 'Cargando...',
-      duration: 3000
-    })
+    
     const tempGrades = {
       p1q1:rowData[0].puntaje,
       p2q1:rowData[1].puntaje,
@@ -81,32 +84,41 @@ const SubjectPage: React.FC = () => {
       p1q2:rowData[3].puntaje,
       p2q2:rowData[4].puntaje,
       p3q2:rowData[5].puntaje,
-      supletorio:null,
-      remedial:null,
-      gracia:null
+      supletorio:rowData[6].puntaje,
+      remedial:rowData[7].puntaje,
+      gracia:rowData[8].puntaje
     }
 
-    console.log("notas temporales",{tempGrades,studentId,subjectId});
+    const isBetweenValues = (currentValue: number) => currentValue <= 10.00 && currentValue >= 0.00;
     
-
-    await updateGrades(studentId,subjectId,tempGrades).then(response =>showAlert(response.message));
-    
-        
+    if(Object.values(tempGrades).every(isBetweenValues)){
+      present({
+        message: 'Cargando...',
+      })
+      await updateGrades(studentId,subjectId,tempGrades).then(response =>{dismiss();showAlert(response.message)});
+    }
+    else{
+      
+      showAlert("Las notas deben ser números decimales separados por punto entre 0.00 y 10.00");
+      
+    }  
   }
 
+ 
+
   const [rowData, setRowData] = useState([
-      {descripcion: "Parcial 1 Q 1", puntaje: grades[0]["p1q1"]},
-      {descripcion: "Parcial 2 Q 1", puntaje: grades[0]["p2q1"]},
-      {descripcion: "Parcial 3 Q 1", puntaje: grades[0]["p3q1"]},
-      {descripcion: "Parcial 1 Q 2", puntaje: grades[0]["p1q2"]},
-      {descripcion: "Parcial 2 Q 2", puntaje: grades[0]["p2q2"]},
-      {descripcion: "Parcial 3 Q 2", puntaje: grades[0]["p3q2"]},
-      {descripcion: "Quimestre 1", puntaje: grades[0]["q1"]},
-      {descripcion: "Quimestre 2", puntaje: grades[0]["q2"]},
+      {'descripción': "Parcial 1 Q 1", puntaje: grades[0]["p1q1"]},
+      {'descripción': "Parcial 2 Q 1", puntaje: grades[0]["p2q1"]},
+      {'descripción': "Parcial 3 Q 1", puntaje: grades[0]["p3q1"]},
+      {'descripción': "Parcial 1 Q 2", puntaje: grades[0]["p1q2"]},
+      {'descripción': "Parcial 2 Q 2", puntaje: grades[0]["p2q2"]},
+      {'descripción': "Parcial 3 Q 2", puntaje: grades[0]["p3q2"]},
+      {'descripción': "Quimestre 1", puntaje: grades[0]["q1"]},
+      {'descripción': "Quimestre 2", puntaje: grades[0]["q2"]},
   ]);
 
   const [columnDefs] = useState([
-      { field: 'descripcion', width: 120, editable:true},
+      { field: 'descripción', width: 175, editable:true},
       { field: 'puntaje', width: 120, editable: role === "teacher"},
       
   ])
@@ -152,21 +164,48 @@ const SubjectPage: React.FC = () => {
           </IonSelect>
         </IonItem>
 
-
-          <div className="ag-theme-alpine" style={{height: 400, width: 250, marginLeft:40 }}>
+        <IonGrid>
+          <IonRow>
+            <IonCol></IonCol>
+            <IonCol>
+            <div className="ag-theme-alpine" style={{height: 520, width: 300}}>
             <AgGridReact
+                ref={gridRef}
                 rowData={rowData}
                 columnDefs={columnDefs}>
             </AgGridReact>
         </div>
+            </IonCol>
+            <IonCol></IonCol>
+          </IonRow>
+          </IonGrid>
+            
+          <IonGrid>
+          <IonRow>
+            <IonCol >
+              <IonButton  expand='block' onClick={()=>{console.log("count",count);setCount(count-1);
+              }}> Anterior</IonButton>
+            </IonCol>
+            <IonCol >
+              <IonButton expand ='block' onClick={()=>{console.log("countInicial",count);setCount(count+1);
+            }}>Siguiente</IonButton>
+            </IonCol>
+          </IonRow>
+          <IonRow>
           
-            <IonButton style={{marginLeft:50}} onClick={()=>{console.log("count",count);setCount(count-1);
-            }}>Anterior</IonButton>
-          <IonButton onClick={()=>{console.log("countInicial",count);setCount(count+1);
-          }}>Siguiente</IonButton>
-          <IonButton color="success" style={{marginLeft:105}}
-            onClick={e =>  handleUpdate (students[count].id,id)}
-          >Guardar</IonButton>
+            <IonCol></IonCol>
+              <IonCol size='7'>
+              <IonButton  expand= 'block' color="success"
+                onClick={e =>  handleUpdate (students[count].id,id)}
+              >Guardar</IonButton>
+              </IonCol>
+              <IonCol></IonCol>
+          </IonRow>
+        </IonGrid>
+        
+          
+            
+          
           
       </IonContent>
     </IonPage>

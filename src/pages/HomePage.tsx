@@ -47,7 +47,7 @@ const HomePage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
-        <IonTitle>Materias</IonTitle>
+        <IonLabel><h1>Materias</h1></IonLabel>
         <IonList className='ion-margin-top'>
           {role==="teacher"? //Si el rol es de profesor
             subjectList.map((subject)=>
