@@ -45,7 +45,7 @@ const LoginPage: React.FC<Props> = ({onLogin}) => {
           
         onLogin(response.data.user.role);
       } 
-    }).catch(error => swal("Error", "Usuario o contraseña incorrecta", "error"))
+    }).catch(error => {swal("Error", "Usuario o contraseña incorrecta", "error"); dismiss()})
   
   }
 
