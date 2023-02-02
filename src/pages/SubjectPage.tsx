@@ -1,4 +1,4 @@
-import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonLoading, IonPage, IonSelect, IonSelectOption, IonTitle, IonToolbar, useIonAlert, useIonLoading } from '@ionic/react';
+import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonItem, IonLabel, IonLoading, IonPage, IonSelect, IonSelectOption, IonTitle, IonToolbar, useIonAlert, useIonLoading } from '@ionic/react';
 import { AgGridReact } from 'ag-grid-react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
@@ -25,7 +25,7 @@ const SubjectPage: React.FC = () => {
   const [grades, setGrades] = useState([{}]);
   const [present, dismiss] = useIonLoading();
   const [showAlert, hideAlert] = useIonAlert();
-
+  const [subjectName, setSubjectName] = useState("");
 
   
 
@@ -50,7 +50,7 @@ const SubjectPage: React.FC = () => {
       message: 'Cargando...',
       duration: 4000
     })
-    await teacherGrades(studentId,subjectId).then(response =>{grades.push(response.grades[0]);grades.shift()});
+    await teacherGrades(studentId,subjectId).then(response =>{grades.push(response.grades[0]);grades.shift();setSubjectName(response.grades[0].subject_name)});
     
     
 
@@ -121,34 +121,36 @@ const SubjectPage: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Materia</IonTitle>
+          <IonTitle>{subjectName}</IonTitle>
           <IonButtons slot="start">
           <IonBackButton defaultHref="/my/dashboard" />
         </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
-        <IonSelect placeholder='Seleccionar estudiante' value = {students[count].name} onIonChange={(e)=>{
-          console.log(students); 
-            students.map((student,position)=>{
-              if(e.detail.value === student.name){ //Compara el nombre seleccionado con el del arreglo de estudiantes
-                setCount(position)
-                console.log("activado");
-            
-                handleGrades(student.id,id) //Pasa los parametros del id del estudiante y materia
+        <IonItem className='ion-margin-bottom'>
+        <IonLabel position='stacked'>Seleccionar Estudiante</IonLabel>
+          <IonSelect   placeholder='Estudiante' value = {students[count].name} onIonChange={(e)=>{
+            console.log(students); 
+              students.map((student,position)=>{
+                if(e.detail.value === student.name){ //Compara el nombre seleccionado con el del arreglo de estudiantes
+                  setCount(position)
+                  console.log("activado");
               
-              }      
-            })
-            
-          }}>
-          {students.map((student)=>
-              <IonSelectOption key={student.id}>
-                {student.name}
-              </IonSelectOption>
-            )
-          }
-        </IonSelect>
-
+                  handleGrades(student.id,id) //Pasa los parametros del id del estudiante y materia
+                
+                }      
+              })
+              
+            }}>
+            {students.map((student)=>
+                <IonSelectOption key={student.id}>
+                  {student.name}
+                </IonSelectOption>
+              )
+            }
+          </IonSelect>
+        </IonItem>
 
 
           <div className="ag-theme-alpine" style={{height: 400, width: 250, marginLeft:40 }}>
