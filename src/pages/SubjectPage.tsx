@@ -61,10 +61,10 @@ const SubjectPage: React.FC = () => {
       {'descripción': "Parcial 1 Q 1", puntaje: grades[0]["p1q1"]},
       {'descripción': "Parcial 2 Q 1", puntaje: grades[0]["p2q1"]},
       {'descripción': "Parcial 3 Q 1", puntaje: grades[0]["p3q1"]},
+      {'descripción': "Quimestre 1", puntaje: grades[0]["q1"]},
       {'descripción': "Parcial 1 Q 2", puntaje: grades[0]["p1q2"]},
       {'descripción': "Parcial 2 Q 2", puntaje: grades[0]["p2q2"]},
       {'descripción': "Parcial 3 Q 2", puntaje: grades[0]["p3q2"]},
-      {'descripción': "Quimestre 1", puntaje: grades[0]["q1"]},
       {'descripción': "Quimestre 2", puntaje: grades[0]["q2"]},
       {'descripción': "Supletorio", puntaje: grades[0]["supletorio"]},
       {'descripción': "Remedial", puntaje: grades[0]["remedial"]},
@@ -110,15 +110,18 @@ const SubjectPage: React.FC = () => {
       {'descripción': "Parcial 1 Q 1", puntaje: grades[0]["p1q1"]},
       {'descripción': "Parcial 2 Q 1", puntaje: grades[0]["p2q1"]},
       {'descripción': "Parcial 3 Q 1", puntaje: grades[0]["p3q1"]},
+      {'descripción': "Quimestre 1", puntaje: grades[0]["q1"]},
       {'descripción': "Parcial 1 Q 2", puntaje: grades[0]["p1q2"]},
       {'descripción': "Parcial 2 Q 2", puntaje: grades[0]["p2q2"]},
       {'descripción': "Parcial 3 Q 2", puntaje: grades[0]["p3q2"]},
-      {'descripción': "Quimestre 1", puntaje: grades[0]["q1"]},
       {'descripción': "Quimestre 2", puntaje: grades[0]["q2"]},
+      {'descripción': "Supletorio", puntaje: grades[0]["q2"]},
+      {'descripción': "Remedial", puntaje: grades[0]["q2"]},
+      {'descripción': "Gracia", puntaje: grades[0]["q2"]},
   ]);
 
   const [columnDefs] = useState([
-      { field: 'descripción', width: 175, editable:true},
+      { field: 'descripción', width: 175},
       { field: 'puntaje', width: 120, editable: role === "teacher"},
       
   ])
