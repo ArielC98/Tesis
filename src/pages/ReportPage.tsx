@@ -11,41 +11,56 @@ const ReportPage: React.FC = () => {
   const {role} = useAuth();
   const [isLoading,setIsLoading] = useState(false);
   const [data, setData] = useState([]);
-  const [students,setStudents] = useState([]);
+  const [info,setInfo] = useState([]);
 
   useEffect(()=>{
 
     setIsLoading(true);
-    teacherReport("1").then(response => response.grades).then(studentList =>
-      {
-        console.log(studentList);
-        
-        studentList.map((student,i)=>{
+    teacherReport("1").then(response => { 
+      
+      console.log(response);
+      const information = [];
+      information.push(response.information.name);
+      information.push(response.information.director_name);
+      information.push(response.information.secretary_name);
+      information.push(response.subject_name);
+      information.push(response.specialty);
+      information.push(response.course);
+      information.push(response.parallel);
+      information.push(response.academic_period);
 
-          const datos = []
+      setInfo(information)
+      
 
-          datos.push({text:student.student_name + " " + student.student_last_name,style:"names"})
-          datos.push({text:student.p1q1,style:"grades"})
-          datos.push({text:student.p2q1,style:"grades"})
-          datos.push({text:student.p3q1,style:"grades"})
-          datos.push({text:student.p1q2,style:"grades"})
-          datos.push({text:student.p2q2,style:"grades"})
-          datos.push({text:student.p3q2,style:"grades"})
-          datos.push({text:student.q1,style:"grades"})
-          datos.push({text:student.q2,style:"grades"})
-          datos.push({text:student.supletorio,style:"grades"})
-          datos.push({text:student.remedial,style:"grades"})
-          datos.push({text:student.gracia,style:"grades"})
-          datos.push({text:student.final,style:"grades"})
+      return response.grades})
+      .then(studentList =>
+        {
+          console.log(studentList);
+          
+          studentList.map((student,i)=>{
 
-          data.push(datos);
-        }); 
+            const datos = []
 
-        console.log(data);
-        
+            datos.push({text:student.student_name + " " + student.student_last_name,style:"names"})
+            datos.push({text:student.p1q1,style:"grades"})
+            datos.push({text:student.p2q1,style:"grades"})
+            datos.push({text:student.p3q1,style:"grades"})
+            datos.push({text:student.p1q2,style:"grades"})
+            datos.push({text:student.p2q2,style:"grades"})
+            datos.push({text:student.p3q2,style:"grades"})
+            datos.push({text:student.q1,style:"grades"})
+            datos.push({text:student.q2,style:"grades"})
+            datos.push({text:student.supletorio,style:"grades"})
+            datos.push({text:student.remedial,style:"grades"})
+            datos.push({text:student.gracia,style:"grades"})
+            datos.push({text:student.final,style:"grades"})
 
-        setIsLoading(false)
-      });
+            data.push(datos);
+          }); 
+          
+
+          setIsLoading(false)
+        });
     
   },[])
 
@@ -66,7 +81,7 @@ const ReportPage: React.FC = () => {
       <IonContent className="ion-padding">
         <h1>Pagina de reporte</h1>
 
-          <IonButton onClick ={e=>createPDF(role,data)}>Reporte</IonButton>
+          <IonButton onClick ={e=>createPDF(role,data, info)}>Reporte</IonButton>
           
           
 
