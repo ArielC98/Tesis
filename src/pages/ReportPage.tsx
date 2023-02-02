@@ -1,7 +1,7 @@
 import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonList, IonLoading, IonMenuButton, IonPage, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar, useIonLoading } from '@ionic/react';
 import { useState, useEffect } from 'react';
 import { createPDF } from '../data/PDFFile';
-import { Browser } from '@capacitor/browser';
+import { Browser, OpenOptions } from '@capacitor/browser';
 import { useAuth } from '../data/auth';
 import { teacherReport } from '../data/report';
 import { teacherSubjects } from '../data/subjects';
@@ -126,6 +126,7 @@ const ReportPage: React.FC = () => {
 
 
           <IonButton onClick ={e=>{createPDF(role,data, info);setData([])}}>Reporte</IonButton>
+          
           
           
 

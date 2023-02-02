@@ -12,8 +12,8 @@ import PasswordPage from './pages/PasswordPage';
 const App: React.FC = () => {
 
   //Se crean variables con el hook useState para declarar el estado inicial de inicio de sesion del usuario
-  const [loggedIn, setLoggedIn] = useState(true);
-  const [role, setRole] = useState("teacher");
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [role, setRole] = useState("");
   
   
   
