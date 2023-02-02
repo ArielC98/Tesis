@@ -14,6 +14,8 @@ const HomePage: React.FC = () => {
   
 
   useEffect(() => {
+
+
     
     if(role === "teacher"){
       teacherSubjects().then((response) => response.subjects.map((subject) => {subjectList.push(subject);setIsLoading(false);}));
@@ -39,7 +41,7 @@ const HomePage: React.FC = () => {
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonMenuButton />
+            <IonMenuButton/>
           </IonButtons>
           <IonTitle>Inicio</IonTitle>
         </IonToolbar>

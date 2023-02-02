@@ -14,6 +14,8 @@ import {
 import { useLocation } from 'react-router-dom';
 import { archiveOutline, archiveSharp, bookmarkOutline, code, codeOutline, grid, gridOutline, heartOutline, heartSharp, home, homeOutline, link, linkOutline, list, mailOutline, mailSharp, newspaperOutline, paperPlaneOutline, paperPlaneSharp, person, personOutline, settings, settingsOutline, shareSocial, trashOutline, trashSharp, warningOutline, warningSharp } from 'ionicons/icons';
 import './Menu.css';
+import { userData } from '../data/information';
+import { useEffect, useState } from 'react';
 
 interface AppPage {
   url: string;
@@ -60,14 +62,30 @@ const appPages: AppPage[] = [
 
 const Menu: React.FC = () => {
   const location = useLocation();
+  const [avatar,setAvatar] = useState("");
+  const [name,setName] = useState("");
+  const [identification,setIdentification] = useState("");
+
+  useEffect(() =>{
+
+    userData().then(response => {
+
+      setAvatar(response.data.avatar);
+      setName(response.data.user.name);
+      setIdentification(response.data.user.identification);
+      console.log(response.data.user.id);
+      
+    })
+
+  },[])
 
   return (
     <IonMenu contentId="main" type="overlay">
       <IonContent>
         <IonList id="inbox-list">
-          <IonImg src='../assets/icon/user_icon.png' style={{width:190}}/>
-          <IonListHeader>Ariel Calderon</IonListHeader>
-          <IonNote>1750051755</IonNote>
+          <IonImg src={avatar} style={{width:190, marginBottom:5}}/>
+          <IonListHeader>{name}</IonListHeader>
+          <IonNote>{identification}</IonNote>
           {appPages.map((appPage, index) => {
             return (
               <IonMenuToggle key={index} autoHide={false}>
