@@ -35,7 +35,8 @@ const SubjectPage: React.FC = () => {
     
     
     if(role === "teacher"){
-      studentsList(id).then((response) => {response.students.map((student) => {students.push(student)});
+      studentsList(id).then((response) => {response.students.map((student) => {students.push(student)});console.log(students);
+      
       handleGrades(students[0].id,id);setIsLoading(false);
       })
     }
@@ -51,9 +52,9 @@ const SubjectPage: React.FC = () => {
     
     present({
       message: 'Cargando...',
-      duration: 4000
+
     })
-    await teacherGrades(studentId,subjectId).then(response =>{grades.push(response.grades[0]);grades.shift();setSubjectName(response.grades[0].subject_name)});
+    await teacherGrades(studentId,subjectId).then(response =>{grades.push(response.grades[0]);grades.shift();setSubjectName(response.grades[0].subject_name);dismiss()});
     
     
 
@@ -148,12 +149,12 @@ const SubjectPage: React.FC = () => {
         </IonItem>
         <IonItem style={{marginTop:-20}}>
         <IonLabel position='stacked'>Seleccionar Estudiante</IonLabel>
-          <IonSelect   placeholder='Estudiante' value = {students[count].name} onIonChange={(e)=>{
+          <IonSelect   placeholder='Estudiante' value = {students[count].name+ " " + students[count].last_name} onIonChange={(e)=>{
             console.log(students); 
               students.map((student,position)=>{
-                if(e.detail.value === student.name){ //Compara el nombre seleccionado con el del arreglo de estudiantes
+                if(e.detail.value === student.name + " " + student.last_name){ //Compara el nombre seleccionado con el del arreglo de estudiantes
                   setCount(position)
-                  console.log("activado");
+                  
               
                   handleGrades(student.id,id) //Pasa los parametros del id del estudiante y materia
                 
@@ -163,7 +164,7 @@ const SubjectPage: React.FC = () => {
             }}>
             {students.map((student)=>
                 <IonSelectOption key={student.id}>
-                  {student.name}
+                  {student.name + " " + student.last_name}
                 </IonSelectOption>
               )
             }
