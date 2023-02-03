@@ -143,9 +143,10 @@ const SubjectPage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
-          <IonTitle className='ion-text-center'>{subjectName}</IonTitle>
-
-        <IonItem >
+        <IonItem className='ion-no-margin ion-text-center' lines='none'>
+          <IonLabel style={{marginTop:-35, marginBottom:-15}}>{subjectName}</IonLabel>
+        </IonItem>
+        <IonItem style={{marginTop:-20}}>
         <IonLabel position='stacked'>Seleccionar Estudiante</IonLabel>
           <IonSelect   placeholder='Estudiante' value = {students[count].name} onIonChange={(e)=>{
             console.log(students); 
