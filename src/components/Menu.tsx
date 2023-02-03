@@ -83,7 +83,7 @@ const Menu: React.FC = () => {
     <IonMenu contentId="main" type="overlay">
       <IonContent>
         <IonList id="inbox-list">
-          <IonImg src={avatar} style={{width:190, marginBottom:5, marginLeft:5, borderRadius:10}}/>
+          <IonImg src={avatar} style={{width:190, height:200, marginBottom:5, borderRadius:10}}/>
           <IonListHeader>{name}</IonListHeader>
           <IonNote>{identification}</IonNote>
           {appPages.map((appPage, index) => {

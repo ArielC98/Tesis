@@ -39,7 +39,7 @@ const LoginPage: React.FC<Props> = ({onLogin}) => {
         localStorage.setItem('access_token', response.data['access_token']);
         localStorage.setItem('user', JSON.stringify(response.data['user']));
         
-        swal("Success", response.message, "success", {
+        swal("Bienvenido", response.message, "success", {
           timer: 2000,
           buttons:{}
         })

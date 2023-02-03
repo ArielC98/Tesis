@@ -136,14 +136,16 @@ const SubjectPage: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>{subjectName}</IonTitle>
+          <IonTitle>GESTIÓN DE NOTAS</IonTitle>
           <IonButtons slot="start">
-          <IonBackButton defaultHref="/my/dashboard" text='Volver'/>
+          <IonBackButton defaultHref="/my/dashboard" text=''/>
         </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
-        <IonItem className='ion-margin-bottom'>
+          <IonTitle className='ion-text-center'>{subjectName}</IonTitle>
+
+        <IonItem >
         <IonLabel position='stacked'>Seleccionar Estudiante</IonLabel>
           <IonSelect   placeholder='Estudiante' value = {students[count].name} onIonChange={(e)=>{
             console.log(students); 
@@ -171,7 +173,7 @@ const SubjectPage: React.FC = () => {
           <IonRow>
             <IonCol></IonCol>
             <IonCol>
-            <div className="ag-theme-alpine" style={{height: 520, width: 300}}>
+            <div className="ag-theme-alpine" style={{height: 520, width: 300, marginLeft:4}}>
             <AgGridReact
                 ref={gridRef}
                 rowData={rowData}
@@ -198,7 +200,7 @@ const SubjectPage: React.FC = () => {
           
             <IonCol></IonCol>
               <IonCol size='7'>
-              <IonButton  expand= 'block' color="success"
+              <IonButton  expand= 'block' color="warning"
                 onClick={e =>  handleUpdate (students[count].id,id)}
               >Guardar</IonButton>
               </IonCol>
