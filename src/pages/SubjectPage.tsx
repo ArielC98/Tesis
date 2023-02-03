@@ -190,11 +190,11 @@ const SubjectPage: React.FC = () => {
           <IonGrid>
           <IonRow>
             <IonCol >
-              <IonButton  expand='block' onClick={()=>{console.log("count",count);setCount(count-1);
+              <IonButton  expand='block' onClick={()=>{count === 0? setCount(students.length-1) : setCount(count-1);
               }}> Anterior</IonButton>
             </IonCol>
             <IonCol >
-              <IonButton expand ='block' onClick={()=>{console.log("countInicial",count);setCount(count+1);
+              <IonButton expand ='block' onClick={()=>{count === (students.length - 1) ? setCount(0) : setCount(count+1);
             }}>Siguiente</IonButton>
             </IonCol>
           </IonRow>
