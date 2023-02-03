@@ -36,8 +36,8 @@ const SubjectPage: React.FC = () => {
     
     if(role === "teacher"){
       studentsList(id).then((response) => {response.students.map((student) => {students.push(student)});console.log(students);
-      
-      handleGrades(students[0].id,id);setIsLoading(false);
+      setIsLoading(false);
+      handleGrades(students[0].id,id);
       })
     }
     else{
@@ -51,7 +51,7 @@ const SubjectPage: React.FC = () => {
   async function handleGrades (studentId: string, subjectId: string) {
     
     present({
-      message: 'Cargando...',
+      message: 'Cargando notas...',
 
     })
     await teacherGrades(studentId,subjectId).then(response =>{grades.push(response.grades[0]);grades.shift();setSubjectName(response.grades[0].subject_name);dismiss()});
