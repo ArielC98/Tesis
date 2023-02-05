@@ -13,6 +13,7 @@ import { log } from 'console';
 
 
 
+
 interface RouteParams {
   id:string;
 }
@@ -44,17 +45,17 @@ const SubjectPage: React.FC = () => {
       })
     }
     else{
-      studentGrades("1").then((response) => {response.grades.map((subject) => subjects.push(subject));
+      studentGrades("1").then((response) => {response.grades.map((subject) => {if(subject.subject_id === +id){subjects.unshift(subject)}else{subjects.push(subject)}});
+      console.log(subjects);
       setIsLoading(false);
       handleGrades({academicPeriod :"1"});
       })
     }
 
-    
-
   },[id,role,students]);
 
   async function handleGrades ({studentId = "" , subjectId="", academicPeriod = ""}) {
+
     
     present({
       message: 'Cargando notas...',
@@ -62,11 +63,11 @@ const SubjectPage: React.FC = () => {
     })
 
     if(role === "teacher"){
-      await teacherGrades(studentId,subjectId).then(response =>{console.log(grades);grades.push(response.grades[0]);grades.shift();setSubjectName(response.grades[0].subject_name);dismiss()});
+      await teacherGrades(studentId,subjectId).then(response =>{console.log(grades);grades.push(response.grades[0]);grades.shift();dismiss()});
     }
 
     else{
-      await studentGrades("1").then(response => {grades.push(response.grades.find(grade => grade.subject_id === +id)); grades.shift();
+      await studentGrades("1").then(response => {grades.push(response.grades.find(grade => grade.subject_id === +id)); grades.shift();dismiss();
       console.log(subjects)}
       );
     }
@@ -164,7 +165,7 @@ const SubjectPage: React.FC = () => {
         </IonItem>
         <IonItem style={{marginTop:-20}}>
         <IonLabel position='stacked'>Seleccionar Estudiante</IonLabel>
-          <IonSelect   placeholder='Estudiante' value = {students[count].name+ " " + students[count].last_name} onIonChange={(e)=>{
+          <IonSelect   placeholder='Estudiante' value = {role === "teacher"?students[count].name+ " " + students[count].last_name : subjects[count].subject_name} onIonChange={(e)=>{
             console.log(students); 
               students.map((student,position)=>{
                 if(e.detail.value === student.name + " " + student.last_name){ //Compara el nombre seleccionado con el del arreglo de estudiantes
