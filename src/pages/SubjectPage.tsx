@@ -164,23 +164,33 @@ const SubjectPage: React.FC = () => {
           <IonLabel style={{marginTop:-35, marginBottom:-15}}>{subjectName}</IonLabel>
         </IonItem>
         <IonItem style={{marginTop:-20}}>
-        <IonLabel position='stacked'>Seleccionar Estudiante</IonLabel>
+        <IonLabel position='stacked'>Seleccionar {role === "teacher"?"Estudiante":"Materia"}</IonLabel>
           <IonSelect   placeholder='Estudiante' value = {role === "teacher"?students[count].name+ " " + students[count].last_name : subjects[count].subject_name} onIonChange={(e)=>{
-            console.log(students); 
-              students.map((student,position)=>{
-                if(e.detail.value === student.name + " " + student.last_name){ //Compara el nombre seleccionado con el del arreglo de estudiantes
-                  setCount(position)
-                  
               
-                  handleGrades({studentId:student.id,subjectId:id}) //Pasa los parametros del id del estudiante y materia
-                
+              (role==="teacher"?students:subjects).map((item,position)=>{
+                if(e.detail.value === (role==="teacher"?item.name + " " + item.last_name:item.subject_name)){ //Compara el nombre seleccionado con el del arreglo de estudiantes
+                  //setCount(position) <= AQUI
+                  
+                  if(role ==="teacher"){
+                  handleGrades({studentId:item.id,subjectId:id}) //Pasa los parametros del id del estudiante y materia
+                  }
+                  else{
+                    handleGrades({academicPeriod:"1"})
+                  }
                 }      
               })
               
             }}>
-            {students.map((student)=>
+            {role === "teacher"?
+            students.map((student)=>
                 <IonSelectOption key={student.id}>
                   {student.name + " " + student.last_name}
+                </IonSelectOption>
+              )
+              :
+              subjects.map((subject) =>
+                <IonSelectOption key={subject.subject_id}>
+                  {subject.subject_name}
                 </IonSelectOption>
               )
             }
