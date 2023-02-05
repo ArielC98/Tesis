@@ -73,7 +73,6 @@ const Menu: React.FC = () => {
       setAvatar(response.data.avatar);
       setName(response.data.user.name);
       setIdentification(response.data.user.identification);
-      console.log(response.data.user.id);
       
     })
 

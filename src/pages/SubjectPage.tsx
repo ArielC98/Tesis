@@ -6,9 +6,11 @@ import swal from 'sweetalert';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { studentsList } from '../data/students';
-import { teacherGrades } from '../data/grades';
+import { studentGrades, teacherGrades } from '../data/grades';
 import { updateGrades } from '../data/grades';
 import { useAuth } from '../data/auth';
+import { log } from 'console';
+
 
 
 interface RouteParams {
@@ -20,45 +22,58 @@ const SubjectPage: React.FC = () => {
   const [students] = useState([]);
   const {role} = useAuth();
   const {id} = useParams<RouteParams>(); //return an object with the parameters passed in the URL
-  //const [actualStudent, setActualStudent] = useState("");
   const [count, setCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [grades, setGrades] = useState([{}]);
+  const [subjects, setSubjects] = useState([]);
   const [present, dismiss] = useIonLoading();
   const [showAlert, hideAlert] = useIonAlert();
   const [subjectName, setSubjectName] = useState("");
   const gridRef = useRef<AgGridReact>();
   
 
+ 
 
   useEffect(() => {
     
-    
+
     if(role === "teacher"){
       studentsList(id).then((response) => {response.students.map((student) => {students.push(student)});console.log(students);
       setIsLoading(false);
-      handleGrades(students[0].id,id);
+      handleGrades({studentId :students[0].id ,subjectId:id});
       })
     }
     else{
-      
+      studentGrades("1").then((response) => {response.grades.map((subject) => subjects.push(subject));
+      setIsLoading(false);
+      handleGrades({academicPeriod :"1"});
+      })
     }
 
     
 
   },[id,role,students]);
 
-  async function handleGrades (studentId: string, subjectId: string) {
+  async function handleGrades ({studentId = "" , subjectId="", academicPeriod = ""}) {
     
     present({
       message: 'Cargando notas...',
 
     })
-    await teacherGrades(studentId,subjectId).then(response =>{grades.push(response.grades[0]);grades.shift();setSubjectName(response.grades[0].subject_name);dismiss()});
+
+    if(role === "teacher"){
+      await teacherGrades(studentId,subjectId).then(response =>{console.log(grades);grades.push(response.grades[0]);grades.shift();setSubjectName(response.grades[0].subject_name);dismiss()});
+    }
+
+    else{
+      await studentGrades("1").then(response => {grades.push(response.grades.find(grade => grade.subject_id === +id)); grades.shift();
+      console.log(subjects)}
+      );
+    }
     
     
 
-    setRowData([
+    setRowDataTeacher([
       {'descripción': "Parcial 1 Q 1", puntaje: grades[0]["p1q1"].toFixed(2)},
       {'descripción': "Parcial 2 Q 1", puntaje: grades[0]["p2q1"].toFixed(2)},
       {'descripción': "Parcial 3 Q 1", puntaje: grades[0]["p3q1"].toFixed(2)},
@@ -79,15 +94,15 @@ const SubjectPage: React.FC = () => {
   async function handleUpdate (studentId: string, subjectId: string) {
     
     const tempGrades = {
-      p1q1:rowData[0].puntaje,
-      p2q1:rowData[1].puntaje,
-      p3q1:rowData[2].puntaje,
-      p1q2:rowData[3].puntaje,
-      p2q2:rowData[4].puntaje,
-      p3q2:rowData[5].puntaje,
-      supletorio:rowData[6].puntaje,
-      remedial:rowData[7].puntaje,
-      gracia:rowData[8].puntaje
+      p1q1:rowDataTeacher[0].puntaje,
+      p2q1:rowDataTeacher[1].puntaje,
+      p3q1:rowDataTeacher[2].puntaje,
+      p1q2:rowDataTeacher[3].puntaje,
+      p2q2:rowDataTeacher[4].puntaje,
+      p3q2:rowDataTeacher[5].puntaje,
+      supletorio:rowDataTeacher[6].puntaje,
+      remedial:rowDataTeacher[7].puntaje,
+      gracia:rowDataTeacher[8].puntaje
     }
 
     const isBetweenValues = (currentValue: number) => currentValue <= 10.00 && currentValue >= 0.00;
@@ -105,9 +120,9 @@ const SubjectPage: React.FC = () => {
     }  
   }
 
- 
 
-  const [rowData, setRowData] = useState([
+
+  const [rowDataTeacher, setRowDataTeacher] = useState([
       {'descripción': "Parcial 1 Q 1", puntaje: grades[0]["p1q1"]?.toFixed(2)},
       {'descripción': "Parcial 2 Q 1", puntaje: grades[0]["p2q1"]?.toFixed(2)},
       {'descripción': "Parcial 3 Q 1", puntaje: grades[0]["p3q1"]?.toFixed(2)},
@@ -121,7 +136,7 @@ const SubjectPage: React.FC = () => {
       {'descripción': "Gracia", puntaje: grades[0]["q2"]?.toFixed(2)},
   ]);
 
-  const [columnDefs] = useState([
+  const [columnDefsTeacher] = useState([
       { field: 'descripción', width: 175},
       { field: 'puntaje', width: 120, editable: role === "teacher"},
       
@@ -156,7 +171,7 @@ const SubjectPage: React.FC = () => {
                   setCount(position)
                   
               
-                  handleGrades(student.id,id) //Pasa los parametros del id del estudiante y materia
+                  handleGrades({studentId:student.id,subjectId:id}) //Pasa los parametros del id del estudiante y materia
                 
                 }      
               })
@@ -178,8 +193,8 @@ const SubjectPage: React.FC = () => {
             <div className="ag-theme-alpine" style={{height: 520, width: 300, marginLeft:4}}>
             <AgGridReact
                 ref={gridRef}
-                rowData={rowData}
-                columnDefs={columnDefs}>
+                rowData={rowDataTeacher}
+                columnDefs={columnDefsTeacher}>
             </AgGridReact>
         </div>
             </IonCol>
