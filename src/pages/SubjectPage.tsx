@@ -85,14 +85,14 @@ const SubjectPage: React.FC = () => {
     
 
     setRowDataTeacher([
-      {'descripción': "Parcial 1 Q 1", puntaje: grades[0]["p1q1"].toFixed(2)},
-      {'descripción': "Parcial 2 Q 1", puntaje: grades[0]["p2q1"].toFixed(2)},
-      {'descripción': "Parcial 3 Q 1", puntaje: grades[0]["p3q1"].toFixed(2)},
-      {'descripción': "Quimestre 1", puntaje: grades[0]["q1"].toFixed(2)},
-      {'descripción': "Parcial 1 Q 2", puntaje: grades[0]["p1q2"].toFixed(2)},
-      {'descripción': "Parcial 2 Q 2", puntaje: grades[0]["p2q2"].toFixed(2)},
-      {'descripción': "Parcial 3 Q 2", puntaje: grades[0]["p3q2"].toFixed(2)},
-      {'descripción': "Quimestre 2", puntaje: grades[0]["q2"].toFixed(2)},
+      {'descripción': "Parcial 1 Q 1", puntaje: grades[0]["p1q1"]?.toFixed(2)},
+      {'descripción': "Parcial 2 Q 1", puntaje: grades[0]["p2q1"]?.toFixed(2)},
+      {'descripción': "Parcial 3 Q 1", puntaje: grades[0]["p3q1"]?.toFixed(2)},
+      {'descripción': "Quimestre 1", puntaje: grades[0]["q1"]?.toFixed(2)},
+      {'descripción': "Parcial 1 Q 2", puntaje: grades[0]["p1q2"]?.toFixed(2)},
+      {'descripción': "Parcial 2 Q 2", puntaje: grades[0]["p2q2"]?.toFixed(2)},
+      {'descripción': "Parcial 3 Q 2", puntaje: grades[0]["p3q2"]?.toFixed(2)},
+      {'descripción': "Quimestre 2", puntaje: grades[0]["q2"]?.toFixed(2)},
       {'descripción': "Supletorio", puntaje: grades[0]["supletorio"]?.toFixed(2)},
       {'descripción': "Remedial", puntaje: grades[0]["remedial"]?.toFixed(2)},
       {'descripción': "Gracia", puntaje: grades[0]["gracia"]?.toFixed(2)},
