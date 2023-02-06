@@ -1,4 +1,5 @@
 import {
+  IonButton,
   IonContent,
   IonIcon,
   IonImg,
@@ -96,6 +97,7 @@ const Menu: React.FC = () => {
             );
           })}
         </IonList>
+        
       </IonContent>
     </IonMenu>
   );

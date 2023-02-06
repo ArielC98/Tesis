@@ -1,10 +1,14 @@
-import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonList, IonMenuButton, IonPage, IonRow, IonTitle, IonToolbar } from '@ionic/react';
+import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonList, IonMenuButton, IonPage, IonRow, IonTitle, IonToolbar, useIonLoading } from '@ionic/react';
 import { useState } from 'react';
+import { updatePassword } from '../data/password';
+import swal from 'sweetalert';
 
 const SettingsPage: React.FC = () => {
 
   const [passwd, setPasswd] = useState("");
   const [passwdConf, setPasswdConf] = useState("");
+  const [present, dismiss] = useIonLoading();
+  
 
   const handleLogout = () => {
     localStorage.removeItem("access_token");
@@ -13,21 +17,16 @@ const SettingsPage: React.FC = () => {
   };
 
   
-  const handlePasswordChange = async () => {
-      return await fetch('https://sismds.herokuapp.com/api/teacher/update-password', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + localStorage.getItem("access_token")
-          },
-          body: JSON.stringify({
-            password:passwd,
-            password_confirmation:passwdConf
-          })
-      })
-      .then(response => response.json()).then(response => console.log(response)
-      )
-      console.log(passwd, passwdConf);
+  const handlePasswordChange = async e => {
+    present({
+      message: "Un momento..."
+    })  
+    const confirmation =  await updatePassword(passwd, passwdConf);
+    console.log(confirmation);
+    setPasswd("");
+    setPasswdConf("");
+    dismiss();
+    swal({ text:confirmation, icon:"info"})
       
   }
 
@@ -48,16 +47,12 @@ const SettingsPage: React.FC = () => {
           <IonLabel><h2>Cambio de contraseña</h2></IonLabel>
           </IonItem>
           <IonItem>
-            <IonLabel position='stacked'>Contraseña actual</IonLabel>
-            <IonInput></IonInput>
-          </IonItem>
-          <IonItem>
             <IonLabel position='stacked'>Contraseña nueva</IonLabel>
-            <IonInput  onIonChange={e => setPasswd(e.detail.value)}></IonInput>
+            <IonInput  value = {passwd} onIonChange={e => setPasswd(e.detail.value)}></IonInput>
           </IonItem>
           <IonItem>
             <IonLabel position='stacked'>Confirmar contraseña</IonLabel>
-            <IonInput  onIonChange={e => setPasswdConf(e.detail.value)}></IonInput>
+            <IonInput  value = {passwdConf} onIonChange={e => setPasswdConf(e.detail.value)}></IonInput>
           </IonItem>
           <IonRow>
             <IonCol></IonCol>
@@ -75,7 +70,7 @@ const SettingsPage: React.FC = () => {
               <IonCol><IonButton color="medium" onClick={handleLogout}>Cerrar Sesión</IonButton></IonCol>
               <IonCol></IonCol>
             </IonRow>
-          
+
         
         </IonList>
         
