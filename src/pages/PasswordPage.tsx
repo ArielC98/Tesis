@@ -32,7 +32,7 @@ const PasswordPage: React.FC = () => {
           <IonButtons slot='start'>
             <IonBackButton defaultHref="/login"/>
           </IonButtons>
-          <IonTitle>Recuperación de contraseña</IonTitle>
+          <IonTitle>Recuperar contraseña</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
@@ -52,7 +52,7 @@ const PasswordPage: React.FC = () => {
           </IonItem>
           
         </IonList>
-        <IonButton expand='block' onClick={e => handlePasswordReset(identification)
+        <IonButton className='ion-margin-top' expand='block' onClick={e => handlePasswordReset(identification)
         }>Enviar</IonButton>
       </IonContent>
     </IonPage>

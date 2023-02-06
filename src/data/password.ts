@@ -14,5 +14,4 @@ export async function updatePassword(newPassword1: string, newPassword2: string)
     })
     .then(response => response.json()).then(response => response.message)
     
-    
 }
