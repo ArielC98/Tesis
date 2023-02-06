@@ -238,7 +238,7 @@ const SubjectPage: React.FC = () => {
           <IonRow>
             <IonCol></IonCol>
               <IonCol size='7'>
-              <IonButton  expand= 'block' color="warning"
+              <IonButton className={role === "teacher"?'':"ion-hide"}  expand= 'block' color="warning"
                 onClick={e =>  handleUpdate (students[count].id,id)}
               >Guardar</IonButton>
               </IonCol>
