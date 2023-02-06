@@ -46,7 +46,7 @@ const SubjectPage: React.FC = () => {
     }
     else{
       studentGrades("1").then((response) => {response.grades.map((subject) => {if(subject.subject_id === +id){subjects.unshift(subject)}else{subjects.push(subject)}});
-      console.log(subjects);
+      console.log("subjects",subjects);
       setIsLoading(false);
       handleGrades({academicPeriod :"1"});
       })
@@ -54,7 +54,7 @@ const SubjectPage: React.FC = () => {
 
   },[id,role,students]);
 
-  async function handleGrades ({studentId = "" , subjectId="", academicPeriod = ""}) {
+  async function handleGrades ({studentId = "" , subjectId="", academicPeriod = "", subjectNameParam = ""}) {
 
     
     present({
@@ -67,8 +67,16 @@ const SubjectPage: React.FC = () => {
     }
 
     else{
-      await studentGrades("1").then(response => {grades.push(response.grades.find(grade => grade.subject_id === +id)); grades.shift();dismiss();
-      console.log(subjects)}
+      console.log(subjects);
+        await studentGrades(academicPeriod).then(response => {
+          if(subjectNameParam === ""){
+          grades.push(response.grades.find(grade => grade.subject_id === +id  )); 
+          console.log("grades",grades)}
+          else{
+            grades.push(response.grades.find(grade => grade.subject_name === subjectNameParam))
+          }
+          grades.shift();dismiss();
+        }
       );
     }
     
@@ -169,13 +177,14 @@ const SubjectPage: React.FC = () => {
               
               (role==="teacher"?students:subjects).map((item,position)=>{
                 if(e.detail.value === (role==="teacher"?item.name + " " + item.last_name:item.subject_name)){ //Compara el nombre seleccionado con el del arreglo de estudiantes
-                  //setCount(position) <= AQUI
+                  setCount(position) 
                   
                   if(role ==="teacher"){
                   handleGrades({studentId:item.id,subjectId:id}) //Pasa los parametros del id del estudiante y materia
                   }
                   else{
-                    handleGrades({academicPeriod:"1"})
+                    handleGrades({academicPeriod:"1", subjectNameParam:e.detail.value})
+                    
                   }
                 }      
               })
@@ -216,16 +225,15 @@ const SubjectPage: React.FC = () => {
           <IonGrid>
           <IonRow>
             <IonCol >
-              <IonButton  expand='block' onClick={()=>{count === 0? setCount(students.length-1) : setCount(count-1);
+              <IonButton  expand='block' onClick={()=>{count === 0? setCount((role === "teacher"?students:subjects).length-1) : setCount(count-1);
               }}> Anterior</IonButton>
             </IonCol>
             <IonCol >
-              <IonButton expand ='block' onClick={()=>{count === (students.length - 1) ? setCount(0) : setCount(count+1);
+              <IonButton expand ='block' onClick={()=>{count === ((role === "teacher"?students:subjects).length - 1) ? setCount(0) : setCount(count+1);
             }}>Siguiente</IonButton>
             </IonCol>
           </IonRow>
           <IonRow>
-          
             <IonCol></IonCol>
               <IonCol size='7'>
               <IonButton  expand= 'block' color="warning"
