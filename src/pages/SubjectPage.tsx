@@ -54,6 +54,8 @@ const SubjectPage: React.FC = () => {
 
   },[id,role,students]);
 
+  //Function to get grades
+
   async function handleGrades ({studentId = "" , subjectId="", academicPeriod = "", subjectNameParam = ""}) {
 
     
