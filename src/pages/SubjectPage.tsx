@@ -65,7 +65,7 @@ const SubjectPage: React.FC = () => {
     })
 
     if(role === "teacher"){
-      await teacherGrades(studentId,subjectId).then(response =>{console.log(grades);grades.push(response.grades[0]);grades.shift();dismiss()});
+      await teacherGrades(studentId,subjectId).then(response =>{console.log(grades);grades.push(response.grades[0]);grades.shift();setSubjectName(response.grades[0].subject_name);dismiss()});
     }
 
     else{
