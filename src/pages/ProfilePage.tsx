@@ -1,7 +1,8 @@
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonImg, IonInput, IonItem, IonLabel, IonList, IonLoading, IonMenuButton, IonPage, IonRow, IonSelect, IonSelectOption, IonTextarea, IonTitle, IonToolbar } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { userData, updateProfileData } from '../data/information';
-import { usePhotoGallery } from '../data/information';
+
 
 
 
@@ -19,7 +20,19 @@ const ProfilePage: React.FC = () => {
     const [homePhone, setHomePhone] = useState(null);
     const [mobilePhone, setMobilePhone] = useState(null);
     const [address, setAddress] = useState(null);
-    const {photos,takePhoto} = usePhotoGallery();
+    const [photo, setPhoto] = useState("");
+
+    async function takePicture() {
+        const image = await Camera.getPhoto({
+        quality: 90,
+        allowEditing: false,
+        resultType: CameraResultType.Uri,
+        source: CameraSource.Photos
+        });
+        var imageUrl = image.webPath;
+        // Can be set to the src of an image now
+        setPhoto(imageUrl)
+        }
 
     
     const changeEmail = (e) =>{
@@ -93,15 +106,15 @@ const ProfilePage: React.FC = () => {
             <IonGrid>
                 <IonRow>
                     <IonCol></IonCol>
-                    <IonCol size='6'>
-                        <IonImg style={{width:"150px", height:"200px"}} src={photos.length>0? photos[0].webviewPath:avatar}/>
+                    <IonCol>
+                        <IonImg style={{width:"150px", height:"200px"}} src={photo === ""? avatar:photo}/>
                     </IonCol>
                     <IonCol></IonCol>
                 </IonRow>
         
                 <IonRow>
                     <IonCol></IonCol>
-                    <IonCol><IonButton onClick={()=>takePhoto()}>Editar foto</IonButton></IonCol>
+                    <IonCol><IonButton  onClick={() => takePicture()}>Editar foto</IonButton></IonCol>
                     <IonCol></IonCol>
                 </IonRow>
             </IonGrid>

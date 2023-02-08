@@ -9,6 +9,7 @@ import SubjectPage from './pages/SubjectPage';
 import ReportPage from './pages/ReportPage';
 import "@ionic/react/css/core.css"
 import "./theme/variables.css"
+import LinksPage from './pages/LinksPage';
 
 
 
@@ -38,6 +39,9 @@ const AppMenu: React.FC = () => {
           </Route>
           <Route exact path="/my/reports">
             <ReportPage/>
+          </Route>
+          <Route exact path="/my/links">
+            <LinksPage />
           </Route>
           <Route exact path="/my/settings">
             <SettingsPage />
