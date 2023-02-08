@@ -1,6 +1,6 @@
-import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonItem, IonLabel, IonLoading, IonPage, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar, useIonAlert, useIonLoading } from '@ionic/react';
+import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonItem, IonLabel, IonLoading, IonPage, IonRefresher, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar, RefresherEventDetail, useIonAlert, useIonLoading } from '@ionic/react';
 import { AgGridReact } from 'ag-grid-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 import swal from 'sweetalert';
 import 'ag-grid-community/styles/ag-grid.css';
@@ -32,9 +32,31 @@ const SubjectPage: React.FC = () => {
   const [subjectName, setSubjectName] = useState("");
   const gridRef = useRef<AgGridReact>();
   
+  
+  
 
- 
+  const isCellNoEditable = (params) => {    
+    return params.data["descripción"] === "Final" ||  params.data["descripción"] === "Quimestre 1" || params.data["descripción"] === "Quimestre 2"
+  };
 
+  const columnTypes = useMemo(() => {
+    return {
+      editableColumn: {
+        editable: (params) => {
+          return !isCellNoEditable(params);
+        },
+        cellStyle: (params) => {
+          if (isCellNoEditable(params)) {
+            return { backgroundColor: '#ffe080' };
+          }
+        },
+      },
+    };
+  }, []);
+
+  
+
+    
   useEffect(() => {
     
 
@@ -65,7 +87,7 @@ const SubjectPage: React.FC = () => {
     })
 
     if(role === "teacher"){
-      await teacherGrades(studentId,subjectId).then(response =>{console.log(grades);grades.push(response.grades[0]);grades.shift();setSubjectName(response.grades[0].subject_name);dismiss()});
+      await teacherGrades(studentId,subjectId).then(response =>{console.log("notas",response.grades[0]);grades.push(response.grades[0]);grades.shift();setSubjectName(response.grades[0].subject_name);dismiss()});
     }
 
     else{
@@ -93,6 +115,7 @@ const SubjectPage: React.FC = () => {
       {'descripción': "Parcial 2 Q 2", puntaje: grades[0]["p2q2"]?.toFixed(2)},
       {'descripción': "Parcial 3 Q 2", puntaje: grades[0]["p3q2"]?.toFixed(2)},
       {'descripción': "Quimestre 2", puntaje: grades[0]["q2"]?.toFixed(2)},
+      {'descripción': "Final", puntaje: grades[0]["final"]?.toFixed(2)},
       {'descripción': "Supletorio", puntaje: grades[0]["supletorio"]?.toFixed(2)},
       {'descripción': "Remedial", puntaje: grades[0]["remedial"]?.toFixed(2)},
       {'descripción': "Gracia", puntaje: grades[0]["gracia"]?.toFixed(2)},
@@ -103,30 +126,41 @@ const SubjectPage: React.FC = () => {
   }
 
   async function handleUpdate (studentId: string, subjectId: string) {
+
+    //Se actualizan las unicas notas que deberian modificarse
     
     const tempGrades = {
       p1q1:rowDataTeacher[0].puntaje,
       p2q1:rowDataTeacher[1].puntaje,
       p3q1:rowDataTeacher[2].puntaje,
-      p1q2:rowDataTeacher[3].puntaje,
-      p2q2:rowDataTeacher[4].puntaje,
-      p3q2:rowDataTeacher[5].puntaje,
-      supletorio:rowDataTeacher[6].puntaje,
-      remedial:rowDataTeacher[7].puntaje,
-      gracia:rowDataTeacher[8].puntaje
+      p1q2:rowDataTeacher[4].puntaje,
+      p2q2:rowDataTeacher[5].puntaje,
+      p3q2:rowDataTeacher[6].puntaje,
+      supletorio:rowDataTeacher[9].puntaje,
+      remedial:rowDataTeacher[10].puntaje,
+      gracia:rowDataTeacher[11].puntaje
     }
 
+    if(tempGrades.supletorio === undefined){tempGrades.supletorio = ""};
+    if(tempGrades.remedial === undefined){tempGrades.remedial = ""};
+    if(tempGrades.gracia === undefined){tempGrades.gracia = ""};
+
     const isBetweenValues = (currentValue: number) => currentValue <= 10.00 && currentValue >= 0.00;
-    
-    if(Object.values(tempGrades).every(isBetweenValues)){
-      present({
-        message: 'Cargando...',
-      })
-      await updateGrades(studentId,subjectId,tempGrades).then(response =>{dismiss();showAlert(response.message)});
+    console.log(!Object.values(tempGrades).slice(0,6).every(isBetweenValues));
+    console.log(tempGrades.supletorio);
+    console.log(Object.values(tempGrades).slice(-3).some(item => !(item === "" || item === null) && !isBetweenValues(item)));
+    if(!Object.values(tempGrades).slice(0,6).every(isBetweenValues) || Object.values(tempGrades).slice(-3).some(item => !(item === undefined || item === "" || item === null) && !isBetweenValues(item))){
+      
+      showAlert("Las notas deben ser números decimales separados por punto entre 0.00 y 10.00");
+      
     }
     else{
       
-      showAlert("Las notas deben ser números decimales separados por punto entre 0.00 y 10.00");
+      present({
+        message: 'Cargando...',
+      })
+      console.log(tempGrades);
+      await updateGrades(studentId,subjectId,tempGrades).then(response =>{dismiss();showAlert(response.message)});
       
     }  
   }
@@ -142,16 +176,17 @@ const SubjectPage: React.FC = () => {
       {'descripción': "Parcial 2 Q 2", puntaje: grades[0]["p2q2"]?.toFixed(2)},
       {'descripción': "Parcial 3 Q 2", puntaje: grades[0]["p3q2"]?.toFixed(2)},
       {'descripción': "Quimestre 2", puntaje: grades[0]["q2"]?.toFixed(2)},
-      {'descripción': "Supletorio", puntaje: grades[0]["q2"]?.toFixed(2)},
-      {'descripción': "Remedial", puntaje: grades[0]["q2"]?.toFixed(2)},
-      {'descripción': "Gracia", puntaje: grades[0]["q2"]?.toFixed(2)},
+      {'descripción': "Final", puntaje: grades[0]["final"]?.toFixed(2)},
+      {'descripción': "Supletorio", puntaje: grades[0]["supletorio"]?.toFixed(2)},
+      {'descripción': "Remedial", puntaje: grades[0]["remedial"]?.toFixed(2)},
+      {'descripción': "Gracia", puntaje: grades[0]["gracia"]?.toFixed(2)},
   ]);
 
-  const [columnDefsTeacher] = useState([
+  const columnDefsTeacher = [
       { field: 'descripción', width: 175},
-      { field: 'puntaje', width: 120, editable: role === "teacher"},
+      { field: 'puntaje', width: 120, type: 'editableColumn'},
       
-  ])
+  ]
 
   if(isLoading){
     return <IonLoading isOpen/>
@@ -170,6 +205,7 @@ const SubjectPage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
+    
         <IonItem className='ion-no-margin ion-text-center' lines='none'>
           <IonLabel style={{marginTop:-35, marginBottom:-15}}>{subjectName}</IonLabel>
         </IonItem>
@@ -212,13 +248,16 @@ const SubjectPage: React.FC = () => {
           <IonRow>
             <IonCol></IonCol>
             <IonCol>
-            <div className="ag-theme-alpine" style={{height: 520, width: 300, marginLeft:4}}>
-            <AgGridReact
-                ref={gridRef}
-                rowData={rowDataTeacher}
-                columnDefs={columnDefsTeacher}>
-            </AgGridReact>
-        </div>
+            
+              <div className="ag-theme-alpine" style={{height: 520, width: 300, marginLeft:4}}>
+                <AgGridReact
+                  columnTypes={columnTypes}
+                  ref={gridRef}
+                  rowData={rowDataTeacher}
+                  columnDefs={columnDefsTeacher}>
+                </AgGridReact>
+              </div>
+            
             </IonCol>
             <IonCol></IonCol>
           </IonRow>
@@ -249,7 +288,7 @@ const SubjectPage: React.FC = () => {
           
             
           
-          
+        
       </IonContent>
     </IonPage>
   );
