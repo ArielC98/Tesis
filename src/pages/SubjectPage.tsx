@@ -1,4 +1,4 @@
-import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonItem, IonLabel, IonLoading, IonPage, IonRefresher, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar, RefresherEventDetail, useIonAlert, useIonLoading } from '@ionic/react';
+import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonItem, IonLabel, IonLoading, IonPage, IonRefresher, IonRefresherContent, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar, RefresherEventDetail, useIonAlert, useIonLoading } from '@ionic/react';
 import { AgGridReact } from 'ag-grid-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router';
@@ -33,10 +33,19 @@ const SubjectPage: React.FC = () => {
   const gridRef = useRef<AgGridReact>();
   
   
-  
+  function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
+    setTimeout(() => {
+      
+      handleGrades({studentId :students[0].id ,subjectId:id});
+     
+      event.detail.complete();
+    }, 1000);
+  }
 
   const isCellNoEditable = (params) => {    
-    return params.data["descripción"] === "Final" ||  params.data["descripción"] === "Quimestre 1" || params.data["descripción"] === "Quimestre 2"
+
+      return params.data["descripción"] === "Final" ||  params.data["descripción"] === "Quimestre 1" || params.data["descripción"] === "Quimestre 2" 
+    
   };
 
   const columnTypes = useMemo(() => {
@@ -47,7 +56,12 @@ const SubjectPage: React.FC = () => {
         },
         cellStyle: (params) => {
           if (isCellNoEditable(params)) {
-            return { backgroundColor: '#ffe080' };
+            if(params.data["descripción"] === "Quimestre 1" || params.data["descripción"] === "Quimestre 2"){
+              return { backgroundColor: '#ffe080' }
+            }
+            if(params.data["descripción"] === "Final"){
+              return { backgroundColor: '#7a2f27', color: "white" }
+            }
           }
         },
       },
@@ -58,7 +72,6 @@ const SubjectPage: React.FC = () => {
 
     
   useEffect(() => {
-    
 
     if(role === "teacher"){
       studentsList(id).then((response) => {response.students.map((student) => {students.push(student)});console.log(students);
@@ -74,6 +87,8 @@ const SubjectPage: React.FC = () => {
       })
     }
 
+    
+
   },[id,role,students]);
 
   //Function to get grades
@@ -87,7 +102,9 @@ const SubjectPage: React.FC = () => {
     })
 
     if(role === "teacher"){
-      await teacherGrades(studentId,subjectId).then(response =>{console.log("notas",response.grades[0]);grades.push(response.grades[0]);grades.shift();setSubjectName(response.grades[0].subject_name);dismiss()});
+      await teacherGrades(studentId,subjectId).then(response =>{console.log("notas",response.grades[0]);grades.push(response.grades[0]);grades.shift();setSubjectName(response.grades[0].subject_name);
+      console.log("hola",response.grades[0].final);
+      dismiss()});
     }
 
     else{
@@ -104,24 +121,37 @@ const SubjectPage: React.FC = () => {
       );
     }
     
-    
+    if(grades[0]["final"] < 7.00){
 
-    setRowDataTeacher([
-      {'descripción': "Parcial 1 Q 1", puntaje: grades[0]["p1q1"]?.toFixed(2)},
-      {'descripción': "Parcial 2 Q 1", puntaje: grades[0]["p2q1"]?.toFixed(2)},
-      {'descripción': "Parcial 3 Q 1", puntaje: grades[0]["p3q1"]?.toFixed(2)},
-      {'descripción': "Quimestre 1", puntaje: grades[0]["q1"]?.toFixed(2)},
-      {'descripción': "Parcial 1 Q 2", puntaje: grades[0]["p1q2"]?.toFixed(2)},
-      {'descripción': "Parcial 2 Q 2", puntaje: grades[0]["p2q2"]?.toFixed(2)},
-      {'descripción': "Parcial 3 Q 2", puntaje: grades[0]["p3q2"]?.toFixed(2)},
-      {'descripción': "Quimestre 2", puntaje: grades[0]["q2"]?.toFixed(2)},
-      {'descripción': "Final", puntaje: grades[0]["final"]?.toFixed(2)},
-      {'descripción': "Supletorio", puntaje: grades[0]["supletorio"]?.toFixed(2)},
-      {'descripción': "Remedial", puntaje: grades[0]["remedial"]?.toFixed(2)},
-      {'descripción': "Gracia", puntaje: grades[0]["gracia"]?.toFixed(2)},
-      
-    ])
+      setRowDataTeacher([
+        {'descripción': "Parcial 1 Q 1", puntaje: grades[0]["p1q1"]?.toFixed(2)},
+        {'descripción': "Parcial 2 Q 1", puntaje: grades[0]["p2q1"]?.toFixed(2)},
+        {'descripción': "Parcial 3 Q 1", puntaje: grades[0]["p3q1"]?.toFixed(2)},
+        {'descripción': "Quimestre 1", puntaje: grades[0]["q1"]?.toFixed(2)},
+        {'descripción': "Parcial 1 Q 2", puntaje: grades[0]["p1q2"]?.toFixed(2)},
+        {'descripción': "Parcial 2 Q 2", puntaje: grades[0]["p2q2"]?.toFixed(2)},
+        {'descripción': "Parcial 3 Q 2", puntaje: grades[0]["p3q2"]?.toFixed(2)},
+        {'descripción': "Quimestre 2", puntaje: grades[0]["q2"]?.toFixed(2)},
+        {'descripción': "Final", puntaje: grades[0]["final"]?.toFixed(2)},
+        {'descripción': "Supletorio", puntaje: grades[0]["supletorio"]?.toFixed(2)},
+        {'descripción': "Remedial", puntaje: grades[0]["remedial"]?.toFixed(2)},
+        {'descripción': "Gracia", puntaje: grades[0]["gracia"]?.toFixed(2)},
+      ])
     
+    }  
+    else{
+      setRowDataTeacher([
+        {'descripción': "Parcial 1 Q 1", puntaje: grades[0]["p1q1"]?.toFixed(2)},
+        {'descripción': "Parcial 2 Q 1", puntaje: grades[0]["p2q1"]?.toFixed(2)},
+        {'descripción': "Parcial 3 Q 1", puntaje: grades[0]["p3q1"]?.toFixed(2)},
+        {'descripción': "Quimestre 1", puntaje: grades[0]["q1"]?.toFixed(2)},
+        {'descripción': "Parcial 1 Q 2", puntaje: grades[0]["p1q2"]?.toFixed(2)},
+        {'descripción': "Parcial 2 Q 2", puntaje: grades[0]["p2q2"]?.toFixed(2)},
+        {'descripción': "Parcial 3 Q 2", puntaje: grades[0]["p3q2"]?.toFixed(2)},
+        {'descripción': "Quimestre 2", puntaje: grades[0]["q2"]?.toFixed(2)},
+        {'descripción': "Final", puntaje: grades[0]["final"]?.toFixed(2)}
+      ])
+    }
 
   }
 
@@ -130,15 +160,15 @@ const SubjectPage: React.FC = () => {
     //Se actualizan las unicas notas que deberian modificarse
     
     const tempGrades = {
-      p1q1:rowDataTeacher[0].puntaje,
-      p2q1:rowDataTeacher[1].puntaje,
-      p3q1:rowDataTeacher[2].puntaje,
-      p1q2:rowDataTeacher[4].puntaje,
-      p2q2:rowDataTeacher[5].puntaje,
-      p3q2:rowDataTeacher[6].puntaje,
-      supletorio:rowDataTeacher[9].puntaje,
-      remedial:rowDataTeacher[10].puntaje,
-      gracia:rowDataTeacher[11].puntaje
+      p1q1:rowDataTeacher[0]?.puntaje,
+      p2q1:rowDataTeacher[1]?.puntaje,
+      p3q1:rowDataTeacher[2]?.puntaje,
+      p1q2:rowDataTeacher[4]?.puntaje,
+      p2q2:rowDataTeacher[5]?.puntaje,
+      p3q2:rowDataTeacher[6]?.puntaje,
+      supletorio:rowDataTeacher[9]?.puntaje,
+      remedial:rowDataTeacher[10]?.puntaje,
+      gracia:rowDataTeacher[11]?.puntaje
     }
 
     if(tempGrades.supletorio === undefined){tempGrades.supletorio = ""};
@@ -177,9 +207,7 @@ const SubjectPage: React.FC = () => {
       {'descripción': "Parcial 3 Q 2", puntaje: grades[0]["p3q2"]?.toFixed(2)},
       {'descripción': "Quimestre 2", puntaje: grades[0]["q2"]?.toFixed(2)},
       {'descripción': "Final", puntaje: grades[0]["final"]?.toFixed(2)},
-      {'descripción': "Supletorio", puntaje: grades[0]["supletorio"]?.toFixed(2)},
-      {'descripción': "Remedial", puntaje: grades[0]["remedial"]?.toFixed(2)},
-      {'descripción': "Gracia", puntaje: grades[0]["gracia"]?.toFixed(2)},
+  
   ]);
 
   const columnDefsTeacher = [
@@ -205,7 +233,9 @@ const SubjectPage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
-    
+        <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
+          <IonRefresherContent></IonRefresherContent>
+        </IonRefresher>
         <IonItem className='ion-no-margin ion-text-center' lines='none'>
           <IonLabel style={{marginTop:-35, marginBottom:-15}}>{subjectName}</IonLabel>
         </IonItem>
