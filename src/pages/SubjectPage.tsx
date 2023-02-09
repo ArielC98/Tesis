@@ -120,7 +120,7 @@ const SubjectPage: React.FC = () => {
       );
     }
     
-    if(grades[0]["final"] < 7.00){
+    if(grades[0]["final"] < 7.00 && grades[0]["final"]){
 
       setRowDataTeacher([
         {'descripción': "Parcial 1 Q 1", puntaje: grades[0]["p1q1"]?.toFixed(2)},

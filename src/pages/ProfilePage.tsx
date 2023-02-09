@@ -1,5 +1,5 @@
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonImg, IonInput, IonItem, IonLabel, IonList, IonLoading, IonMenuButton, IonPage, IonRow, IonSelect, IonSelectOption, IonTextarea, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonImg, IonInput, IonItem, IonLabel, IonList, IonLoading, IonMenuButton, IonPage, IonRow, IonSelect, IonSelectOption, IonTextarea, IonTitle, IonToolbar, useIonAlert, useIonLoading } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { userData, updateProfileData } from '../data/information';
 
@@ -21,6 +21,8 @@ const ProfilePage: React.FC = () => {
     const [mobilePhone, setMobilePhone] = useState(null);
     const [address, setAddress] = useState(null);
     const [photo, setPhoto] = useState("");
+    const [present, dismiss] = useIonLoading();
+    const [showAlert, hideAlert] = useIonAlert();
 
     async function takePicture() {
         const image = await Camera.getPhoto({
@@ -32,7 +34,8 @@ const ProfilePage: React.FC = () => {
         var imageUrl = image.webPath;
         // Can be set to the src of an image now
         setPhoto(imageUrl)
-        }
+        console.log(imageUrl);
+    }
 
     
     const changeEmail = (e) =>{
@@ -56,15 +59,19 @@ const ProfilePage: React.FC = () => {
         
     }
     async function updateInput(){
-    
-        const response = await updateProfileData({
+        
+        present({
+            message:"Un momento..."
+        })
+
+        await updateProfileData({
             "personal_phone":mobilePhone,
             "home_phone":homePhone,
             "email":email,
             "address":address
-        });
+        }).then(response => {dismiss(); showAlert("Información actualizada con éxito")});
         
-        console.log(response);
+
     }
     
     
@@ -120,7 +127,7 @@ const ProfilePage: React.FC = () => {
             </IonGrid>
 
 
-            <IonLabel>INFORMACIÓN PERSONAL</IonLabel>
+            <IonLabel style={{fontWeight:"bold"}}>INFORMACIÓN PERSONAL</IonLabel>
 
         
 
@@ -143,7 +150,7 @@ const ProfilePage: React.FC = () => {
                 </IonItem>
             </IonList>
 
-            <IonLabel>INFORMACIÓN DE CONTACTO</IonLabel>
+            <IonLabel style={{fontWeight:"bold"}}>INFORMACIÓN DE CONTACTO</IonLabel>
 
         
 
