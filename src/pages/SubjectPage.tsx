@@ -32,27 +32,25 @@ const SubjectPage: React.FC = () => {
   const [subjectName, setSubjectName] = useState("");
   const gridRef = useRef<AgGridReact>();
   
-  
+  //Funcion para manejar la recarga de la pagina
   function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
     setTimeout(() => {
-      
-      handleGrades({studentId :students[0].id ,subjectId:id});
-     
+      role === "teacher" ? handleGrades({studentId :students[0].id ,subjectId:id}): handleGrades({academicPeriod:"1"});
       event.detail.complete();
     }, 1000);
   }
 
+  //Celdas no editables de la tabla
   const isCellNoEditable = (params) => {    
-
-      return params.data["descripción"] === "Final" ||  params.data["descripción"] === "Quimestre 1" || params.data["descripción"] === "Quimestre 2" 
-    
+      return params.data["descripción"] === "Final" ||  params.data["descripción"] === "Quimestre 1" || params.data["descripción"] === "Quimestre 2"  
   };
 
+  //Control de celdas individuales de la tabla
   const columnTypes = useMemo(() => {
     return {
       editableColumn: {
         editable: (params) => {
-          return !isCellNoEditable(params);
+          return !isCellNoEditable(params) && role === "teacher";
         },
         cellStyle: (params) => {
           if (isCellNoEditable(params)) {
@@ -69,7 +67,7 @@ const SubjectPage: React.FC = () => {
   }, []);
 
   
-
+  //Operaciones iniciales 
     
   useEffect(() => {
 
@@ -91,7 +89,8 @@ const SubjectPage: React.FC = () => {
 
   },[id,role,students]);
 
-  //Function to get grades
+
+  //Funcion para obtener las calificaciones
 
   async function handleGrades ({studentId = "" , subjectId="", academicPeriod = "", subjectNameParam = ""}) {
 
@@ -155,6 +154,7 @@ const SubjectPage: React.FC = () => {
 
   }
 
+  //Funcion para actualizar las calificaciones
   async function handleUpdate (studentId: string, subjectId: string) {
 
     //Se actualizan las unicas notas que deberian modificarse
@@ -195,7 +195,7 @@ const SubjectPage: React.FC = () => {
     }  
   }
 
-
+  //Valores iniciales de la tabla
 
   const [rowDataTeacher, setRowDataTeacher] = useState([
       {'descripción': "Parcial 1 Q 1", puntaje: grades[0]["p1q1"]?.toFixed(2)},
@@ -210,11 +210,15 @@ const SubjectPage: React.FC = () => {
   
   ]);
 
+  //Definicion de las columnas de la tabla
+
   const columnDefsTeacher = [
       { field: 'descripción', width: 175},
       { field: 'puntaje', width: 120, type: 'editableColumn'},
       
   ]
+
+  //Icono de carga
 
   if(isLoading){
     return <IonLoading isOpen/>
