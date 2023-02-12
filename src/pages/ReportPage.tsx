@@ -1,14 +1,22 @@
 import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonList, IonLoading, IonMenuButton, IonPage, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar, useIonLoading } from '@ionic/react';
 import { useState, useEffect } from 'react';
 import { createPDF } from '../data/PDFFile';
-import { Browser, OpenOptions } from '@capacitor/browser';
 import { useAuth } from '../data/auth';
 import { teacherReport } from '../data/report';
 import { teacherSubjects } from '../data/subjects';
 import { studentGrades } from '../data/grades';
+import { Filesystem, Directory } from '@capacitor/filesystem';
+import { Preferences } from '@capacitor/preferences';
+import { Capacitor } from '@capacitor/core';
+import { FileOpener } from '@ionic-native/file-opener';
+
+
+
 
 
 const ReportPage: React.FC = () => {
+
+
 
   const {role} = useAuth();
   const [isLoading,setIsLoading] = useState(false);
@@ -17,6 +25,7 @@ const ReportPage: React.FC = () => {
   const [subjectList] = useState([]);
   const [academicPeriod, setAcademicPeriod] = useState("1");
   const [present, dismiss] = useIonLoading();
+  const [b64, setB64] = useState("");
 
   useEffect(()=>{
 
@@ -36,6 +45,40 @@ const ReportPage: React.FC = () => {
     
     
   },[])
+
+ 
+
+
+  async function downloadPDF(r,d,i){
+
+
+    const filename = 'reporte.pdf';
+    
+    console.log(b64);
+  try{
+    Filesystem.writeFile({
+      path:filename,
+      data: b64,
+      directory:Directory.Data,
+    }).then(result =>{
+      console.log("File Written");
+      Filesystem.getUri({
+        directory:Directory.Data,
+        path:filename
+      }).then(result => {
+        console.log(result);
+        const path = result.uri;
+        FileOpener.open(path,'application/pdf')
+        .then(() => console.log('File is opened'))
+        .catch(error => console.log(error))
+      });
+    });
+    console.log('complete');
+  }catch(error){
+    console.error(error)
+  }
+  }
+  
 
   async function handleReport(id: string){
     present({
@@ -81,6 +124,7 @@ const ReportPage: React.FC = () => {
 
             data.push(datos);
             console.log("data",data);
+            createPDF(role, data, info).getBase64(response => setB64(response));
             
           }); 
           
@@ -125,9 +169,11 @@ const ReportPage: React.FC = () => {
 
 
 
-          <IonButton onClick ={e=>{createPDF(role,data, info);setData([])}}>Reporte</IonButton>
+          <IonButton onClick ={e=>{console.log(downloadPDF(role,data, info));setData([])}}>Reporte</IonButton>
+     
           
           
+
           
 
       </IonContent>

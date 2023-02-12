@@ -83,8 +83,6 @@ let i = 0;
 export const createPDF = (role, data, information) => {
     
 
-
-
     const docDefinition = {
         pageOrientation:'landscape',
         content: [
@@ -158,6 +156,8 @@ export const createPDF = (role, data, information) => {
         console.log(docDefinition.content[8].table.body);
 
     const pdfDocGenerator = pdfMake.createPdf(docDefinition);
-    pdfDocGenerator.open()
+    
+    
+    return pdfDocGenerator;
 }
 

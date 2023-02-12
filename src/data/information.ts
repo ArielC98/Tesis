@@ -35,11 +35,18 @@ export async function updateProfileData(bodyData:object){
   })
 }
 
-export interface UserPhoto {
-  filepath: string;
-  webviewPath?: string;
+export async function updateProfilePic(data:object){
+  console.log("datos",data);
+  return await fetch('https://sismds.herokuapp.com/api/profile/avatar', {
+                  method: 'POST',
+                  headers: {
+                      "Accept": "application/json",
+                      "Content-Type": "application/json",
+                      'Authorization': 'Bearer ' + localStorage.getItem("access_token")
+                  },
+                  body: JSON.stringify(data)
+          }).then(response => response.json()).then(data => console.log(data));
 }
-
 
 export async function base64FromPath(path: string): Promise<string> {
   const response = await fetch(path);

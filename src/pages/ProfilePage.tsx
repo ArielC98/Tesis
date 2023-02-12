@@ -1,8 +1,8 @@
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonImg, IonInput, IonItem, IonLabel, IonList, IonLoading, IonMenuButton, IonPage, IonRow, IonSelect, IonSelectOption, IonTextarea, IonTitle, IonToolbar, useIonAlert, useIonLoading } from '@ionic/react';
 import { useEffect, useState } from 'react';
-import { userData, updateProfileData } from '../data/information';
-
+import { userData, updateProfileData, updateProfilePic } from '../data/information';
+import './ProfilePage.css'
 
 
 
@@ -23,7 +23,9 @@ const ProfilePage: React.FC = () => {
     const [photo, setPhoto] = useState("");
     const [present, dismiss] = useIonLoading();
     const [showAlert, hideAlert] = useIonAlert();
+    const [image, setImage] = useState({});
 
+    
     async function takePicture() {
         const image = await Camera.getPhoto({
         quality: 90,
@@ -37,6 +39,48 @@ const ProfilePage: React.FC = () => {
         console.log(imageUrl);
     }
 
+    function changeImage(event){
+        
+        const foto = event.target.files[0];
+        const data = new FormData();
+        data.append("image",foto);
+        //data["image"] = files;
+        setImage(data);
+        
+    }
+
+    function dataURLtoFile(dataurl, filename) {
+ 
+        var arr = dataurl.split(','),
+            mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]), 
+            n = bstr.length, 
+            u8arr = new Uint8Array(n);
+            
+        while(n--){
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        
+        return new File([u8arr], filename, {type:mime});
+    }
+
+    // function changeImage(event){
+        
+    //     let reader = new FileReader();
+    //     reader.readAsDataURL(event.target.files[0]);
+        
+        
+    //     reader.onload = () =>{
+    //         console.log("resultado", reader.result);
+    //         setPhoto(reader.result.toString());
+    //         let img = dataURLtoFile(reader.result,'profile.png')
+    //         console.log(img);
+    //         setImage({"image":img});
+    //     }
+        
+    // }
+
+    
     
     const changeEmail = (e) =>{
         e.preventDefault();
@@ -64,13 +108,15 @@ const ProfilePage: React.FC = () => {
             message:"Un momento..."
         })
 
+        //aqui
         await updateProfileData({
             "personal_phone":mobilePhone,
             "home_phone":homePhone,
             "email":email,
             "address":address
-        }).then(response => {dismiss(); showAlert("Información actualizada con éxito")});
+        }).then(() => {dismiss(); showAlert("Información actualizada con éxito")});
         
+
 
     }
     
@@ -110,24 +156,32 @@ const ProfilePage: React.FC = () => {
             </IonToolbar>
         </IonHeader>
         <IonContent className="ion-padding">
-            <IonGrid>
+            <IonGrid className='ion-margin-bottom'>
                 <IonRow>
                     <IonCol></IonCol>
                     <IonCol>
-                        <IonImg style={{width:"150px", height:"200px"}} src={photo === ""? avatar:photo}/>
+                        <IonImg  style={{width:"150px", height:"200px"}} src={photo === ""? avatar:photo}/>
                     </IonCol>
                     <IonCol></IonCol>
                 </IonRow>
-        
+                
                 <IonRow>
-                    <IonCol></IonCol>
-                    <IonCol><IonButton  onClick={() => takePicture()}>Editar foto</IonButton></IonCol>
-                    <IonCol></IonCol>
+                    
+                   
+                        <IonItem className='ion-text-center'>
+                            <IonLabel position='stacked' ><h2 style={{fontWeight:"bold"}}>Editar Foto</h2></IonLabel>
+                            
+                            <input  type={'file'} onChange={e => changeImage(e)}/>
+                        
+                        
+                        </IonItem>
+                   
+                    
                 </IonRow>
             </IonGrid>
 
 
-            <IonLabel style={{fontWeight:"bold"}}>INFORMACIÓN PERSONAL</IonLabel>
+            <IonLabel  style={{fontWeight:"bold"}}>INFORMACIÓN PERSONAL</IonLabel>
 
         
 
@@ -172,7 +226,7 @@ const ProfilePage: React.FC = () => {
                     <IonTextarea  value={address} onIonChange={changeAddress}/>
                 </IonItem>
                 
-                    <IonButton expand='block' onClick={updateInput}>Guardar</IonButton>
+                    <IonButton expand='block' onClick={() => updateProfilePic(image)}>Guardar</IonButton>
                 
             </IonList>
         </IonContent>

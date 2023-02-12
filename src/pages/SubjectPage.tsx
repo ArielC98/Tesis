@@ -176,6 +176,7 @@ const SubjectPage: React.FC = () => {
     if(tempGrades.gracia === undefined){tempGrades.gracia = ""};
 
     const isBetweenValues = (currentValue: number) => currentValue <= 10.00 && currentValue >= 0.00;
+    const isNull = (currentValue) => currentValue === null || currentValue === undefined || currentValue === "";
     console.log(!Object.values(tempGrades).slice(0,6).every(isBetweenValues));
     console.log(tempGrades.supletorio);
     console.log(Object.values(tempGrades).slice(-3).some(item => !(item === "" || item === null) && !isBetweenValues(item)));
