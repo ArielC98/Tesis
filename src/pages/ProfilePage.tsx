@@ -4,11 +4,15 @@ import { useEffect, useState } from 'react';
 import { userData, updateProfileData, updateProfilePic } from '../data/information';
 import './ProfilePage.css'
 
-
+interface FData {
+    image: FormData;
+}
 
 
 
 const ProfilePage: React.FC = () => {
+
+
 
     const [isLoading, setIsLoading] = useState(true);
     const [avatar, setAvatar] = useState(null);
@@ -23,7 +27,7 @@ const ProfilePage: React.FC = () => {
     const [photo, setPhoto] = useState("");
     const [present, dismiss] = useIonLoading();
     const [showAlert, hideAlert] = useIonAlert();
-    const [image, setImage] = useState({});
+    const [image, setImage] = useState<FormData>();
 
     
     async function takePicture() {
@@ -43,26 +47,19 @@ const ProfilePage: React.FC = () => {
         
         const foto = event.target.files[0];
         const data = new FormData();
-        data.append("image",foto);
-        //data["image"] = files;
+        data.append('image',foto,'user-avatar.jpg');
+        let reader = new FileReader();
+        reader.readAsDataURL(event.target.files[0]);
+        reader.onload = () => {
+            setPhoto(reader.result.toString());
+        }
+        
+       
+
         setImage(data);
         
     }
 
-    function dataURLtoFile(dataurl, filename) {
- 
-        var arr = dataurl.split(','),
-            mime = arr[0].match(/:(.*?);/)[1],
-            bstr = atob(arr[1]), 
-            n = bstr.length, 
-            u8arr = new Uint8Array(n);
-            
-        while(n--){
-            u8arr[n] = bstr.charCodeAt(n);
-        }
-        
-        return new File([u8arr], filename, {type:mime});
-    }
 
     // function changeImage(event){
         
@@ -171,7 +168,7 @@ const ProfilePage: React.FC = () => {
                         <IonItem className='ion-text-center'>
                             <IonLabel position='stacked' ><h2 style={{fontWeight:"bold"}}>Editar Foto</h2></IonLabel>
                             
-                            <input  type={'file'} onChange={e => changeImage(e)}/>
+                            <input  type={'file'} accept={'.png'} onChange={e => changeImage(e)}/>
                         
                         
                         </IonItem>
@@ -226,7 +223,7 @@ const ProfilePage: React.FC = () => {
                     <IonTextarea  value={address} onIonChange={changeAddress}/>
                 </IonItem>
                 
-                    <IonButton expand='block' onClick={() => updateProfilePic(image)}>Guardar</IonButton>
+                    <IonButton expand='block' onClick={() => {console.log(typeof(image));console.log(image);updateProfilePic(image)}}>Guardar</IonButton>
                 
             </IonList>
         </IonContent>
