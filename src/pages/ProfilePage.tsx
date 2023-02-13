@@ -1,6 +1,7 @@
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonImg, IonInput, IonItem, IonLabel, IonList, IonLoading, IonMenuButton, IonPage, IonRow, IonSelect, IonSelectOption, IonTextarea, IonTitle, IonToolbar, useIonAlert, useIonLoading } from '@ionic/react';
 import { useEffect, useState } from 'react';
+import { useAuth } from '../data/auth';
 import { userData, updateProfileData, updateProfilePic } from '../data/information';
 import './ProfilePage.css'
 
@@ -23,7 +24,7 @@ const ProfilePage: React.FC = () => {
     const [present, dismiss] = useIonLoading();
     const [showAlert, hideAlert] = useIonAlert();
     const [image, setImage] = useState<FormData>();
-
+    const {role} = useAuth();
     
 
 
@@ -65,20 +66,27 @@ const ProfilePage: React.FC = () => {
         setAddress(e.target.value);
         
     }
-    async function updateInput(){
+    async function updateInfo(){
         
-        
+        present({
+            message:"Un momento..."
+        })
 
-        //aqui
-        await updateProfileData({
-            "personal_phone":mobilePhone,
-            "home_phone":homePhone,
-            "email":email,
-            "address":address
-        });
-        
-
-
+        if(role === "teacher"){
+            await updateProfileData({
+                "personal_phone":mobilePhone,
+                "home_phone":homePhone,
+                "email":email,
+                "address":address
+            });
+            await updateProfilePic(image)
+        }
+        else{
+            await updateProfilePic(image).catch(e =>console.error(e))
+            
+        }
+        dismiss();
+        showAlert("Información actualizada con éxito");
     }
     
     
@@ -128,13 +136,13 @@ const ProfilePage: React.FC = () => {
                 
                 <IonRow>
                     
-                        <IonItem className='ion-text-center'>
-                            <IonLabel position='stacked' ><h2 style={{fontWeight:"bold"}}>Editar Foto</h2></IonLabel>
-                            
-                            <input  type={'file'} accept={'.png'} onChange={e => changeImage(e)}/>
-                        
-                        
-                        </IonItem>
+                    <IonCol></IonCol>
+                    <IonCol>
+                    <input id='foto' hidden type={'file'} accept={'.png'} onChange={e => changeImage(e)}/>
+                            <IonButton onClick={()=>  document.getElementById('foto').click()}>Editar Foto</IonButton>
+                    </IonCol>
+                    <IonCol></IonCol>
+
                     
                 </IonRow>
             </IonGrid>
@@ -170,24 +178,22 @@ const ProfilePage: React.FC = () => {
             <IonList>
                 <IonItem>
                     <IonLabel position='stacked'>Correo</IonLabel>
-                    <IonInput type='email' value={email} onIonChange={changeEmail}/>
+                    <IonInput readonly = {role === "student"} type='email' value={email} onIonChange={changeEmail}/>
                 </IonItem>
                 <IonItem>
                     <IonLabel position='stacked'>Teléfono fijo</IonLabel>
-                    <IonInput type='text' value={homePhone} onIonChange={changeHomePhone}/>
+                    <IonInput readonly = {role === "student"} type='text' value={homePhone} onIonChange={changeHomePhone}/>
                 </IonItem>
                 <IonItem>
                     <IonLabel position='stacked'>Teléfono celular</IonLabel>
-                    <IonInput type='text' value={mobilePhone} onIonChange={changeMobilePhone}/>
+                    <IonInput readonly = {role === "student"} type='text' value={mobilePhone} onIonChange={changeMobilePhone}/>
                 </IonItem>
                 <IonItem>
                     <IonLabel position='stacked'>Dirección</IonLabel>
-                    <IonTextarea  value={address} onIonChange={changeAddress}/>
+                    <IonTextarea readonly = {role === "student"} value={address} onIonChange={changeAddress}/>
                 </IonItem>
                 
-                    <IonButton expand='block' onClick={() => {present({
-            message:"Un momento..."
-        });updateInput().then(() => {updateProfilePic(image);dismiss(); showAlert("Información actualizada con éxito")})}}>Guardar</IonButton>
+                    <IonButton expand='block' disabled = {address === "" || mobilePhone === "" || homePhone === "" || email === ""} onClick={() =>updateInfo()}>Guardar</IonButton>
                 
             </IonList>
         </IonContent>
