@@ -1,4 +1,4 @@
-import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonList, IonLoading, IonMenuButton, IonPage, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar, useIonLoading } from '@ionic/react';
+import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonHeader, IonImg, IonInput, IonItem, IonLabel, IonList, IonLoading, IonMenuButton, IonPage, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar, useIonLoading } from '@ionic/react';
 import { useState, useEffect } from 'react';
 import { createPDF } from '../data/PDFFile';
 import { useAuth } from '../data/auth';
@@ -141,15 +141,30 @@ const ReportPage: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Reporte1</IonTitle>
+          <IonTitle>Reportes</IonTitle>
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
-        <h1>Pagina de reporte</h1>
-
+        <IonRow className='ion-justify-content-center'>
+        <IonItem>
+          <h1>Reporte de calificaciones</h1>
+        </IonItem>
+        </IonRow>
+        <IonRow className='ion-justify-content-center'>
+        <IonItem>
+          <IonImg style={{width:250}} src='../assets/icon/logo.png'/>
+        </IonItem>
+        </IonRow>
+          <IonItem className='ion-text-justify' lines='none'>
+            <p >
+              Bienvenido al módulo de reportes. Seleccione una materia de la lista para generar un archivo PDF con las calificaciones del período académico actual.
+            </p>
+            
+          </IonItem>
+        <IonItem>
         <IonSelect placeholder='Seleccionar materia'  onIonChange={(e)=>{
             
             subjectList.map((subject)=>{
@@ -166,10 +181,10 @@ const ReportPage: React.FC = () => {
             )
           }
         </IonSelect>
+        </IonItem>
 
 
-
-          <IonButton onClick ={e=>{console.log(downloadPDF(role,data, info));setData([])}}>Reporte</IonButton>
+          <IonButton className='ion-margin-top' expand='block' onClick ={e=>{console.log(downloadPDF(role,data, info));setData([])}}>Reporte</IonButton>
      
           
           

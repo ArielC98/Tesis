@@ -16,7 +16,8 @@ const PasswordPage: React.FC = () => {
     return await fetch('https://sismds.herokuapp.com/api/forgot-password', {
         method: 'POST',
         headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Accept':'application/json'
         },
         body: JSON.stringify({identification:id})
     })
@@ -52,7 +53,7 @@ const PasswordPage: React.FC = () => {
           </IonItem>
           
         </IonList>
-        <IonButton className='ion-margin-top' expand='block' onClick={e => handlePasswordReset(identification)
+        <IonButton className='ion-margin-top' expand='block' onClick={() => handlePasswordReset(identification)
         }>Enviar</IonButton>
       </IonContent>
     </IonPage>

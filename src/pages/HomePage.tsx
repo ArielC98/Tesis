@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonContent, IonHeader, IonItem, IonLabel, IonList, IonLoading, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonButtons, IonContent, IonHeader, IonImg, IonItem, IonLabel, IonList, IonLoading, IonMenuButton, IonPage, IonRow, IonTitle, IonToolbar } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../data/auth';
 import { studentGrades } from '../data/grades';
@@ -47,8 +47,22 @@ const HomePage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
-        <IonLabel><h1>Materias</h1></IonLabel>
-        <IonList className='ion-margin-top'>
+        <IonLabel className='ion-text-center'><h1>Sistema de Gestión de Notas</h1></IonLabel>
+
+        <IonRow className='ion-justify-content-center'>
+        <IonItem>
+          <IonImg style={{width:250}} src='../assets/icon/logo.png'/>
+        </IonItem>
+        </IonRow>
+        <IonItem className='ion-text-justify' lines='none'>
+            <p >
+              Seleccione una materia para obtener información de las calificaciones del período académico.
+            </p>    
+        </IonItem>
+        <IonItem lines='none'>
+        <IonLabel><h1>Lista de materias</h1></IonLabel>
+        </IonItem>
+        <IonList>
           {role==="teacher"? //Si el rol es de profesor
             subjectList.map((subject)=>
               <IonItem 

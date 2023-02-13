@@ -78,7 +78,7 @@ const ProfilePage: React.FC = () => {
                 "home_phone":homePhone,
                 "email":email,
                 "address":address
-            });
+            }).catch(e=>console.log(e));
             await updateProfilePic(image)
         }
         else{

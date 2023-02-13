@@ -81,11 +81,11 @@ const LoginPage: React.FC<Props> = ({onLogin}) => {
         <IonList>
           <IonItem>
             <IonLabel position='floating'><h2>Identificación</h2></IonLabel>
-            <IonInput  type='text' onIonChange={e => setIdentification(e.detail.value)}/>
+            <IonInput  type='number' onIonChange={e => setIdentification(e.detail.value)}/>
           </IonItem>
           <IonItem>
             <IonLabel position='floating'>Contraseña</IonLabel>
-            <IonInput  type='text' onIonChange={e => setPassword(e.detail.value)}/>
+            <IonInput  type='password' onIonChange={e => setPassword(e.detail.value)}/>
           </IonItem>
           <IonItem  lines='none' routerLink="/password" className='ion-text-center ion-margin-vertical' >
               <IonLabel><h4>¿Olvidó su contraseña?</h4></IonLabel>
