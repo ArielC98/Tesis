@@ -72,10 +72,10 @@ const SubjectPage: React.FC = () => {
   useEffect(() => {
 
     if(role === "teacher"){
-      studentsList(id).then((response) => {response.students.map((student) => {students.push(student)});console.log(students);
+      studentsList(id).then((response) => { console.log("estudiante",response.students);response.students.map((student) => {students.push(student)});
       setIsLoading(false);
       handleGrades({studentId :students[0].id ,subjectId:id});
-      })
+      }).catch(e=> console.log(e))
     }
     else{
       studentGrades("1").then((response) => {response.grades.map((subject) => {if(subject.subject_id === +id){subjects.unshift(subject)}else{subjects.push(subject)}});
@@ -170,18 +170,25 @@ const SubjectPage: React.FC = () => {
       remedial:rowDataTeacher[10]?.puntaje,
       gracia:rowDataTeacher[11]?.puntaje
     }
-
+  
+    if(tempGrades.p1q1 === undefined){tempGrades.p1q1 = ""};
+    if(tempGrades.p2q1 === undefined){tempGrades.p2q1 = ""};
+    if(tempGrades.p3q1 === undefined){tempGrades.p3q1 = ""};
+    if(tempGrades.p1q2 === undefined){tempGrades.p1q2 = ""};
+    if(tempGrades.p2q2 === undefined){tempGrades.p2q2 = ""};
+    if(tempGrades.p3q2 === undefined){tempGrades.p3q2 = ""};
     if(tempGrades.supletorio === undefined){tempGrades.supletorio = ""};
     if(tempGrades.remedial === undefined){tempGrades.remedial = ""};
     if(tempGrades.gracia === undefined){tempGrades.gracia = ""};
 
     const isBetweenValues = (currentValue: number) => currentValue <= 10.00 && currentValue >= 0.00;
-    const isNull = (currentValue) => currentValue === null || currentValue === undefined || currentValue === "";
+    const isNull = (currentValue) => currentValue === null  || currentValue === "" || currentValue === undefined;
     console.log(!Object.values(tempGrades).slice(0,6).every(isBetweenValues));
     console.log(tempGrades.supletorio);
     console.log(Object.values(tempGrades).slice(-3).some(item => !(item === "" || item === null) && !isBetweenValues(item)));
-    if(!Object.values(tempGrades).slice(0,6).every(isBetweenValues) || Object.values(tempGrades).slice(-3).some(item => !(item === undefined || item === "" || item === null) && !isBetweenValues(item))){
-      
+    
+    if(Object.values(tempGrades).some(item => !(isNull(item)) && !isBetweenValues(item))){
+      console.log(tempGrades);
       showAlert("Las notas deben ser números decimales separados por punto entre 0.00 y 10.00");
       
     }
@@ -190,6 +197,7 @@ const SubjectPage: React.FC = () => {
       present({
         message: 'Cargando...',
       })
+      Object.values(tempGrades).some(item=> {if(item === undefined){item = ""}});
       console.log(tempGrades);
       await updateGrades(studentId,subjectId,tempGrades).then(response =>{dismiss();showAlert(response.message)});
       

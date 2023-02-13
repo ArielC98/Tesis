@@ -4,11 +4,6 @@ import { useEffect, useState } from 'react';
 import { userData, updateProfileData, updateProfilePic } from '../data/information';
 import './ProfilePage.css'
 
-interface FData {
-    image: FormData;
-}
-
-
 
 const ProfilePage: React.FC = () => {
 
@@ -30,18 +25,7 @@ const ProfilePage: React.FC = () => {
     const [image, setImage] = useState<FormData>();
 
     
-    async function takePicture() {
-        const image = await Camera.getPhoto({
-        quality: 90,
-        allowEditing: false,
-        resultType: CameraResultType.Uri,
-        source: CameraSource.Photos
-        });
-        var imageUrl = image.webPath;
-        // Can be set to the src of an image now
-        setPhoto(imageUrl)
-        console.log(imageUrl);
-    }
+
 
     function changeImage(event){
         
@@ -53,29 +37,11 @@ const ProfilePage: React.FC = () => {
         reader.onload = () => {
             setPhoto(reader.result.toString());
         }
-        
-       
-
-        setImage(data);
-        
+        setImage(data);        
     }
 
 
-    // function changeImage(event){
-        
-    //     let reader = new FileReader();
-    //     reader.readAsDataURL(event.target.files[0]);
-        
-        
-    //     reader.onload = () =>{
-    //         console.log("resultado", reader.result);
-    //         setPhoto(reader.result.toString());
-    //         let img = dataURLtoFile(reader.result,'profile.png')
-    //         console.log(img);
-    //         setImage({"image":img});
-    //     }
-        
-    // }
+
 
     
     
@@ -101,9 +67,7 @@ const ProfilePage: React.FC = () => {
     }
     async function updateInput(){
         
-        present({
-            message:"Un momento..."
-        })
+        
 
         //aqui
         await updateProfileData({
@@ -111,7 +75,7 @@ const ProfilePage: React.FC = () => {
             "home_phone":homePhone,
             "email":email,
             "address":address
-        }).then(() => {dismiss(); showAlert("Información actualizada con éxito")});
+        });
         
 
 
@@ -164,7 +128,6 @@ const ProfilePage: React.FC = () => {
                 
                 <IonRow>
                     
-                   
                         <IonItem className='ion-text-center'>
                             <IonLabel position='stacked' ><h2 style={{fontWeight:"bold"}}>Editar Foto</h2></IonLabel>
                             
@@ -172,7 +135,6 @@ const ProfilePage: React.FC = () => {
                         
                         
                         </IonItem>
-                   
                     
                 </IonRow>
             </IonGrid>
@@ -223,7 +185,9 @@ const ProfilePage: React.FC = () => {
                     <IonTextarea  value={address} onIonChange={changeAddress}/>
                 </IonItem>
                 
-                    <IonButton expand='block' onClick={() => {console.log(typeof(image));console.log(image);updateProfilePic(image)}}>Guardar</IonButton>
+                    <IonButton expand='block' onClick={() => {present({
+            message:"Un momento..."
+        });updateInput().then(() => {updateProfilePic(image);dismiss(); showAlert("Información actualizada con éxito")})}}>Guardar</IonButton>
                 
             </IonList>
         </IonContent>
