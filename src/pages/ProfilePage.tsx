@@ -3,7 +3,7 @@ import { IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonImg, 
 import { useEffect, useState } from 'react';
 import { useAuth } from '../data/auth';
 import { userData, updateProfileData, updateProfilePic } from '../data/information';
-import './ProfilePage.css'
+import './ProfilePage.css';
 
 
 const ProfilePage: React.FC = () => {
