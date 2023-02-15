@@ -46,7 +46,8 @@ const LoginPage: React.FC<Props> = ({onLogin}) => {
       identification,
       password
     }).then(response => {
-
+      console.log(response);
+      
       if ('access_token' in response.data) {
         dismiss();
         localStorage.setItem('access_token', response.data['access_token']);

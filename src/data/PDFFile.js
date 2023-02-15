@@ -1,19 +1,9 @@
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
-import { useState } from 'react';
-import { Plugin } from '@capacitor/core';
-import { Browser } from '@capacitor/browser';
+
 
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
-
-const rector = "Rector";
-const secretario = "Secretario";
-
-
-
-let i = 0;
-
 
 
 
@@ -31,10 +21,10 @@ export const createPDF = (role, data, information) => {
             {text: information[0], style:"header"},
             {text: `Rector/a: ${information[1]}`, style:"header"},
             {text: `Secretario/a: ${information[2]}`, style:"header",  margin:[0,0,0,20]},
-            {text: `Asignatura: ${information[3]}`, style:"info"},
+            {text: `${role ==="teacher"?"Asignatura":"Estudiante"}: ${information[3]}`, style:"info"},
             {text: `Especialidad: ${information[4]}`, style:"info"},
-            {text: `Curso: ${information[5]}`, style:"info",margin:[0,0,0,10]},
-            {text: `Paralelo: ${information[6]}`, style:"info",bold:true, alignment:"center"},
+            {text: `Curso: ${information[5]}`, style:"info"},
+            {text: `Paralelo: ${information[6]}`, style:"info", margin:[0,0,0,10]},
             {
                 // layout: 'lightHorizontalLines', // optional
                 table: {
@@ -93,7 +83,7 @@ export const createPDF = (role, data, information) => {
         console.log(docDefinition.content[8].table.body);
 
     const pdfDocGenerator = pdfMake.createPdf(docDefinition);
-    
+    pdfDocGenerator.open();
     
     return pdfDocGenerator;
 }

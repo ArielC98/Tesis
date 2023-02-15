@@ -15,7 +15,7 @@ import LinksPage from './pages/LinksPage';
 
 const AppMenu: React.FC = () => {
 
-  const {loggedIn} = useAuth();
+  const {loggedIn,role} = useAuth();
   
   
 
@@ -31,7 +31,7 @@ const AppMenu: React.FC = () => {
           <Route exact path="/my/dashboard">
             <HomePage />
           </Route>
-          <Route exact path = "/my/subjects/:id">
+          <Route exact path = {role === "teacher" ? "/my/subjects/:id":"/my/subjects/:id/:period"}>
             <SubjectPage/>
           </Route>
           <Route exact path="/my/profile">

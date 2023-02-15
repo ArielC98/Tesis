@@ -1,28 +1,28 @@
 import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonItem, IonLabel, IonLoading, IonPage, IonRefresher, IonRefresherContent, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar, RefresherEventDetail, useIonAlert, useIonLoading } from '@ionic/react';
 import { AgGridReact } from 'ag-grid-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useParams } from 'react-router';
-import swal from 'sweetalert';
+import { Redirect, Route, useParams } from 'react-router';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { studentsList } from '../data/students';
 import { studentGrades, teacherGrades } from '../data/grades';
 import { updateGrades } from '../data/grades';
 import { useAuth } from '../data/auth';
-import { log } from 'console';
+
 
 
 
 
 interface RouteParams {
   id:string;
+  period:string;
 }
 
 const SubjectPage: React.FC = () => {
 
   const [students] = useState([]);
   const {role} = useAuth();
-  const {id} = useParams<RouteParams>(); //return an object with the parameters passed in the URL
+  const {id, period} = useParams<RouteParams>(); //return an object with the parameters passed in the URL
   const [count, setCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [grades, setGrades] = useState([{}]);
@@ -35,7 +35,7 @@ const SubjectPage: React.FC = () => {
   //Funcion para manejar la recarga de la pagina
   function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
     setTimeout(() => {
-      role === "teacher" ? handleGrades({studentId :students[0].id ,subjectId:id}): handleGrades({academicPeriod:"1"});
+      role === "teacher" ? handleGrades({studentId :students[0].id ,subjectId:id}): handleGrades({academicPeriod:period});
       event.detail.complete();
     }, 1000);
   }
@@ -75,13 +75,13 @@ const SubjectPage: React.FC = () => {
       studentsList(id).then((response) => { console.log("estudiante",response.students);response.students.map((student) => {students.push(student)});
       setIsLoading(false);
       handleGrades({studentId :students[0].id ,subjectId:id});
-      }).catch(e=> console.log(e))
+      }).catch(()=> {showAlert({header:'Materia no disponible', buttons:[{text:"Volver", handler:()=>{window.location.href='./..'}}]}); setIsLoading(false)})
     }
     else{
       studentGrades("1").then((response) => {response.grades.map((subject) => {if(subject.subject_id === +id){subjects.unshift(subject)}else{subjects.push(subject)}});
       console.log("subjects",subjects);
       setIsLoading(false);
-      handleGrades({academicPeriod :"1"});
+      handleGrades({academicPeriod :period});
       })
     }
 
@@ -241,7 +241,7 @@ const SubjectPage: React.FC = () => {
         <IonToolbar>
           <IonTitle>GESTIÓN DE NOTAS</IonTitle>
           <IonButtons slot="start">
-          <IonBackButton defaultHref="/my/dashboard" text=''/>
+          <IonBackButton  defaultHref="/my/dashboard" text=''/>
         </IonButtons>
         </IonToolbar>
       </IonHeader>
@@ -254,7 +254,7 @@ const SubjectPage: React.FC = () => {
         </IonItem>
         <IonItem style={{marginTop:-20}}>
         <IonLabel position='stacked'>Seleccionar {role === "teacher"?"Estudiante":"Materia"}</IonLabel>
-          <IonSelect   placeholder='Estudiante' value = {role === "teacher"?students[count].name+ " " + students[count].last_name : subjects[count].subject_name} onIonChange={(e)=>{
+          <IonSelect   placeholder='Estudiante' value = {role === "teacher"?students[count]?.name+ " " + students[count]?.last_name : subjects[count]?.subject_name} onIonChange={(e)=>{
               
               (role==="teacher"?students:subjects).map((item,position)=>{
                 if(e.detail.value === (role==="teacher"?item.name + " " + item.last_name:item.subject_name)){ //Compara el nombre seleccionado con el del arreglo de estudiantes
