@@ -23,7 +23,7 @@ const ReportPage: React.FC = () => {
   const [data, setData] = useState([]);
   const [info,setInfo] = useState([]);
   const [subjectList] = useState([]);
-  const [academicPeriod, setAcademicPeriod] = useState("1");
+  const [academicPeriod, setAcademicPeriod] = useState("");
   const [periodList] = useState([]);
   const [present, dismiss] = useIonLoading();
   const [b64, setB64] = useState("");
@@ -39,11 +39,11 @@ const ReportPage: React.FC = () => {
     
     }
     else{
-      studentGrades(academicPeriod).then(response => response.grades.map((subject) => {subjectList.push(subject);console.log(subjectList);
-      })
-      ).then(()=>
+      console.log(academicPeriod);
+      
+      
       reportFilters().then(data => {data.academic_periods.map(period => periodList.push(period));console.log(periodList);
-      ;setIsLoading(false)}))
+      ;setIsLoading(false)})
     }
 
     
@@ -138,6 +138,10 @@ const ReportPage: React.FC = () => {
         });
       }
       else{
+
+        studentGrades(period).then(response => response.grades.map((subject) => {subjectList.push(subject);console.log(subjectList);
+        })
+        )
         
         studentReport(period).then(response => { 
       
@@ -146,11 +150,11 @@ const ReportPage: React.FC = () => {
           information.push(response.information.name);
           information.push(response.information.director_name);
           information.push(response.information.secretary_name);
-          information.push(response.subject_name);
-          information.push(response.specialty);
-          information.push(response.course);
-          information.push(response.parallel);
-          information.push(response.academic_period);
+          information.push(response.user.student_name + " " + response.user.student_last_name);
+          information.push(response.user.specialty_name);
+          information.push(response.user.course_name);
+          information.push(response.user.parallel_name);
+          information.push(response.user.academic_period_name);
     
           setInfo(information)
           
@@ -182,7 +186,7 @@ const ReportPage: React.FC = () => {
               }); 
               
               console.log("data",data);
-              createPDF(role, data, info).getBase64(response => setB64(response));
+              
               dismiss();
             });
 
@@ -226,6 +230,7 @@ const ReportPage: React.FC = () => {
             
             periodList.map((period)=>{
               if(e.detail.value === period.name){ 
+                setAcademicPeriod(period.id);
                 handleReport({period:period.id});
               }      
             });
@@ -247,7 +252,7 @@ const ReportPage: React.FC = () => {
             
             subjectList.map((subject)=>{
               if(e.detail.value === (role ==="teacher"?subject.name:subject.subject_name)){ //Compara el nombre seleccionado con el del arreglo de estudiantes
-                handleReport(subject.id);
+                handleReport({id:subject.id});
               }      
             });
             
@@ -262,7 +267,7 @@ const ReportPage: React.FC = () => {
         </IonItem>
 
 
-          <IonButton className='ion-margin-top' expand='block' onClick ={e=>{console.log(downloadPDF(role,data, info));setData([])}}>Generar reporte</IonButton>
+          <IonButton disabled ={academicPeriod===""} className='ion-margin-top' expand='block' onClick ={e=>{console.log(info);createPDF(role,data, info);setData([])}}>Generar reporte</IonButton>
 
           
           
