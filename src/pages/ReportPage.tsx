@@ -38,7 +38,8 @@ const ReportPage: React.FC = () => {
     
     }
     else{
-      studentGrades(academicPeriod).then(response => response.grades.map((subject) => {subjectList.push(subject);setIsLoading(false);})
+      studentGrades(academicPeriod).then(response => response.grades.map((subject) => {subjectList.push(subject);setIsLoading(false);console.log(subjectList);
+      })
       )
     }
 
@@ -60,7 +61,7 @@ const ReportPage: React.FC = () => {
       path:filename,
       data: b64,
       directory:Directory.Data,
-    }).then(result =>{
+    }).then(() =>{
       console.log("File Written");
       Filesystem.getUri({
         directory:Directory.Data,
@@ -168,15 +169,15 @@ const ReportPage: React.FC = () => {
         <IonSelect placeholder='Seleccionar materia'  onIonChange={(e)=>{
             
             subjectList.map((subject)=>{
-              if(e.detail.value === subject.name){ //Compara el nombre seleccionado con el del arreglo de estudiantes
+              if(e.detail.value === (role ==="teacher"?subject.name:subject.subject_name)){ //Compara el nombre seleccionado con el del arreglo de estudiantes
                 handleReport(subject.id);
               }      
             });
             
           }}>
           {subjectList.map((subject)=>
-              <IonSelectOption key={subject.id}>
-                {subject.name}
+              <IonSelectOption key={role ==="teacher"?subject.id:subject.subject_id}>
+                {role ==="teacher"?subject.name:subject.subject_name}
               </IonSelectOption>
             )
           }
@@ -184,8 +185,8 @@ const ReportPage: React.FC = () => {
         </IonItem>
 
 
-          <IonButton className='ion-margin-top' expand='block' onClick ={e=>{console.log(downloadPDF(role,data, info));setData([])}}>Reporte</IonButton>
-     
+          <IonButton className='ion-margin-top' expand='block' onClick ={e=>{console.log(downloadPDF(role,data, info));setData([])}}>Generar reporte</IonButton>
+
           
           
 
