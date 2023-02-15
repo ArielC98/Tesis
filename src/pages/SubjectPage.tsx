@@ -2,30 +2,27 @@ import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonH
 import { AgGridReact } from 'ag-grid-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Redirect, Route, useParams } from 'react-router';
-import swal from 'sweetalert';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { studentsList } from '../data/students';
 import { studentGrades, teacherGrades } from '../data/grades';
 import { updateGrades } from '../data/grades';
 import { useAuth } from '../data/auth';
-import { log } from 'console';
-import {useRouteMatch} from 'react-router-dom';
-import { RouterLink } from '@ionic/core/dist/types/components/router-link/router-link';
-import { navigate } from 'ionicons/icons';
+
 
 
 
 
 interface RouteParams {
   id:string;
+  period:string;
 }
 
 const SubjectPage: React.FC = () => {
 
   const [students] = useState([]);
   const {role} = useAuth();
-  const {id} = useParams<RouteParams>(); //return an object with the parameters passed in the URL
+  const {id, period} = useParams<RouteParams>(); //return an object with the parameters passed in the URL
   const [count, setCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [grades, setGrades] = useState([{}]);
@@ -38,7 +35,7 @@ const SubjectPage: React.FC = () => {
   //Funcion para manejar la recarga de la pagina
   function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
     setTimeout(() => {
-      role === "teacher" ? handleGrades({studentId :students[0].id ,subjectId:id}): handleGrades({academicPeriod:"1"});
+      role === "teacher" ? handleGrades({studentId :students[0].id ,subjectId:id}): handleGrades({academicPeriod:period});
       event.detail.complete();
     }, 1000);
   }
@@ -84,7 +81,7 @@ const SubjectPage: React.FC = () => {
       studentGrades("1").then((response) => {response.grades.map((subject) => {if(subject.subject_id === +id){subjects.unshift(subject)}else{subjects.push(subject)}});
       console.log("subjects",subjects);
       setIsLoading(false);
-      handleGrades({academicPeriod :"1"});
+      handleGrades({academicPeriod :period});
       })
     }
 

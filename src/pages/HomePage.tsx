@@ -1,4 +1,3 @@
-import { present } from '@ionic/core/dist/types/utils/overlays';
 import { IonButton, IonButtons, IonContent, IonHeader, IonImg, IonItem, IonLabel, IonList, IonLoading, IonMenuButton, IonPage, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar, useIonLoading } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../data/auth';
@@ -34,7 +33,7 @@ const HomePage: React.FC = () => {
     }
     
     
-  },[academicPeriod]);
+  },[]);
 
 
   async function handleStudentGrades(period: string) {
@@ -69,7 +68,7 @@ const HomePage: React.FC = () => {
         </IonRow>
         <IonItem className='ion-text-justify' lines='none'>
             <p >
-              Seleccione una materia para obtener información de las calificaciones del período académico.
+              Seleccione una materia para {role === "student"?"obtener":"editar la"} información de las calificaciones del período académico {role === "teacher"? "actual": "seleccionado"}.
             </p>    
         </IonItem>
         
@@ -82,7 +81,7 @@ const HomePage: React.FC = () => {
                 console.log(true);
                 handleStudentGrades(period.id);
                 console.log(subjectList);
-                
+                setAcademicPeriod(period.id);
               }      
             });
             
@@ -123,7 +122,7 @@ const HomePage: React.FC = () => {
                 button 
                 detail
                 key={subject.id}
-                routerLink={`/my/subjects/${subject.subject_id}`}
+                routerLink={`/my/subjects/${subject.subject_id}/${academicPeriod}`}
                 >
                   
                   <IonLabel>

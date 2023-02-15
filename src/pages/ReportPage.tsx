@@ -131,7 +131,7 @@ const ReportPage: React.FC = () => {
 
             data.push(datos);
             console.log("data",data);
-            //createPDF(role, data, info).getBase64(response => setB64(response));
+            createPDF(role, data, info).getBase64(response => setB64(response));
           }); 
           
           dismiss();
@@ -270,7 +270,7 @@ const ReportPage: React.FC = () => {
         </IonItem>
 
 
-          <IonButton disabled ={role === "teacher"?subjectName === "": academicPeriod===""} className='ion-margin-top' expand='block' onClick ={e=>{console.log({"info":info,"data":data});createPDF(role,data, info);setData([])}}>Generar reporte</IonButton>
+          <IonButton disabled ={role === "teacher"?subjectName === "": academicPeriod===""} className='ion-margin-top' expand='block' onClick ={e=>{console.log({"info":info,"data":data});downloadPDF(role,data, info);setData([])}}>Generar reporte</IonButton>
 
           
           
