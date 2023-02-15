@@ -22,6 +22,7 @@ const ReportPage: React.FC = () => {
   const [isLoading,setIsLoading] = useState(false);
   const [data, setData] = useState([]);
   const [info,setInfo] = useState([]);
+  const [subjectName, setSubjectName] = useState("");
   const [subjectList] = useState([]);
   const [academicPeriod, setAcademicPeriod] = useState("");
   const [periodList] = useState([]);
@@ -110,7 +111,7 @@ const ReportPage: React.FC = () => {
       .then(studentList =>
         {
           console.log(studentList);
-          studentList.map((student,i)=>{
+          studentList.map((student)=>{
             
             const datos = []
 
@@ -130,10 +131,10 @@ const ReportPage: React.FC = () => {
 
             data.push(datos);
             console.log("data",data);
-            createPDF(role, data, info).getBase64(response => setB64(response));
-            dismiss();
+            //createPDF(role, data, info).getBase64(response => setB64(response));
           }); 
           
+          dismiss();
 
         });
       }
@@ -252,6 +253,7 @@ const ReportPage: React.FC = () => {
             
             subjectList.map((subject)=>{
               if(e.detail.value === (role ==="teacher"?subject.name:subject.subject_name)){ //Compara el nombre seleccionado con el del arreglo de estudiantes
+                setSubjectName(subject.name);
                 handleReport({id:subject.id});
               }      
             });
@@ -259,7 +261,8 @@ const ReportPage: React.FC = () => {
           }}>
           {subjectList.map((subject)=>
               <IonSelectOption key={role ==="teacher"?subject.id:subject.subject_id}>
-                {role ==="teacher"?subject.name:subject.subject_name}
+                {subject.name}
+                
               </IonSelectOption>
             )
           }
@@ -267,7 +270,7 @@ const ReportPage: React.FC = () => {
         </IonItem>
 
 
-          <IonButton disabled ={academicPeriod===""} className='ion-margin-top' expand='block' onClick ={e=>{console.log(info);createPDF(role,data, info);setData([])}}>Generar reporte</IonButton>
+          <IonButton disabled ={role === "teacher"?subjectName === "": academicPeriod===""} className='ion-margin-top' expand='block' onClick ={e=>{console.log({"info":info,"data":data});createPDF(role,data, info);setData([])}}>Generar reporte</IonButton>
 
           
           
