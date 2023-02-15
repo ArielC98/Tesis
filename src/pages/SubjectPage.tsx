@@ -75,7 +75,7 @@ const SubjectPage: React.FC = () => {
       studentsList(id).then((response) => { console.log("estudiante",response.students);response.students.map((student) => {students.push(student)});
       setIsLoading(false);
       handleGrades({studentId :students[0].id ,subjectId:id});
-      }).catch(()=> {showAlert({header:'Materia no disponible', buttons:[{text:"Volver", handler:()=>{window.location.href='./..'}}]}); setIsLoading(false)})
+      }).catch(()=> {showAlert({header:'Materia no disponible', buttons:[{text:"Ok"}]}); setIsLoading(false)})
     }
     else{
       studentGrades("1").then((response) => {response.grades.map((subject) => {if(subject.subject_id === +id){subjects.unshift(subject)}else{subjects.push(subject)}});
