@@ -2,7 +2,7 @@ import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonHeader, Io
 import { useState, useEffect } from 'react';
 import { createPDF } from '../data/PDFFile';
 import { useAuth } from '../data/auth';
-import { teacherReport } from '../data/report';
+import { reportFilters, studentReport, teacherReport } from '../data/report';
 import { teacherSubjects } from '../data/subjects';
 import { studentGrades } from '../data/grades';
 import { Filesystem, Directory } from '@capacitor/filesystem';
@@ -24,6 +24,7 @@ const ReportPage: React.FC = () => {
   const [info,setInfo] = useState([]);
   const [subjectList] = useState([]);
   const [academicPeriod, setAcademicPeriod] = useState("1");
+  const [periodList] = useState([]);
   const [present, dismiss] = useIonLoading();
   const [b64, setB64] = useState("");
 
@@ -38,9 +39,11 @@ const ReportPage: React.FC = () => {
     
     }
     else{
-      studentGrades(academicPeriod).then(response => response.grades.map((subject) => {subjectList.push(subject);setIsLoading(false);console.log(subjectList);
+      studentGrades(academicPeriod).then(response => response.grades.map((subject) => {subjectList.push(subject);console.log(subjectList);
       })
-      )
+      ).then(()=>
+      reportFilters().then(data => {data.academic_periods.map(period => periodList.push(period));console.log(periodList);
+      ;setIsLoading(false)}))
     }
 
     
@@ -81,10 +84,12 @@ const ReportPage: React.FC = () => {
   }
   
 
-  async function handleReport(id: string){
+  async function handleReport({id= '',period=''}){
     present({
       message: 'Creando reporte...',
     })
+
+    if(role === "teacher"){
     teacherReport(id).then(response => { 
       
       console.log(response);
@@ -126,12 +131,63 @@ const ReportPage: React.FC = () => {
             data.push(datos);
             console.log("data",data);
             createPDF(role, data, info).getBase64(response => setB64(response));
-            
+            dismiss();
           }); 
           
 
-          dismiss();
-    });
+        });
+      }
+      else{
+        
+        studentReport(period).then(response => { 
+      
+          console.log(response);
+          const information = [];
+          information.push(response.information.name);
+          information.push(response.information.director_name);
+          information.push(response.information.secretary_name);
+          information.push(response.subject_name);
+          information.push(response.specialty);
+          information.push(response.course);
+          information.push(response.parallel);
+          information.push(response.academic_period);
+    
+          setInfo(information)
+          
+    
+          return response.grades})
+          .then(gradesList =>
+            {
+              console.log('notas',gradesList);
+              gradesList.map((subject)=>{
+                
+                const datos = []
+                
+                datos.push({text:subject.subject_name,style:"names"})
+                datos.push({text:subject.p1q1,style:"grades"})
+                datos.push({text:subject.p2q1,style:"grades"})
+                datos.push({text:subject.p3q1,style:"grades"})
+                datos.push({text:subject.p1q2,style:"grades"})
+                datos.push({text:subject.p2q2,style:"grades"})
+                datos.push({text:subject.p3q2,style:"grades"})
+                datos.push({text:subject.q1,style:"grades"})
+                datos.push({text:subject.q2,style:"grades"})
+                datos.push({text:subject.supletorio,style:"grades"})
+                datos.push({text:subject.remedial,style:"grades"})
+                datos.push({text:subject.gracia,style:"grades"})
+                datos.push({text:subject.final,style:"grades"})
+    
+                data.push(datos);
+                
+              }); 
+              
+              console.log("data",data);
+              createPDF(role, data, info).getBase64(response => setB64(response));
+              dismiss();
+            });
+
+      } 
+        
   }
 
   if(isLoading){
@@ -161,11 +217,32 @@ const ReportPage: React.FC = () => {
         </IonRow>
           <IonItem className='ion-text-justify' lines='none'>
             <p >
-              Bienvenido al módulo de reportes. Seleccione una materia de la lista para generar un archivo PDF con las calificaciones del período académico actual.
+              Bienvenido al módulo de reportes. Seleccione {role === "teacher"?"una materia":"un periodo académico"} de la lista para generar un archivo PDF con las calificaciones del {role ==="teacher"?"período académico actual":"estudiante"}.
             </p>
             
           </IonItem>
-        <IonItem>
+          <IonItem hidden = {role === "teacher"}>
+          <IonSelect placeholder='Seleccionar período académico'  onIonChange={(e)=>{
+            
+            periodList.map((period)=>{
+              if(e.detail.value === period.name){ 
+                handleReport({period:period.id});
+              }      
+            });
+            
+          }}>
+          {periodList.map((period)=>
+              <IonSelectOption key={period.id}>
+                {period.name}
+              </IonSelectOption>
+            )
+          }
+        </IonSelect>
+          </IonItem>
+
+
+        <IonItem hidden={role === "student"}>
+        
         <IonSelect placeholder='Seleccionar materia'  onIonChange={(e)=>{
             
             subjectList.map((subject)=>{
