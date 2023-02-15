@@ -5,7 +5,7 @@ import swal from 'sweetalert';
 import { loginUser, useAuth} from '../data/auth';
 import "@ionic/react/css/core.css"
 import "../theme/variables.css"
-
+import Joyride from 'react-joyride';
 
 
 interface Props{
@@ -20,6 +20,19 @@ const LoginPage: React.FC<Props> = ({onLogin}) => {
   const [password, setPassword] = useState("");
   const [present, dismiss] = useIonLoading();
   const [isLoading, setIsLoading] = useState(false);
+  const [steps, setSteps] = useState(
+    [
+      {
+        target: '.my-first-step',
+        content: 'This is my awesome feature!',
+      },
+      {
+        target: '.my-other-step',
+        content: 'This another awesome feature!',
+      },
+    
+    ]
+  )
   
 
 
@@ -58,6 +71,7 @@ const LoginPage: React.FC<Props> = ({onLogin}) => {
     return <Redirect to ='/my/dashboard'/>
   }
 
+  
 
 
   //Si no es verdadera retorna el contenido de la pagina de inicio de sesion
@@ -78,10 +92,13 @@ const LoginPage: React.FC<Props> = ({onLogin}) => {
             <IonCol></IonCol>
           </IonRow>
         </IonGrid>
-        <IonList>
-          <IonItem>
+
+    
+        <IonList >
+        <Joyride steps={steps}/>
+          <IonItem id="create-post">
             <IonLabel position='floating'><h2>Identificación</h2></IonLabel>
-            <IonInput  type='number' onIonChange={e => setIdentification(e.detail.value)}/>
+            <IonInput class='my-first-step' type='number' onIonChange={e => setIdentification(e.detail.value)}/>
           </IonItem>
           <IonItem>
             <IonLabel position='floating'>Contraseña</IonLabel>
@@ -90,9 +107,9 @@ const LoginPage: React.FC<Props> = ({onLogin}) => {
           <IonItem  lines='none' routerLink="/password" className='ion-text-center ion-margin-vertical' >
               <IonLabel><h4>¿Olvidó su contraseña?</h4></IonLabel>
           </IonItem>
+    
         </IonList>
         <IonButton disabled = {identification === "" || password === ""} className='ion-margin-vertical' expand='block' onClick={handleSubmit}color="primary">Ingresar</IonButton>
-      
       </IonContent>
     </IonPage>
   );

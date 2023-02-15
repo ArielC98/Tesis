@@ -79,7 +79,7 @@ const ProfilePage: React.FC = () => {
                 "email":email,
                 "address":address
             }).catch(e=>console.log(e));
-            await updateProfilePic(image)
+            await updateProfilePic(image).catch(e=>console.log(e));
         }
         else{
             await updateProfilePic(image).catch(e =>console.error(e))
@@ -193,7 +193,8 @@ const ProfilePage: React.FC = () => {
                     <IonTextarea readonly = {role === "student"} value={address} onIonChange={changeAddress}/>
                 </IonItem>
                 
-                    <IonButton expand='block' disabled = {address === "" || mobilePhone === "" || homePhone === "" || email === ""} onClick={() =>updateInfo()}>Guardar</IonButton>
+                    <IonButton expand='block' disabled = {address === "" || mobilePhone === "" || homePhone === "" || email === "" || (role === "student" && photo ==='')} onClick={() =>{updateInfo(); console.log(role)}
+                    }>Guardar</IonButton>
                 
             </IonList>
         </IonContent>

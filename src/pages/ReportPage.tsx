@@ -109,18 +109,18 @@ const ReportPage: React.FC = () => {
             const datos = []
 
             datos.push({text:student.student_name + " " + student.student_last_name,style:"names"})
-            datos.push({text:student.p1q1,style:"grades"})
-            datos.push({text:student.p2q1,style:"grades"})
-            datos.push({text:student.p3q1,style:"grades"})
-            datos.push({text:student.p1q2,style:"grades"})
-            datos.push({text:student.p2q2,style:"grades"})
-            datos.push({text:student.p3q2,style:"grades"})
-            datos.push({text:student.q1,style:"grades"})
-            datos.push({text:student.q2,style:"grades"})
-            datos.push({text:student.supletorio,style:"grades"})
-            datos.push({text:student.remedial,style:"grades"})
-            datos.push({text:student.gracia,style:"grades"})
-            datos.push({text:student.final,style:"grades"})
+            datos.push({text:student.p1q1?.toFixed(2),style:"grades"})
+            datos.push({text:student.p2q1?.toFixed(2),style:"grades"})
+            datos.push({text:student.p3q1?.toFixed(2),style:"grades"})
+            datos.push({text:student.p1q2?.toFixed(2),style:"grades"})
+            datos.push({text:student.p2q2?.toFixed(2),style:"grades"})
+            datos.push({text:student.p3q2?.toFixed(2),style:"grades"})
+            datos.push({text:student.q1?.toFixed(2),style:"grades"})
+            datos.push({text:student.q2?.toFixed(2),style:"grades"})
+            datos.push({text:student.supletorio?.toFixed(2),style:"grades"})
+            datos.push({text:student.remedial?.toFixed(2),style:"grades"})
+            datos.push({text:student.gracia?.toFixed(2),style:"grades"})
+            datos.push({text:student.final?.toFixed(2),style:"grades"})
 
             data.push(datos);
             console.log("data",data);
