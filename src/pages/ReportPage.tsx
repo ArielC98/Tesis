@@ -229,7 +229,7 @@ const ReportPage: React.FC = () => {
 
   return (
     <IonPage>
-      <Joyride steps={steps} continuous = {true}/>
+      <Joyride steps={steps} continuous = {true} run = {tutorial}/>
       <IonHeader>
         <IonToolbar>
           <IonTitle>Reportes</IonTitle>
