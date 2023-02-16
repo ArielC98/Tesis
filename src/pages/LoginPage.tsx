@@ -1,4 +1,4 @@
-import { IonButton, IonCol, IonContent, IonGrid, IonHeader, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, IonRow, IonText, IonTitle, IonToolbar, useIonLoading } from '@ionic/react';
+import { IonButton, IonCol, IonContent, IonGrid, IonHeader, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, IonRow, IonText, IonTitle, IonToolbar, useIonAlert, useIonLoading } from '@ionic/react';
 import { useState } from 'react';
 import { Redirect } from 'react-router';
 import swal from 'sweetalert';
@@ -20,7 +20,7 @@ const LoginPage: React.FC<Props> = ({onLogin}) => {
   const [password, setPassword] = useState("");
   const [present, dismiss] = useIonLoading();
   const [isLoading, setIsLoading] = useState(false);
-  
+  const [showAlert] = useIonAlert();
   
 
 
@@ -37,11 +37,19 @@ const LoginPage: React.FC<Props> = ({onLogin}) => {
       console.log(response);
       
       if ('access_token' in response.data) {
+
+        if(response.data.user.role === "secretary"){
+          onLogin(response.data.user.role, false);
+          swal("No disponible", "Los usuarios tipo Secretaria deben usar el sistema web.", "info");
+          setTimeout(()=> window.location.href = "/",2000);
+        }
+        else{
+
         dismiss();
         localStorage.setItem('access_token', response.data['access_token']);
         localStorage.setItem('user', JSON.stringify(response.data['user']));
 
-        if(+localStorage.getItem('hasDoneTutorial') === null){
+        if(+localStorage.getItem('hasDoneTutorial') === 0){
           localStorage.setItem('hasDoneTutorial',response.data.user.id);
           onLogin(response.data.user.role, true);
           console.log("caso1",localStorage.getItem('hasDoneTutorial'),response.data.user.id);
@@ -63,10 +71,10 @@ const LoginPage: React.FC<Props> = ({onLogin}) => {
           timer: 2000,
           buttons:{}
         })
-          
+        }
       
       } 
-    }).catch(() => {swal("Error", "Usuario o contraseña incorrecta", "error"); dismiss()})
+    }).catch((e) => {swal("Error", "Usuario o contraseña incorrecta.", "error"); dismiss()})
   
   }
 
