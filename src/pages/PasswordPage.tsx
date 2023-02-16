@@ -53,7 +53,7 @@ const PasswordPage: React.FC = () => {
           </IonItem>
           
         </IonList>
-        <IonButton className='ion-margin-top' expand='block' onClick={() => handlePasswordReset(identification)
+        <IonButton disabled = {identification === ""} className='ion-margin-top' expand='block' onClick={() => handlePasswordReset(identification)
         }>Enviar</IonButton>
       </IonContent>
     </IonPage>
