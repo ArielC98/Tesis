@@ -52,7 +52,7 @@ const appPages: AppPage[] = [
     mdIcon: list
   },
   {
-    title: 'Redes',
+    title: 'Contacto',
     url: '/my/links',
     iosIcon: shareSocial,
     mdIcon: shareSocial
