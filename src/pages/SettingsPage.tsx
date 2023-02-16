@@ -82,7 +82,17 @@ const SettingsPage: React.FC = () => {
       <IonContent className="ion-padding">
         <IonList class='step10'>
           <IonItem lines='none'>
-          <IonLabel><h2>Cambio de contraseña</h2></IonLabel>
+          <IonLabel style={{fontWeight:"bold"}}><h1>Cambio de contraseña</h1></IonLabel>
+          </IonItem>
+          <IonItem lines='none' style={{marginBottom:-15}}>
+            <IonLabel>La nueva contraseña debe tener:</IonLabel>
+          </IonItem>
+          <IonItem lines='none'>
+            <ul>
+              <li>Letras mayúsculas y minúsculas</li>
+              <li>Al menos un número</li>
+              <li>Un caracter especial (.,?*/) </li>
+            </ul>
           </IonItem>
           <IonItem>
             <IonLabel position='stacked'>Contraseña nueva</IonLabel>
@@ -100,7 +110,7 @@ const SettingsPage: React.FC = () => {
           </IonList>
           <IonList class='step11'>
             <IonItem>
-              <IonLabel>Cerrar Sesión</IonLabel>
+              <IonLabel><h1>Cerrar Sesión</h1></IonLabel>
             </IonItem>
           
             <IonRow >
