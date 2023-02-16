@@ -122,17 +122,17 @@ const ReportPage: React.FC = () => {
     teacherReport(id).then(response => { 
       
       console.log(response);
-      const information = [];
-      information.push(response.information.name);
-      information.push(response.information.director_name);
-      information.push(response.information.secretary_name);
-      information.push(response.subject_name);
-      information.push(response.specialty);
-      information.push(response.course);
-      information.push(response.parallel);
-      information.push(response.academic_period);
+      
+      info.push(response.information.name);
+      info.push(response.information.director_name);
+      info.push(response.information.secretary_name);
+      info.push(response.subject_name);
+      info.push(response.specialty);
+      info.push(response.course);
+      info.push(response.parallel);
+      info.push(response.academic_period);
 
-      setInfo(information)
+      
       
 
       return response.grades})
@@ -144,18 +144,18 @@ const ReportPage: React.FC = () => {
             const datos = []
 
             datos.push({text:student.student_name + " " + student.student_last_name,style:"names"})
-            datos.push({text:student.p1q1?.toFixed(2),style:"grades"})
-            datos.push({text:student.p2q1?.toFixed(2),style:"grades"})
-            datos.push({text:student.p3q1?.toFixed(2),style:"grades"})
-            datos.push({text:student.p1q2?.toFixed(2),style:"grades"})
-            datos.push({text:student.p2q2?.toFixed(2),style:"grades"})
-            datos.push({text:student.p3q2?.toFixed(2),style:"grades"})
-            datos.push({text:student.q1?.toFixed(2),style:"grades"})
-            datos.push({text:student.q2?.toFixed(2),style:"grades"})
-            datos.push({text:student.supletorio?.toFixed(2),style:"grades"})
-            datos.push({text:student.remedial?.toFixed(2),style:"grades"})
-            datos.push({text:student.gracia?.toFixed(2),style:"grades"})
-            datos.push({text:student.final?.toFixed(2),style:"grades"})
+            datos.push({text:student.p1q1,style:"grades"})
+            datos.push({text:student.p2q1,style:"grades"})
+            datos.push({text:student.p3q1,style:"grades"})
+            datos.push({text:student.p1q2,style:"grades"})
+            datos.push({text:student.p2q2,style:"grades"})
+            datos.push({text:student.p3q2,style:"grades"})
+            datos.push({text:student.q1,style:"grades"})
+            datos.push({text:student.q2,style:"grades"})
+            datos.push({text:student.supletorio,style:"grades"})
+            datos.push({text:student.remedial,style:"grades"})
+            datos.push({text:student.gracia,style:"grades"})
+            datos.push({text:student.final,style:"grades"})
 
             data.push(datos);
             console.log("data",data);
@@ -174,19 +174,20 @@ const ReportPage: React.FC = () => {
         
         studentReport(period).then(response => { 
       
-          console.log(response);
-          const information = [];
-          information.push(response.information.name);
-          information.push(response.information.director_name);
-          information.push(response.information.secretary_name);
-          information.push(response.user.student_name + " " + response.user.student_last_name);
-          information.push(response.user.specialty_name);
-          information.push(response.user.course_name);
-          information.push(response.user.parallel_name);
-          information.push(response.user.academic_period_name);
-    
-          setInfo(information)
+          console.log("respuesta",response);
           
+          info.push(response.information.name);
+          info.push(response.information.director_name);
+          info.push(response.information.secretary_name);
+          info.push(response.user.student_name + " " + response.user.student_last_name);
+          info.push(response.user.specialty_name);
+          info.push(response.user.course_name);
+          info.push(response.user.parallel_name);
+          info.push(response.user.academic_period_name);
+    
+          
+          
+
     
           return response.grades})
           .then(gradesList =>
@@ -213,8 +214,8 @@ const ReportPage: React.FC = () => {
                 data.push(datos);
                 
               }); 
-              
-              console.log("data",data);
+              createPDF(role, data, info).getBase64(response => setB64(response));
+              console.log("info",info);
               
               dismiss();
             });
