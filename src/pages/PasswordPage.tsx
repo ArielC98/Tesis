@@ -1,4 +1,4 @@
-import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, IonRow, IonText, IonTitle, IonToolbar } from '@ionic/react';
+import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, IonRow, IonText, IonTitle, IonToolbar, useIonLoading } from '@ionic/react';
 import { useState } from 'react';
 import swal from 'sweetalert';
 
@@ -8,11 +8,13 @@ import swal from 'sweetalert';
 const PasswordPage: React.FC = () => {
   
   const [identification, setIdentification] = useState("");
-
+  const [present, dismiss] = useIonLoading();
 
   async function handlePasswordReset (id : string){
     console.log(id);
-    
+    present({
+      message:"Cargando"
+    })
     return await fetch('https://sismds.herokuapp.com/api/forgot-password', {
         method: 'POST',
         headers: {
@@ -21,8 +23,8 @@ const PasswordPage: React.FC = () => {
         },
         body: JSON.stringify({identification:id})
     })
-        .then(data => data.json()).then(response => console.log(response)
-        )
+        .then(data => data.json()).then(response => {swal({ text:response.message, icon:"info"});dismiss()})
+        
   }
 
   //Si no es verdadera retorna el contenido de la pagina de inicio de sesion
