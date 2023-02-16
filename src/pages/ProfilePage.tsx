@@ -1,10 +1,14 @@
-import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonImg, IonInput, IonItem, IonLabel, IonList, IonLoading, IonMenuButton, IonPage, IonRow, IonSelect, IonSelectOption, IonTextarea, IonTitle, IonToolbar, useIonAlert, useIonLoading } from '@ionic/react';
+import { IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonImg, IonInput, IonItem, IonLabel, IonList, IonLoading, IonMenuButton, IonPage, IonRow, IonTextarea, IonTitle, IonToolbar, useIonAlert, useIonLoading } from '@ionic/react';
 import { useEffect, useState } from 'react';
+import Joyride,{ Step } from 'react-joyride';
 import { useAuth } from '../data/auth';
 import { userData, updateProfileData, updateProfilePic } from '../data/information';
 import './ProfilePage.css';
 
+interface State{
+    run: boolean;
+    steps: Step[];
+}
 
 const ProfilePage: React.FC = () => {
 
@@ -24,8 +28,45 @@ const ProfilePage: React.FC = () => {
     const [present, dismiss] = useIonLoading();
     const [showAlert, hideAlert] = useIonAlert();
     const [image, setImage] = useState<FormData>();
-    const {role} = useAuth();
-    
+    const {role, tutorial} = useAuth();
+    const [{run,steps}, setSteps] = useState<State>({
+        run:true,
+        steps:[
+            {
+                target: 'body',
+                placement:'center',
+                content: <h3>Bienvenido/a a la sección de su perfil personal</h3>,
+                showProgress:true,
+                locale:{next:"Siguiente"}
+            },
+            {
+                target: '.step4',
+                title:"Foto de perfil",
+                content: 'Aquí podrá cambiar su foto de perfil por otra que se encuentre en su dispositivo',
+                showProgress:true,
+                locale:{next:"Siguiente", back:"Anterior"}
+            },
+            {
+                target: '.step5',
+                content: 'También podrá observar su información personal',
+                showProgress:true,
+                locale:{next:"Siguiente", back:"Anterior"}
+            },
+            {
+                target: '.step6',
+                content: `Y ${role === "teacher"?"editar":""} su información de contacto ${role === "teacher"?"en caso de ser necesario":""}`,
+                showProgress:true,
+                locale:{next:"Siguiente", back:"Anterior"}
+            },
+            {
+                target: '.step7',
+                content: 'Cuando haya realizado los cambios necesarios haga clic en el botón guardar para almacenar su información en el sistema',
+                showProgress:true,
+                locale:{next:"Siguiente", back:"Anterior"}
+            },
+        
+        ]
+    })
 
 
     function changeImage(event){
@@ -116,6 +157,7 @@ const ProfilePage: React.FC = () => {
 
     return (
         <IonPage>
+        <Joyride steps={steps} continuous={true} run={tutorial}/>
         <IonHeader>
             <IonToolbar>
             <IonButtons slot="start">
@@ -125,7 +167,7 @@ const ProfilePage: React.FC = () => {
             </IonToolbar>
         </IonHeader>
         <IonContent className="ion-padding">
-            <IonGrid className='ion-margin-bottom'>
+            <IonGrid className='ion-margin-bottom' class='step4'>
                 <IonRow>
                     <IonCol></IonCol>
                     <IonCol>
@@ -147,7 +189,7 @@ const ProfilePage: React.FC = () => {
                 </IonRow>
             </IonGrid>
 
-
+            <div className='step5'>
             <IonLabel  style={{fontWeight:"bold"}}>INFORMACIÓN PERSONAL</IonLabel>
 
         
@@ -170,10 +212,10 @@ const ProfilePage: React.FC = () => {
                     <IonInput type='text' value={birthDate} readonly/>
                 </IonItem>
             </IonList>
+            </div>
 
+            <div className='step6'>
             <IonLabel style={{fontWeight:"bold"}}>INFORMACIÓN DE CONTACTO</IonLabel>
-
-        
 
             <IonList>
                 <IonItem>
@@ -193,10 +235,11 @@ const ProfilePage: React.FC = () => {
                     <IonTextarea readonly = {role === "student"} value={address} onIonChange={changeAddress}/>
                 </IonItem>
                 
-                    <IonButton expand='block' disabled = {address === "" || mobilePhone === "" || homePhone === "" || email === "" || (role === "student" && photo ==='')} onClick={() =>{updateInfo(); console.log(role)}
-                    }>Guardar</IonButton>
                 
             </IonList>
+            </div>
+            <IonButton class='step7' expand='block' disabled = {address === "" || mobilePhone === "" || homePhone === "" || email === "" || (role === "student" && photo ==='')} onClick={() =>{updateInfo(); console.log(role)}
+            }>Guardar</IonButton>
         </IonContent>
         </IonPage>
     );

@@ -17,6 +17,7 @@ import { archiveOutline, archiveSharp, bookmarkOutline, code, codeOutline, grid,
 import './Menu.css';
 import { userData } from '../data/information';
 import { useEffect, useState } from 'react';
+import Joyride, { Step } from 'react-joyride';
 
 interface AppPage {
   url: string;
@@ -24,6 +25,12 @@ interface AppPage {
   mdIcon: string;
   title: string;
 }
+
+interface State{
+  run: boolean;
+  steps: Step[];
+}
+
 
 const appPages: AppPage[] = [
   {
@@ -62,10 +69,15 @@ const appPages: AppPage[] = [
 
 
 const Menu: React.FC = () => {
+
+
+
   const location = useLocation();
   const [avatar,setAvatar] = useState("");
   const [name,setName] = useState("");
   const [identification,setIdentification] = useState("");
+
+
 
   useEffect(() =>{
 
@@ -88,8 +100,8 @@ const Menu: React.FC = () => {
           <IonNote>{identification}</IonNote>
           {appPages.map((appPage, index) => {
             return (
-              <IonMenuToggle key={index} autoHide={false}>
-                <IonItem className={location.pathname === appPage.url ? 'selected' : ''} routerLink={appPage.url} routerDirection="none" lines="none" detail={false}>
+              <IonMenuToggle  key={index} autoHide={false}>
+                <IonItem  className={location.pathname === appPage.url ? 'selected' : ''} routerLink={appPage.url} routerDirection="none" lines="none" detail={false}>
                   <IonIcon slot="start" ios={appPage.iosIcon} md={appPage.mdIcon} />
                   <IonLabel>{appPage.title}</IonLabel>
                 </IonItem>

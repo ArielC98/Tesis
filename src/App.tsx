@@ -17,19 +17,20 @@ const App: React.FC = () => {
   //Se crean variables con el hook useState para declarar el estado inicial de inicio de sesion del usuario
   const [loggedIn, setLoggedIn] = useState(false);
   const [role, setRole] = useState("");
+  const [tutorial,setTutorial] =useState(false);
   
   
   
   return (
     <IonApp>
-      <AuthContext.Provider value = {{loggedIn, role}}>
+      <AuthContext.Provider value = {{loggedIn, role, tutorial}}>
           <IonReactRouter>
             {/* Se usa Switch para renderizar exclusivamente una ruta */}
             <Switch>
           <IonRouterOutlet>
               <Route exact path = "/login">
 
-                  <LoginPage   onLogin={(roleAux)=>{setLoggedIn(true); setRole(roleAux)}}/>
+                  <LoginPage   onLogin={(roleAux, needTutorial)=>{setLoggedIn(true); setRole(roleAux); setTutorial(needTutorial)}}/>
 
               </Route>
               

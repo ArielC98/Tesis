@@ -4,16 +4,53 @@ import { useAuth } from '../data/auth';
 import { studentGrades } from '../data/grades';
 import { reportFilters } from '../data/report';
 import { teacherSubjects } from '../data/subjects';
+import Joyride,{Step} from 'react-joyride';
 
+interface State{
+  run: boolean;
+  steps: Step[];
+}
 
 const HomePage: React.FC = () => {
-  const {role} = useAuth();
+  const {role, tutorial} = useAuth();
   const [subjectList, setSubjectList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [academicPeriod, setAcademicPeriod] = useState("1");
+  const [academicPeriod, setAcademicPeriod] = useState("");
   const [periodList] = useState([]);
   const [present, dismiss] = useIonLoading();
-  
+  const [{run,steps}, setSteps] = useState<State>({
+    run:false,
+    steps:[
+      {
+        target: 'body',
+        placement:'center',
+        content: <h2>¡Bienvenido/a al sistema de gestión de notas!</h2>,
+        showProgress:true,
+        locale:{next:"Siguiente"}
+      },
+      {
+        target: '.step1',
+        title:"Periodo académico",
+        content: 'Elija un periodo académico de la lista para que se muestren las materias correspondientes a dicho periodo',
+        showProgress:true,
+        locale:{next:"Siguiente", back:"Anterior"}
+      },
+      {
+        target: '.step2',
+        title:"Materias",
+        content: 'Seleccione una materia de la lista para acceder a la página que contiene la información de sus calificaciones',
+        showProgress:true,
+        locale:{next:"Siguiente", back:"Anterior"}
+      },
+      {
+        target: '.step3',
+        content: 'Abra el menú para acceder a las demás opciones del sistema',
+        showProgress:true,
+        locale:{next:"Siguiente", back:"Anterior"}
+      },
+    
+    ]
+  })
   
   useEffect(() => {
     
@@ -50,10 +87,11 @@ const HomePage: React.FC = () => {
 
   return (
     <IonPage>
+      <Joyride steps={steps} continuous = {true} run={tutorial}/>
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonMenuButton/>
+            <IonMenuButton class='step3'/>
           </IonButtons>
           <IonTitle>Inicio</IonTitle>
         </IonToolbar>
@@ -72,7 +110,7 @@ const HomePage: React.FC = () => {
             </p>    
         </IonItem>
         
-        <IonSelect className='ion-margin-bottom' hidden = {role === "teacher"} placeholder='Seleccionar período académico'  onIonChange={(e)=>{
+        <IonSelect class='step1' className='ion-margin-bottom ' hidden = {role === "teacher"} placeholder='Seleccionar período académico'  onIonChange={(e)=>{
           
             periodList.map((period)=>{
               
@@ -93,10 +131,11 @@ const HomePage: React.FC = () => {
             )
           }
         </IonSelect>
+        <div  className='step2'>
         <IonItem>
         <IonLabel><h1>Lista de materias</h1></IonLabel>
         </IonItem>
-        <IonList>
+        <IonList >
           {role==="teacher"? //Si el rol es de profesor
             subjectList.map((subject)=>
               <IonItem 
@@ -134,7 +173,7 @@ const HomePage: React.FC = () => {
             }
           
         </IonList>
-        
+        </div>
       </IonContent>
     </IonPage>
   );

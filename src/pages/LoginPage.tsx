@@ -5,11 +5,11 @@ import swal from 'sweetalert';
 import { loginUser, useAuth} from '../data/auth';
 import "@ionic/react/css/core.css"
 import "../theme/variables.css"
-import Joyride from 'react-joyride';
+
 
 
 interface Props{
-  onLogin: (string) => void,
+  onLogin: (string, boolean) => void,
 }
 
 const LoginPage: React.FC<Props> = ({onLogin}) => {
@@ -20,19 +20,7 @@ const LoginPage: React.FC<Props> = ({onLogin}) => {
   const [password, setPassword] = useState("");
   const [present, dismiss] = useIonLoading();
   const [isLoading, setIsLoading] = useState(false);
-  const [steps, setSteps] = useState(
-    [
-      {
-        target: '.my-first-step',
-        content: 'This is my awesome feature!',
-      },
-      {
-        target: '.my-other-step',
-        content: 'This another awesome feature!',
-      },
-    
-    ]
-  )
+  
   
 
 
@@ -52,15 +40,33 @@ const LoginPage: React.FC<Props> = ({onLogin}) => {
         dismiss();
         localStorage.setItem('access_token', response.data['access_token']);
         localStorage.setItem('user', JSON.stringify(response.data['user']));
+
+        if(+localStorage.getItem('hasDoneTutorial') === null){
+          localStorage.setItem('hasDoneTutorial',response.data.user.id);
+          onLogin(response.data.user.role, true);
+          console.log("caso1",localStorage.getItem('hasDoneTutorial'),response.data.user.id);
+        }
+        else{
+          if(+localStorage.getItem('hasDoneTutorial') === response.data.user.id){
+            console.log("caso2",localStorage.getItem('hasDoneTutorial'),response.data.user.id);
+            
+            onLogin(response.data.user.role, false);
+          }
+          else{
+            localStorage.setItem('hasDoneTutorial',response.data.user.id)
+            console.log("caso3",typeof(+localStorage.getItem('hasDoneTutorial')),typeof(response.data.user.id));
+            onLogin(response.data.user.role, true);
+          }
+        }
         
         swal("Bienvenido", response.message, "success", {
           timer: 2000,
           buttons:{}
         })
           
-        onLogin(response.data.user.role);
+      
       } 
-    }).catch(error => {swal("Error", "Usuario o contraseña incorrecta", "error"); dismiss()})
+    }).catch(() => {swal("Error", "Usuario o contraseña incorrecta", "error"); dismiss()})
   
   }
 
@@ -96,7 +102,7 @@ const LoginPage: React.FC<Props> = ({onLogin}) => {
 
     
         <IonList >
-        <Joyride steps={steps}/>
+    
           <IonItem id="create-post">
             <IonLabel position='floating'><h2>Identificación</h2></IonLabel>
             <IonInput class='my-first-step' type='number' onIonChange={e => setIdentification(e.detail.value)}/>

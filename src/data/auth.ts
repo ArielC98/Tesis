@@ -14,7 +14,7 @@ export async function loginUser(credentials) {
         .then(data => data.json())
 }
 
-export const AuthContext = React.createContext({loggedIn:false, role:"teacher"})
+export const AuthContext = React.createContext({loggedIn:false, role:"teacher",tutorial:false})
 
 export function useAuth(){
     

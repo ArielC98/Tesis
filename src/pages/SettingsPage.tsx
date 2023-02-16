@@ -1,14 +1,51 @@
 import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonList, IonMenuButton, IonPage, IonRow, IonTitle, IonToolbar, useIonLoading } from '@ionic/react';
 import { useState } from 'react';
-import { updatePassword } from '../data/password';
+import { useAuth } from '../data/auth';
+import {updatePassword} from '../data/password';
 import swal from 'sweetalert';
+import Joyride,{ Step } from 'react-joyride';
+
+interface State{
+  run: boolean;
+  steps: Step[];
+}
+
 
 const SettingsPage: React.FC = () => {
 
   const [passwd, setPasswd] = useState("");
   const [passwdConf, setPasswdConf] = useState("");
   const [present, dismiss] = useIonLoading();
-  
+  const {tutorial} = useAuth();
+  const [{run,steps}, setSteps] = useState<State>({
+    run:true,
+    steps:[
+        {
+            target: 'body',
+            placement:'center',
+            content: <h3>Bienvenido/a a la sección de ajustes</h3>,
+            showProgress:true,
+            locale:{next:"Siguiente"}
+        },
+        {
+            target: '.step10',
+            title:"Cambio de contraseña",
+            content: 'Aquí podrá cambiar su contraseña en caso de ser necesario',
+            showProgress:true,
+            locale:{next:"Siguiente", back:"Anterior"}
+        },
+        {
+            target: '.step11',
+            content: 'Finalmente, puede cerrar su sesión cuando haya terminado de usar la aplicación',
+            showProgress:true,
+            locale:{next:"Siguiente", back:"Anterior"}
+        }
+      
+    
+    ]
+})
+
+
 
   const handleLogout = () => {
     localStorage.removeItem("access_token");
@@ -33,6 +70,7 @@ const SettingsPage: React.FC = () => {
 
   return (
     <IonPage>
+      <Joyride  steps={steps} continuous={true} run={tutorial}/>
       <IonHeader>
         <IonToolbar>
           <IonTitle>Ajustes</IonTitle>
@@ -42,7 +80,7 @@ const SettingsPage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
-        <IonList>
+        <IonList class='step10'>
           <IonItem lines='none'>
           <IonLabel><h2>Cambio de contraseña</h2></IonLabel>
           </IonItem>
@@ -60,12 +98,12 @@ const SettingsPage: React.FC = () => {
             <IonCol></IonCol>
           </IonRow>
           </IonList>
-          <IonList>
-          <IonItem>
-            <IonLabel>Cerrar Sesión</IonLabel>
-          </IonItem>
+          <IonList class='step11'>
+            <IonItem>
+              <IonLabel>Cerrar Sesión</IonLabel>
+            </IonItem>
           
-            <IonRow>
+            <IonRow >
               <IonCol></IonCol>
               <IonCol><IonButton color="medium" onClick={handleLogout}>Cerrar Sesión</IonButton></IonCol>
               <IonCol></IonCol>

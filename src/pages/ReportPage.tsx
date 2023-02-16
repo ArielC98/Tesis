@@ -6,11 +6,13 @@ import { reportFilters, studentReport, teacherReport } from '../data/report';
 import { teacherSubjects } from '../data/subjects';
 import { studentGrades } from '../data/grades';
 import { Filesystem, Directory } from '@capacitor/filesystem';
-import { Preferences } from '@capacitor/preferences';
-import { Capacitor } from '@capacitor/core';
 import { FileOpener } from '@ionic-native/file-opener';
+import Joyride,{Step} from 'react-joyride';
 
-
+interface State{
+  run: boolean;
+  steps: Step[];
+}
 
 
 
@@ -18,7 +20,7 @@ const ReportPage: React.FC = () => {
 
 
 
-  const {role} = useAuth();
+  const {role, tutorial} = useAuth();
   const [isLoading,setIsLoading] = useState(false);
   const [data, setData] = useState([]);
   const [info,setInfo] = useState([]);
@@ -28,6 +30,32 @@ const ReportPage: React.FC = () => {
   const [periodList] = useState([]);
   const [present, dismiss] = useIonLoading();
   const [b64, setB64] = useState("");
+  const [{run,steps}, setSteps] = useState<State>({
+    run:false,
+    steps:[
+      {
+        target: 'body',
+        placement:'center',
+        content: <h2>Bienvenido/a la página de reportes</h2>,
+        showProgress:true,
+        locale:{next:"Siguiente"}
+      },
+      {
+        target: '.step8',
+        title:"Materia",
+        content: 'Seleccione la materia para generar un reporte en archivo PDF con las calificaciones',
+        showProgress:true,
+        locale:{next:"Siguiente", back:"Anterior"}
+      },
+      {
+        target: '.step9',
+        content: 'Cuando se haya creado el reporte, haga clic en el botón de Generar reporte y el archivo se descargará directamente a su dispositivo',
+        showProgress:true,
+        locale:{next:"Siguiente", back:"Anterior"}
+      },
+    
+    ]
+  })
 
   useEffect(()=>{
 
@@ -201,6 +229,7 @@ const ReportPage: React.FC = () => {
 
   return (
     <IonPage>
+      <Joyride steps={steps} continuous = {true}/>
       <IonHeader>
         <IonToolbar>
           <IonTitle>Reportes</IonTitle>
@@ -220,14 +249,15 @@ const ReportPage: React.FC = () => {
           <IonImg style={{width:250}} src='../assets/icon/logo.png'/>
         </IonItem>
         </IonRow>
+           <IonItem className='ion-text-center'> <h2>Bienvenido/a al módulo de reportes.</h2> </IonItem>
           <IonItem className='ion-text-justify' lines='none'>
             <p >
-              Bienvenido al módulo de reportes. Seleccione {role === "teacher"?"una materia":"un periodo académico"} de la lista para generar un archivo PDF con las calificaciones del {role ==="teacher"?"período académico actual":"estudiante"}.
+              Seleccione {role === "teacher"?"una materia":"un periodo académico"} de la lista para generar un archivo PDF con las calificaciones del {role ==="teacher"?"período académico actual":"estudiante"}.
             </p>
             
           </IonItem>
           <IonItem hidden = {role === "teacher"}>
-          <IonSelect placeholder='Seleccionar período académico'  onIonChange={(e)=>{
+          <IonSelect class={role==='student'?'step8':""} placeholder='Seleccionar período académico'  onIonChange={(e)=>{
             
             periodList.map((period)=>{
               if(e.detail.value === period.name){ 
@@ -249,7 +279,7 @@ const ReportPage: React.FC = () => {
 
         <IonItem hidden={role === "student"}>
         
-        <IonSelect placeholder='Seleccionar materia'  onIonChange={(e)=>{
+        <IonSelect class={role==='teacher'?'step8':""} placeholder='Seleccionar materia'  onIonChange={(e)=>{
             
             subjectList.map((subject)=>{
               if(e.detail.value === (role ==="teacher"?subject.name:subject.subject_name)){ //Compara el nombre seleccionado con el del arreglo de estudiantes
@@ -269,13 +299,7 @@ const ReportPage: React.FC = () => {
         </IonSelect>
         </IonItem>
 
-
-          <IonButton disabled ={role === "teacher"?subjectName === "": academicPeriod===""} className='ion-margin-top' expand='block' onClick ={e=>{console.log({"info":info,"data":data});downloadPDF(role,data, info);setData([])}}>Generar reporte</IonButton>
-
-          
-          
-
-          
+          <IonButton class='step9' disabled ={role === "teacher"?subjectName === "": academicPeriod===""} className='ion-margin-top' expand='block' onClick ={e=>{console.log({"info":info,"data":data});downloadPDF(role,data, info);setData([])}}>Generar reporte</IonButton>
 
       </IonContent>
     </IonPage>

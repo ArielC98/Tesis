@@ -1,6 +1,6 @@
 import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonItem, IonLabel, IonLoading, IonPage, IonRefresher, IonRefresherContent, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar, RefresherEventDetail, useIonAlert, useIonLoading } from '@ionic/react';
 import { AgGridReact } from 'ag-grid-react';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Redirect, Route, useParams } from 'react-router';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
@@ -8,8 +8,7 @@ import { studentsList } from '../data/students';
 import { studentGrades, teacherGrades } from '../data/grades';
 import { updateGrades } from '../data/grades';
 import { useAuth } from '../data/auth';
-
-
+import Joyride,{ Step } from 'react-joyride';
 
 
 
@@ -17,11 +16,15 @@ interface RouteParams {
   id:string;
   period:string;
 }
+interface State{
+  run: boolean;
+  steps: Step[];
+}
 
 const SubjectPage: React.FC = () => {
 
   const [students] = useState([]);
-  const {role} = useAuth();
+  const {role, tutorial} = useAuth();
   const {id, period} = useParams<RouteParams>(); //return an object with the parameters passed in the URL
   const [count, setCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -31,6 +34,52 @@ const SubjectPage: React.FC = () => {
   const [showAlert, hideAlert] = useIonAlert();
   const [subjectName, setSubjectName] = useState("");
   const gridRef = useRef<AgGridReact>();
+  const [{run,steps}, setSteps] = useState<State>({
+    run:true,
+    steps:[
+        {
+            target: 'body',
+            placement:'center',
+            content: <h3>Bienvenido/a a la sección de calificaciones</h3>,
+            showProgress:true,
+            locale:{next:"Siguiente"}
+        },
+        {
+            target: '.step12',
+            title:`Lista de ${role === "teacher"?"Estudiantes":"Materias"}`,
+            content: 'Seleccione una opción para deplegar las notas correspondientes',
+            showProgress:true,
+            locale:{next:"Siguiente", back:"Anterior"}
+        },
+        {
+            target: '.step13-teacher',
+            content: 'En la tabla puede editar las notas de los parciales y, en caso de que el/la estudiante tenga menos de 7 de promedio final, se despliegan las celdas de exámenes extra.',
+            showProgress:true,
+            locale:{next:"Siguiente", back:"Anterior"}
+        },
+        {
+            target: '.step13-student',
+            content: 'En la tabla puede observar las notas de los parciales, quimestrales, nota final y exámentes extra en caso de tener un promedio menor a 7.',
+            showProgress:true,
+            locale:{next:"Siguiente", back:"Anterior"}
+        },
+        {
+            target: '.step14',
+            content: 'Utilice los botones para navegar entre las diferentes tablas de calificaciones',
+            showProgress:true,
+            locale:{next:"Siguiente", back:"Anterior"}
+        },
+        {
+            target: '.step15',
+            content: 'Al terminar de editar las notas, pulse el botón Guardar y la información se subirá al sistema.',
+            showProgress:true,
+            locale:{next:"Siguiente", back:"Anterior"}
+        },
+      
+    
+    ]
+})
+
   
   //Funcion para manejar la recarga de la pagina
   function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
@@ -237,6 +286,7 @@ const SubjectPage: React.FC = () => {
 
   return (
     <IonPage>
+      <Joyride steps={steps} continuous run={tutorial}/>
       <IonHeader>
         <IonToolbar>
           <IonTitle>GESTIÓN DE NOTAS</IonTitle>
@@ -252,8 +302,8 @@ const SubjectPage: React.FC = () => {
         <IonItem className='ion-no-margin ion-text-center' lines='none'>
           <IonLabel style={{marginTop:-35, marginBottom:-15}}>{subjectName}</IonLabel>
         </IonItem>
-        <IonItem style={{marginTop:-20}}>
-        <IonLabel position='stacked'>Seleccionar {role === "teacher"?"Estudiante":"Materia"}</IonLabel>
+        <IonItem class='step12' style={{marginTop:-20}}>
+        <IonLabel  position='stacked'>Seleccionar {role === "teacher"?"Estudiante":"Materia"}</IonLabel>
           <IonSelect   placeholder='Estudiante' value = {role === "teacher"?students[count]?.name+ " " + students[count]?.last_name : subjects[count]?.subject_name} onIonChange={(e)=>{
               
               (role==="teacher"?students:subjects).map((item,position)=>{
@@ -290,7 +340,7 @@ const SubjectPage: React.FC = () => {
         <IonGrid>
           <IonRow>
             <IonCol></IonCol>
-            <IonCol>
+            <IonCol class={role==="teacher"?"step13-teacher":"step13-student"}>
             
               <div className="ag-theme-alpine" style={{height: 520, width: 300, marginLeft:4}}>
                 <AgGridReact
@@ -307,7 +357,7 @@ const SubjectPage: React.FC = () => {
           </IonGrid>
             
           <IonGrid>
-          <IonRow>
+          <IonRow class='step14'>
             <IonCol >
               <IonButton  expand='block' onClick={()=>{count === 0? setCount((role === "teacher"?students:subjects).length-1) : setCount(count-1);
               }}> Anterior</IonButton>
@@ -320,7 +370,7 @@ const SubjectPage: React.FC = () => {
           <IonRow>
             <IonCol></IonCol>
               <IonCol size='7'>
-              <IonButton className={role === "teacher"?'':"ion-hide"}  expand= 'block' color="warning"
+              <IonButton hidden = {role === "student"} className='step15'  expand= 'block' color="warning"
                 onClick={e =>  handleUpdate (students[count].id,id)}
               >Guardar</IonButton>
               </IonCol>
