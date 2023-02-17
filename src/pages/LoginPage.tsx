@@ -52,17 +52,13 @@ const LoginPage: React.FC<Props> = ({onLogin}) => {
         if(+localStorage.getItem('hasDoneTutorial') === 0){
           localStorage.setItem('hasDoneTutorial',response.data.user.id);
           onLogin(response.data.user.role, true);
-          console.log("caso1",localStorage.getItem('hasDoneTutorial'),response.data.user.id);
         }
         else{
-          if(+localStorage.getItem('hasDoneTutorial') === response.data.user.id){
-            console.log("caso2",localStorage.getItem('hasDoneTutorial'),response.data.user.id);
-            
+          if(+localStorage.getItem('hasDoneTutorial') === response.data.user.id){           
             onLogin(response.data.user.role, false);
           }
           else{
             localStorage.setItem('hasDoneTutorial',response.data.user.id)
-            console.log("caso3",typeof(+localStorage.getItem('hasDoneTutorial')),typeof(response.data.user.id));
             onLogin(response.data.user.role, true);
           }
         }

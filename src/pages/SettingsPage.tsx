@@ -50,6 +50,12 @@ const SettingsPage: React.FC = () => {
   const handleLogout = () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("user");
+    localStorage.removeItem("repeatHome");
+    localStorage.removeItem("repeatLinks");
+    localStorage.removeItem("repeatProfile");
+    localStorage.removeItem("repeatReport");
+    localStorage.removeItem("repeatSettings");
+    localStorage.removeItem("repeatSubject");
     window.location.href = "/";
   };
 
@@ -70,7 +76,13 @@ const SettingsPage: React.FC = () => {
 
   return (
     <IonPage>
-      <Joyride  steps={steps} continuous={true} run={tutorial}/>
+      <Joyride  
+        steps={steps} 
+        continuous={true} 
+        run={tutorial && !(localStorage.getItem("repeatSettings") ==="no")}
+        callback={()=>{localStorage.setItem("repeatSettings","no")}}
+        
+        />
       <IonHeader>
         <IonToolbar>
           <IonTitle>Ajustes</IonTitle>

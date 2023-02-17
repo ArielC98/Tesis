@@ -157,7 +157,12 @@ const ProfilePage: React.FC = () => {
 
     return (
         <IonPage>
-        <Joyride steps={steps} continuous={true} run={tutorial}/>
+        <Joyride 
+            steps={steps} 
+            continuous={true} 
+            run={tutorial && !(localStorage.getItem("repeatProfile") ==="no")}
+            callback={()=>{localStorage.setItem("repeatProfile","no")}}
+            />
         <IonHeader>
             <IonToolbar>
             <IonButtons slot="start">

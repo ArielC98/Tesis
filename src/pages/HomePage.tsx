@@ -4,7 +4,7 @@ import { useAuth } from '../data/auth';
 import { studentGrades } from '../data/grades';
 import { reportFilters } from '../data/report';
 import { teacherSubjects } from '../data/subjects';
-import Joyride,{Step} from 'react-joyride';
+import Joyride,{Step, STATUS} from 'react-joyride';
 
 interface State{
   run: boolean;
@@ -18,6 +18,7 @@ const HomePage: React.FC = () => {
   const [academicPeriod, setAcademicPeriod] = useState("");
   const [periodList] = useState([]);
   const [present, dismiss] = useIonLoading();
+  const [repeat, setRepeat] = useState(true);
   const [{run,steps}, setSteps] = useState<State>({
     run:false,
     steps:[
@@ -54,7 +55,7 @@ const HomePage: React.FC = () => {
   
   useEffect(() => {
     
-    
+    console.log(repeat);
     
     if(role === "teacher"){
       teacherSubjects().then((response) => response.subjects.map((subject) => {subjectList.push(subject);setIsLoading(false);}));
@@ -87,7 +88,12 @@ const HomePage: React.FC = () => {
 
   return (
     <IonPage>
-      <Joyride steps={steps} continuous = {true} run={tutorial}/>
+      <Joyride
+        steps={steps} 
+        continuous = {true} 
+        run={tutorial && !(localStorage.getItem("repeatHome") ==="no")}
+        callback={()=>{localStorage.setItem("repeatHome","no")}}
+      />
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
@@ -116,7 +122,6 @@ const HomePage: React.FC = () => {
               
               if(e.detail.value === period.name){ 
                 
-                console.log(true);
                 handleStudentGrades(period.id);
                 console.log(subjectList);
                 setAcademicPeriod(period.id);

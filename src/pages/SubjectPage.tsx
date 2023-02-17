@@ -34,6 +34,7 @@ const SubjectPage: React.FC = () => {
   const [showAlert, hideAlert] = useIonAlert();
   const [subjectName, setSubjectName] = useState("");
   const gridRef = useRef<AgGridReact>();
+  const [repetir, setRepetir] = useState(false);
   const [{run,steps}, setSteps] = useState<State>({
     run:true,
     steps:[
@@ -124,13 +125,14 @@ const SubjectPage: React.FC = () => {
       studentsList(id).then((response) => { console.log("estudiante",response.students);response.students.map((student) => {students.push(student)});
       setIsLoading(false);
       handleGrades({studentId :students[0].id ,subjectId:id});
-      }).catch(()=> {showAlert({header:'Materia no disponible', buttons:[{text:"Ok"}]}); setIsLoading(false)})
+      }).catch(()=> {showAlert({header:'Materia no disponible', buttons:[{text:"Ok"}]}); setIsLoading(false);})
     }
     else{
-      studentGrades("1").then((response) => {response.grades.map((subject) => {if(subject.subject_id === +id){subjects.unshift(subject)}else{subjects.push(subject)}});
+      studentGrades(period).then((response) => {response.grades.map((subject) => {if(subject.subject_id === +id){subjects.unshift(subject)}else{subjects.push(subject)}});
       console.log("subjects",subjects);
       setIsLoading(false);
       handleGrades({academicPeriod :period});
+      
       })
     }
 
@@ -152,7 +154,7 @@ const SubjectPage: React.FC = () => {
     if(role === "teacher"){
       await teacherGrades(studentId,subjectId).then(response =>{console.log("notas",response.grades[0]);grades.push(response.grades[0]);grades.shift();setSubjectName(response.grades[0].subject_name);
       console.log("hola",response.grades[0].final);
-      dismiss()});
+      dismiss(); setRepetir(true)});
     }
 
     else{
@@ -164,7 +166,7 @@ const SubjectPage: React.FC = () => {
           else{
             grades.push(response.grades.find(grade => grade.subject_name === subjectNameParam))
           }
-          grades.shift();dismiss();
+          grades.shift();dismiss();setRepetir(true);
         }
       );
     }
@@ -286,7 +288,14 @@ const SubjectPage: React.FC = () => {
 
   return (
     <IonPage>
-      <Joyride steps={steps} continuous run={tutorial}/>
+      <Joyride 
+        steps={steps} 
+        continuous 
+        run={tutorial && !(localStorage.getItem("repeatSubjects") ==="no")}
+        callback={()=>{if(!(localStorage.getItem("repeatSubjects") === "no") && repetir){
+          localStorage.setItem("repeatSubjects","no")
+        }}}
+      />
       <IonHeader>
         <IonToolbar>
           <IonTitle>GESTIÓN DE NOTAS</IonTitle>
@@ -370,7 +379,7 @@ const SubjectPage: React.FC = () => {
           <IonRow>
             <IonCol></IonCol>
               <IonCol size='7'>
-              <IonButton hidden = {role === "student"} className='step15'  expand= 'block' color="warning"
+              <IonButton hidden = {role === "student"} className= {role === "teacher"?'step15':""}  expand= 'block' color="warning"
                 onClick={e =>  handleUpdate (students[count].id,id)}
               >Guardar</IonButton>
               </IonCol>

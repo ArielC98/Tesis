@@ -22,7 +22,7 @@ const LinksPage: React.FC = () => {
             locale:{next:"Siguiente"}
         },
         {
-          target: 'step15',
+          target: '.step15',
           content: "Aquí encontrará todo lo referente a información de contacto con la institución",
           showProgress:true,
           locale:{next:"Siguiente"}
@@ -35,7 +35,12 @@ const LinksPage: React.FC = () => {
 
   return (
     <IonPage>
-      <Joyride steps={steps} run = {tutorial}/>
+      <Joyride 
+        steps={steps} 
+        continuous
+        run={tutorial && !(localStorage.getItem("repeatLinks") ==="no")}
+        callback={()=>{localStorage.setItem("repeatLinks","no")}}
+      />
       <IonHeader>
         <IonToolbar>
           <IonTitle>Enlaces </IonTitle>

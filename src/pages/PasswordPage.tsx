@@ -33,7 +33,7 @@ const PasswordPage: React.FC = () => {
       <IonHeader>
         <IonToolbar>
           <IonButtons slot='start'>
-            <IonBackButton text='Volver' defaultHref="/login"/>
+            <IonBackButton defaultHref="/login"/>
           </IonButtons>
           <IonTitle>Recuperar contraseña</IonTitle>
         </IonToolbar>

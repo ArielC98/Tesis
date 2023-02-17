@@ -29,6 +29,7 @@ const ReportPage: React.FC = () => {
   const [academicPeriod, setAcademicPeriod] = useState("");
   const [periodList] = useState([]);
   const [present, dismiss] = useIonLoading();
+  const [repetir, setRepetir] = useState(false);
   const [b64, setB64] = useState("");
   const [{run,steps}, setSteps] = useState<State>({
     run:false,
@@ -62,7 +63,7 @@ const ReportPage: React.FC = () => {
     setIsLoading(true);
 
     if(role === "teacher"){
-      teacherSubjects().then((response) => response.subjects.map((subject) => {subjectList.push(subject);setIsLoading(false);}));
+      teacherSubjects().then((response) => response.subjects.map((subject) => {subjectList.push(subject);setIsLoading(false);setRepetir(true)}));
     
       console.log(subjectList);
     
@@ -230,7 +231,14 @@ const ReportPage: React.FC = () => {
 
   return (
     <IonPage>
-      <Joyride steps={steps} continuous = {true} run = {tutorial}/>
+      <Joyride 
+        steps={steps} 
+        continuous = {true} 
+        run={tutorial && !(localStorage.getItem("repeatReport") ==="no")}
+        callback={()=>{if(!(localStorage.getItem("repeatReport") === "no") && repetir){
+          localStorage.setItem("repeatReport","no")
+        }}}
+        />
       <IonHeader>
         <IonToolbar>
           <IonTitle>Reportes</IonTitle>
@@ -250,7 +258,7 @@ const ReportPage: React.FC = () => {
           <IonImg style={{width:250}} src='../assets/icon/logo.png'/>
         </IonItem>
         </IonRow>
-           <IonItem className='ion-text-center'> <h2>Bienvenido/a al módulo de reportes.</h2> </IonItem>
+          <IonItem className='ion-text-center'> <h2>Bienvenido/a al módulo de reportes.</h2> </IonItem>
           <IonItem className='ion-text-justify' lines='none'>
             <p >
               Seleccione {role === "teacher"?"una materia":"un periodo académico"} de la lista para generar un archivo PDF con las calificaciones del {role ==="teacher"?"período académico actual":"estudiante"}.
