@@ -323,7 +323,7 @@ const SubjectPage: React.FC = () => {
                   handleGrades({studentId:item.id,subjectId:id}) //Pasa los parametros del id del estudiante y materia
                   }
                   else{
-                    handleGrades({academicPeriod:"1", subjectNameParam:e.detail.value})
+                    handleGrades({academicPeriod:period, subjectNameParam:e.detail.value})
                     
                   }
                 }      
