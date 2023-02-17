@@ -83,7 +83,7 @@ export const createPDF = (role, data, information) => {
         console.log(docDefinition.content[8].table.body);
 
     const pdfDocGenerator = pdfMake.createPdf(docDefinition);
-    //pdfDocGenerator.open(); <- Descomentar para pruebas en navegador
+    //pdfDocGenerator.open(); //<- Descomentar para pruebas en navegador
     
     return pdfDocGenerator;
 }
