@@ -47,7 +47,7 @@ const HomePage: React.FC = () => {
         target: '.step3',
         content: 'Abra el menú para acceder a las demás opciones del sistema',
         showProgress:true,
-        locale:{next:"Siguiente", back:"Anterior"}
+        locale:{next:"Siguiente", back:"Anterior", last:"Final"}
       },
     
     ]

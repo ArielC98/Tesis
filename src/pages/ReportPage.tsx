@@ -50,9 +50,9 @@ const ReportPage: React.FC = () => {
       },
       {
         target: '.step9',
-        content: 'Cuando se haya creado el reporte, haga clic en el botón de Generar reporte y el archivo se descargará directamente a su dispositivo',
+        content: 'Cuando se haya creado el reporte, haga clic en el botón de Generar reporte y el archivo se abrirá en su aplicación predeterminada para leer archivos PDF.',
         showProgress:true,
-        locale:{next:"Siguiente", back:"Anterior"}
+        locale:{next:"Siguiente", back:"Anterior", last:"Final"}
       },
     
     ]

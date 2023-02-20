@@ -74,7 +74,7 @@ const SubjectPage: React.FC = () => {
             target: '.step15',
             content: 'Al terminar de editar las notas, pulse el botón Guardar y la información se subirá al sistema.',
             showProgress:true,
-            locale:{next:"Siguiente", back:"Anterior"}
+            locale:{next:"Siguiente", back:"Anterior", last:"Final"}
         },
       
     

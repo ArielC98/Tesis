@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import Joyride,{ Step } from 'react-joyride';
 import { useAuth } from '../data/auth';
 import { userData, updateProfileData, updateProfilePic } from '../data/information';
-import './ProfilePage.css';
+
 
 interface State{
     run: boolean;
@@ -62,7 +62,7 @@ const ProfilePage: React.FC = () => {
                 target: '.step7',
                 content: 'Cuando haya realizado los cambios necesarios haga clic en el botón guardar para almacenar su información en el sistema',
                 showProgress:true,
-                locale:{next:"Siguiente", back:"Anterior"}
+                locale:{next:"Siguiente", back:"Anterior", last:"Final"}
             },
         
         ]

@@ -109,7 +109,7 @@ const LoginPage: React.FC<Props> = ({onLogin}) => {
     
           <IonItem id="create-post">
             <IonLabel position='floating'><h2>Identificación</h2></IonLabel>
-            <IonInput class='my-first-step' type='number' onIonChange={e => setIdentification(e.detail.value)}/>
+            <IonInput class='my-first-step' type='text' onIonChange={e => setIdentification(e.detail.value)}/>
           </IonItem>
           <IonItem>
             <IonLabel position='floating'>Contraseña</IonLabel>

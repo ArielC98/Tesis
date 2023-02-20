@@ -38,7 +38,7 @@ const SettingsPage: React.FC = () => {
             target: '.step11',
             content: 'Finalmente, puede cerrar su sesión cuando haya terminado de usar la aplicación',
             showProgress:true,
-            locale:{next:"Siguiente", back:"Anterior"}
+            locale:{next:"Siguiente", back:"Anterior", last:"Final"}
         }
       
     

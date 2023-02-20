@@ -25,7 +25,7 @@ const LinksPage: React.FC = () => {
           target: '.step15',
           content: "Aquí encontrará todo lo referente a información de contacto con la institución",
           showProgress:true,
-          locale:{next:"Siguiente"}
+          locale:{next:"Siguiente", last:"Final"}
       }
     
     ]
@@ -60,7 +60,7 @@ const LinksPage: React.FC = () => {
             <a href='https://www.facebook.com/I.E.Migueldesantiago/'>I.E. Miguel de Santiago</a>
           </IonItem>
 
-          <IonLabel><h2>Página web</h2></IonLabel>
+          <IonLabel><h2>Sistema web</h2></IonLabel>
           <IonItem>
             <a href='
 iefmigueldesantiago.edu.ec'>iefmigueldesantiago.edu.ec</a>
