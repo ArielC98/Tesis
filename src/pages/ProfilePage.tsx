@@ -26,10 +26,10 @@ const ProfilePage: React.FC = () => {
     const [address, setAddress] = useState(null);
     const [photo, setPhoto] = useState("");
     const [present, dismiss] = useIonLoading();
-    const [showAlert, hideAlert] = useIonAlert();
+    const [showAlert] = useIonAlert();
     const [image, setImage] = useState<FormData>();
     const {role, tutorial} = useAuth();
-    const [{run,steps}, setSteps] = useState<State>({
+    const [{steps}] = useState<State>({
         run:true,
         steps:[
             {
@@ -119,15 +119,16 @@ const ProfilePage: React.FC = () => {
                 "home_phone":homePhone,
                 "email":email,
                 "address":address
-            }).catch(e=>console.log(e));
-            await updateProfilePic(image).catch(e=>console.log(e));
+            }).then(()=>{dismiss();
+            showAlert("Información actualizada con éxito")}).catch(() => {dismiss();showAlert("Error al actualizar datos")});
+            await updateProfilePic(image).catch(() => {dismiss();showAlert("Error al actualizar foto de perfil")});
         }
         else{
-            await updateProfilePic(image).catch(e =>console.error(e))
+            await updateProfilePic(image).then(()=>{dismiss();
+                showAlert("Información actualizada con éxito")}).catch(() => {dismiss();showAlert("Error al actualizar foto de perfil")});
             
         }
-        dismiss();
-        showAlert("Información actualizada con éxito");
+        
     }
     
     
@@ -185,7 +186,7 @@ const ProfilePage: React.FC = () => {
                     
                     <IonCol></IonCol>
                     <IonCol>
-                    <input id='foto' hidden type={'file'} accept={'.png'} onChange={e => changeImage(e)}/>
+                    <input id='foto' hidden type={'file'} accept="image/*" onChange={e => changeImage(e)}/>
                             <IonButton onClick={()=>  document.getElementById('foto').click()}>Editar Foto</IonButton>
                     </IonCol>
                     <IonCol></IonCol>
@@ -243,8 +244,7 @@ const ProfilePage: React.FC = () => {
                 
             </IonList>
             </div>
-            <IonButton class='step7' expand='block' disabled = {address === "" || mobilePhone === "" || homePhone === "" || email === "" || (role === "student" && photo ==='')} onClick={() =>{updateInfo(); console.log(role)}
-            }>Guardar</IonButton>
+            <IonButton class='step7' expand='block' disabled = {address === "" || mobilePhone === "" || homePhone === "" || email === "" || (role === "student" && photo ==='')} onClick={() =>updateInfo()}>Guardar</IonButton>
         </IonContent>
         </IonPage>
     );

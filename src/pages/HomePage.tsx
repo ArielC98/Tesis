@@ -1,10 +1,10 @@
-import { IonButton, IonButtons, IonContent, IonHeader, IonImg, IonItem, IonLabel, IonList, IonLoading, IonMenuButton, IonPage, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar, useIonLoading } from '@ionic/react';
+import {IonButtons, IonContent, IonHeader, IonImg, IonItem, IonLabel, IonList, IonLoading, IonMenuButton, IonPage, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar, useIonAlert, useIonLoading } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../data/auth';
 import { studentGrades } from '../data/grades';
 import { reportFilters } from '../data/report';
 import { teacherSubjects } from '../data/subjects';
-import Joyride,{Step, STATUS} from 'react-joyride';
+import Joyride,{Step} from 'react-joyride';
 
 interface State{
   run: boolean;
@@ -18,8 +18,8 @@ const HomePage: React.FC = () => {
   const [academicPeriod, setAcademicPeriod] = useState("");
   const [periodList] = useState([]);
   const [present, dismiss] = useIonLoading();
-  const [repeat, setRepeat] = useState(true);
-  const [{run,steps}, setSteps] = useState<State>({
+  const [showAlert] = useIonAlert();
+  const [{steps}] = useState<State>({
     run:false,
     steps:[
       {
@@ -55,17 +55,17 @@ const HomePage: React.FC = () => {
   
   useEffect(() => {
     
-    console.log(repeat);
+   
     
     if(role === "teacher"){
       teacherSubjects().then((response) => response.subjects.map((subject) => {subjectList.push(subject);setIsLoading(false);}));
       
-      console.log(subjectList);
+     
       
     }
     else{
       
-      reportFilters().then(data => {data.academic_periods.map(period => periodList.push(period));console.log(periodList);setIsLoading(false)
+      reportFilters().then(data => {data.academic_periods.map(period => periodList.push(period));setIsLoading(false)
         })
       
     }
@@ -77,7 +77,7 @@ const HomePage: React.FC = () => {
   async function handleStudentGrades(period: string) {
     present({message:"Cargando materias..."});
     const materias = []
-    await studentGrades(period).then(response => {response.grades.map((subject) => {materias.push(subject);setIsLoading(false);setSubjectList(materias)});dismiss()})
+    await studentGrades(period).then(response => {response.grades.map((subject) => {materias.push(subject);setIsLoading(false);setSubjectList(materias)});dismiss()}).catch(() => {showAlert("Periodo no disponible");dismiss()})
     
   }
   
@@ -116,14 +116,14 @@ const HomePage: React.FC = () => {
             </p>    
         </IonItem>
         
-        <IonSelect class='step1' className='ion-margin-bottom ' hidden = {role === "teacher"} placeholder='Seleccionar período académico'  onIonChange={(e)=>{
+        <IonSelect class= {role === "teacher"?'':'step1'} className='ion-margin-bottom ' hidden = {role === "teacher"} placeholder='Seleccionar período académico'  onIonChange={(e)=>{
           
             periodList.map((period)=>{
               
               if(e.detail.value === period.name){ 
                 
                 handleStudentGrades(period.id);
-                console.log(subjectList);
+
                 setAcademicPeriod(period.id);
               }      
             });

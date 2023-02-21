@@ -1,4 +1,4 @@
-import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonHeader, IonImg, IonInput, IonItem, IonLabel, IonList, IonLoading, IonMenuButton, IonPage, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar, useIonLoading } from '@ionic/react';
+import { IonButton, IonButtons, IonContent, IonHeader, IonImg, IonItem, IonLoading, IonMenuButton, IonPage, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar, useIonAlert, useIonLoading } from '@ionic/react';
 import { useState, useEffect } from 'react';
 import { createPDF } from '../data/PDFFile';
 import { useAuth } from '../data/auth';
@@ -29,9 +29,10 @@ const ReportPage: React.FC = () => {
   const [academicPeriod, setAcademicPeriod] = useState("");
   const [periodList] = useState([]);
   const [present, dismiss] = useIonLoading();
+  const [showAlert] = useIonAlert();
   const [repetir, setRepetir] = useState(false);
   const [b64, setB64] = useState("");
-  const [{run,steps}, setSteps] = useState<State>({
+  const [{steps}] = useState<State>({
     run:false,
     steps:[
       {
@@ -65,14 +66,14 @@ const ReportPage: React.FC = () => {
     if(role === "teacher"){
       teacherSubjects().then((response) => response.subjects.map((subject) => {subjectList.push(subject);setIsLoading(false);setRepetir(true)}));
     
-      console.log(subjectList);
+
     
     }
     else{
-      console.log(academicPeriod);
+
       
       
-      reportFilters().then(data => {data.academic_periods.map(period => periodList.push(period));console.log(periodList);
+      reportFilters().then(data => {data.academic_periods.map(period => periodList.push(period))
       ;setIsLoading(false)})
     }
 
@@ -88,26 +89,22 @@ const ReportPage: React.FC = () => {
 
     const filename = 'reporte.pdf';
     
-    console.log(b64);
   try{
     Filesystem.writeFile({
       path:filename,
       data: b64,
       directory:Directory.Data,
     }).then(() =>{
-      console.log("File Written");
       Filesystem.getUri({
         directory:Directory.Data,
         path:filename
       }).then(result => {
-        console.log(result);
         const path = result.uri;
         FileOpener.open(path,'application/pdf')
         .then(() => console.log('File is opened'))
         .catch(error => console.log(error))
       });
     });
-    console.log('complete');
   }catch(error){
     console.error(error)
   }
@@ -122,7 +119,7 @@ const ReportPage: React.FC = () => {
     if(role === "teacher"){
     teacherReport(id).then(response => { 
       
-      console.log(response);
+
       
       info.push(response.information.name);
       info.push(response.information.director_name);
@@ -139,7 +136,6 @@ const ReportPage: React.FC = () => {
       return response.grades})
       .then(studentList =>
         {
-          console.log(studentList);
           studentList.map((student)=>{
             
             const datos = []
@@ -159,7 +155,6 @@ const ReportPage: React.FC = () => {
             datos.push({text:student.final,style:"grades"})
 
             data.push(datos);
-            console.log("data",data);
             createPDF(role, data, info).getBase64(response => setB64(response));
           }); 
           
@@ -169,13 +164,12 @@ const ReportPage: React.FC = () => {
       }
       else{
 
-        studentGrades(period).then(response => response.grades.map((subject) => {subjectList.push(subject);console.log(subjectList);
+        studentGrades(period).then(response => response.grades.map((subject) => {subjectList.push(subject)
         })
         )
         
         studentReport(period).then(response => { 
-      
-          console.log("respuesta",response);
+    
           
           info.push(response.information.name);
           info.push(response.information.director_name);
@@ -193,7 +187,6 @@ const ReportPage: React.FC = () => {
           return response.grades})
           .then(gradesList =>
             {
-              console.log('notas',gradesList);
               gradesList.map((subject)=>{
                 
                 const datos = []
@@ -216,10 +209,9 @@ const ReportPage: React.FC = () => {
                 
               }); 
               createPDF(role, data, info).getBase64(response => setB64(response));
-              console.log("info",info);
               
               dismiss();
-            });
+            }).catch(() => {dismiss();showAlert("Error en la actualizacion")});
 
       } 
         
@@ -308,7 +300,7 @@ const ReportPage: React.FC = () => {
         </IonSelect>
         </IonItem>
 
-          <IonButton class='step9' disabled ={role === "teacher"?subjectName === "": academicPeriod===""} className='ion-margin-top' expand='block' onClick ={e=>{console.log({"info":info,"data":data});downloadPDF(role,data, info);setData([])}}>Generar reporte</IonButton>
+          <IonButton class='step9' disabled ={role === "teacher"?subjectName === "": academicPeriod===""} className='ion-margin-top' expand='block' onClick ={()=>{downloadPDF(role,data, info);setData([])}}>Generar reporte</IonButton>
 
       </IonContent>
     </IonPage>

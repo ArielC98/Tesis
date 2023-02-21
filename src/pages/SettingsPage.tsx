@@ -1,4 +1,4 @@
-import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonList, IonMenuButton, IonPage, IonRow, IonTitle, IonToolbar, useIonLoading } from '@ionic/react';
+import {IonButton, IonButtons, IonCol, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonList, IonMenuButton, IonPage, IonRow, IonTitle, IonToolbar, useIonLoading } from '@ionic/react';
 import { useState } from 'react';
 import { useAuth } from '../data/auth';
 import {updatePassword} from '../data/password';
@@ -65,7 +65,6 @@ const SettingsPage: React.FC = () => {
       message: "Un momento..."
     })  
     const confirmation =  await updatePassword(passwd, passwdConf);
-    console.log(confirmation);
     setPasswd("");
     setPasswdConf("");
     dismiss();

@@ -1,7 +1,7 @@
 import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonItem, IonLabel, IonLoading, IonPage, IonRefresher, IonRefresherContent, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar, RefresherEventDetail, useIonAlert, useIonLoading } from '@ionic/react';
 import { AgGridReact } from 'ag-grid-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Redirect, Route, useParams } from 'react-router';
+import {  useParams } from 'react-router';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { studentsList } from '../data/students';
@@ -28,14 +28,14 @@ const SubjectPage: React.FC = () => {
   const {id, period} = useParams<RouteParams>(); //return an object with the parameters passed in the URL
   const [count, setCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [grades, setGrades] = useState([{}]);
-  const [subjects, setSubjects] = useState([]);
+  const [grades] = useState([{}]);
+  const [subjects] = useState([]);
   const [present, dismiss] = useIonLoading();
-  const [showAlert, hideAlert] = useIonAlert();
+  const [showAlert] = useIonAlert();
   const [subjectName, setSubjectName] = useState("");
   const gridRef = useRef<AgGridReact>();
   const [repetir, setRepetir] = useState(false);
-  const [{run,steps}, setSteps] = useState<State>({
+  const [{steps}] = useState<State>({
     run:true,
     steps:[
         {
@@ -122,14 +122,13 @@ const SubjectPage: React.FC = () => {
   useEffect(() => {
 
     if(role === "teacher"){
-      studentsList(id).then((response) => { console.log("estudiante",response.students);response.students.map((student) => {students.push(student)});
+      studentsList(id).then((response) => {response.students.map((student) => {students.push(student)});
       setIsLoading(false);
       handleGrades({studentId :students[0].id ,subjectId:id});
       }).catch(()=> {showAlert({header:'Materia no disponible', buttons:[{text:"Ok"}]}); setIsLoading(false);})
     }
     else{
       studentGrades(period).then((response) => {response.grades.map((subject) => {if(subject.subject_id === +id){subjects.unshift(subject)}else{subjects.push(subject)}});
-      console.log("subjects",subjects);
       setIsLoading(false);
       handleGrades({academicPeriod :period});
       
@@ -152,17 +151,14 @@ const SubjectPage: React.FC = () => {
     })
 
     if(role === "teacher"){
-      await teacherGrades(studentId,subjectId).then(response =>{console.log("notas",response.grades[0]);grades.push(response.grades[0]);grades.shift();setSubjectName(response.grades[0].subject_name);
-      console.log("hola",response.grades[0].final);
+      await teacherGrades(studentId,subjectId).then(response =>{grades.push(response.grades[0]);grades.shift();setSubjectName(response.grades[0].subject_name);
       dismiss(); setRepetir(true)});
     }
 
     else{
-      console.log(subjects);
         await studentGrades(academicPeriod).then(response => {
           if(subjectNameParam === ""){
-          grades.push(response.grades.find(grade => grade.subject_id === +id  )); 
-          console.log("grades",grades)}
+          grades.push(response.grades.find(grade => grade.subject_id === +id  ))}
           else{
             grades.push(response.grades.find(grade => grade.subject_name === subjectNameParam))
           }
@@ -234,12 +230,10 @@ const SubjectPage: React.FC = () => {
 
     const isBetweenValues = (currentValue: number) => currentValue <= 10.00 && currentValue >= 0.00;
     const isNull = (currentValue) => currentValue === null  || currentValue === "" || currentValue === undefined;
-    console.log(!Object.values(tempGrades).slice(0,6).every(isBetweenValues));
-    console.log(tempGrades.supletorio);
-    console.log(Object.values(tempGrades).slice(-3).some(item => !(item === "" || item === null) && !isBetweenValues(item)));
+
     
     if(Object.values(tempGrades).some(item => !(isNull(item)) && !isBetweenValues(item))){
-      console.log(tempGrades);
+
       showAlert("Las notas deben ser números decimales separados por punto entre 0.00 y 10.00");
       
     }
@@ -249,8 +243,7 @@ const SubjectPage: React.FC = () => {
         message: 'Cargando...',
       })
       Object.values(tempGrades).some(item=> {if(item === undefined){item = ""}});
-      console.log(tempGrades);
-      await updateGrades(studentId,subjectId,tempGrades).then(response =>{dismiss();showAlert(response.message)});
+      await updateGrades(studentId,subjectId,tempGrades).then(response =>{dismiss();showAlert(response.message)}).catch(() => {dismiss();showAlert("Error en la actualizacion")});
       
     }  
   }

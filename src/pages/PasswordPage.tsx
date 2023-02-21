@@ -1,4 +1,4 @@
-import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, IonRow, IonText, IonTitle, IonToolbar, useIonLoading } from '@ionic/react';
+import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, IonRow, IonTitle, IonToolbar, useIonLoading } from '@ionic/react';
 import { useState } from 'react';
 import swal from 'sweetalert';
 
@@ -11,7 +11,6 @@ const PasswordPage: React.FC = () => {
   const [present, dismiss] = useIonLoading();
 
   async function handlePasswordReset (id : string){
-    console.log(id);
     present({
       message:"Cargando"
     })

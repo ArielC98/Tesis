@@ -36,14 +36,13 @@ export async function updateProfileData(bodyData:object){
 }
 
 export async function updateProfilePic(data:FormData){
-  console.log("datos",data);
   await fetch('https://sismds.herokuapp.com/api/profile/avatar', {
                 method: 'POST',
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("access_token")
                 },
                 body: data
-        }).then(response => response.json()).then(data => console.log(data));
+        }).then(response => response.json())
 }
 
 

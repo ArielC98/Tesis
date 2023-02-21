@@ -75,12 +75,10 @@ export const createPDF = (role, data, information) => {
         }
         }
 
-        console.log("tamanio1" ,docDefinition.content[8].table.body.length);
-        console.log(data.length);
+
         
         data.map(item => docDefinition.content[8].table.body.push(item))
-        console.log("tamanio2" ,docDefinition.content[8].table.body.length);
-        console.log(docDefinition.content[8].table.body);
+    
 
     const pdfDocGenerator = pdfMake.createPdf(docDefinition);
     //pdfDocGenerator.open(); //<- Descomentar para pruebas en navegador

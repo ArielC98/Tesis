@@ -1,4 +1,4 @@
-import { IonButton, IonCol, IonContent, IonGrid, IonHeader, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, IonRow, IonText, IonTitle, IonToolbar, useIonAlert, useIonLoading } from '@ionic/react';
+import { IonButton, IonCol, IonContent, IonGrid, IonHeader, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, IonRow, IonTitle, IonToolbar, useIonAlert, useIonLoading } from '@ionic/react';
 import { useState } from 'react';
 import { Redirect } from 'react-router';
 import swal from 'sweetalert';
@@ -20,7 +20,6 @@ const LoginPage: React.FC<Props> = ({onLogin}) => {
   const [password, setPassword] = useState("");
   const [present, dismiss] = useIonLoading();
   const [isLoading, setIsLoading] = useState(false);
-  const [showAlert] = useIonAlert();
   
 
 
@@ -34,14 +33,13 @@ const LoginPage: React.FC<Props> = ({onLogin}) => {
       identification,
       password
     }).then(response => {
-      console.log(response);
       
       if ('access_token' in response.data) {
 
         if(response.data.user.role === "secretary"){
           onLogin(response.data.user.role, false);
           swal("No disponible", "Los usuarios tipo Secretaria deben usar el sistema web.", "info");
-          setTimeout(()=> window.location.href = "/",2000);
+          setTimeout(()=> window.location.href = "/",3500);
         }
         else{
 
