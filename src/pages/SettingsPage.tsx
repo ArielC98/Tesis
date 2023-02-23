@@ -24,20 +24,17 @@ const SettingsPage: React.FC = () => {
             target: 'body',
             placement:'center',
             content: <h3>Bienvenido/a a la sección de ajustes</h3>,
-            showProgress:true,
             locale:{next:"Siguiente"}
         },
         {
             target: '.step10',
             title:"Cambio de contraseña",
             content: 'Aquí podrá cambiar su contraseña en caso de ser necesario',
-            showProgress:true,
             locale:{next:"Siguiente", back:"Anterior"}
         },
         {
             target: '.step11',
             content: 'Finalmente, puede cerrar su sesión cuando haya terminado de usar la aplicación',
-            showProgress:true,
             locale:{next:"Siguiente", back:"Anterior", last:"Final"}
         }
       

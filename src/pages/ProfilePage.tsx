@@ -36,32 +36,27 @@ const ProfilePage: React.FC = () => {
                 target: 'body',
                 placement:'center',
                 content: <h3>Bienvenido/a a la sección de su perfil personal</h3>,
-                showProgress:true,
                 locale:{next:"Siguiente"}
             },
             {
                 target: '.step4',
                 title:"Foto de perfil",
                 content: 'Aquí podrá cambiar su foto de perfil por otra que se encuentre en su dispositivo',
-                showProgress:true,
                 locale:{next:"Siguiente", back:"Anterior"}
             },
             {
                 target: '.step5',
                 content: 'También podrá observar su información personal',
-                showProgress:true,
                 locale:{next:"Siguiente", back:"Anterior"}
             },
             {
                 target: '.step6',
                 content: `Y ${role === "teacher"?"editar":""} su información de contacto ${role === "teacher"?"en caso de ser necesario":""}`,
-                showProgress:true,
                 locale:{next:"Siguiente", back:"Anterior"}
             },
             {
                 target: '.step7',
                 content: 'Cuando haya realizado los cambios necesarios haga clic en el botón guardar para almacenar su información en el sistema',
-                showProgress:true,
                 locale:{next:"Siguiente", back:"Anterior", last:"Final"}
             },
         

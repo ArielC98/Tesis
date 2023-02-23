@@ -26,27 +26,23 @@ const HomePage: React.FC = () => {
         target: 'body',
         placement:'center',
         content: <h2>¡Bienvenido/a al sistema de gestión de notas!</h2>,
-        showProgress:true,
         locale:{next:"Siguiente"}
       },
       {
         target: '.step1',
         title:"Periodo académico",
         content: 'Elija un periodo académico de la lista para que se muestren las materias correspondientes a dicho periodo',
-        showProgress:true,
         locale:{next:"Siguiente", back:"Anterior"}
       },
       {
         target: '.step2',
         title:"Materias",
         content: 'Seleccione una materia de la lista para acceder a la página que contiene la información de sus calificaciones',
-        showProgress:true,
         locale:{next:"Siguiente", back:"Anterior"}
       },
       {
         target: '.step3',
         content: 'Abra el menú para acceder a las demás opciones del sistema',
-        showProgress:true,
         locale:{next:"Siguiente", back:"Anterior", last:"Final"}
       },
     
@@ -116,7 +112,7 @@ const HomePage: React.FC = () => {
             </p>    
         </IonItem>
         
-        <IonSelect class= {role === "teacher"?'':'step1'} className='ion-margin-bottom ' hidden = {role === "teacher"} placeholder='Seleccionar período académico'  onIonChange={(e)=>{
+        <IonSelect class= {role === "student"?'step1':""} className='ion-margin-bottom ' hidden = {role === "teacher"} placeholder='Seleccionar período académico'  onIonChange={(e)=>{
           
             periodList.map((period)=>{
               

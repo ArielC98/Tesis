@@ -42,38 +42,32 @@ const SubjectPage: React.FC = () => {
             target: 'body',
             placement:'center',
             content: <h3>Bienvenido/a a la sección de calificaciones</h3>,
-            showProgress:true,
             locale:{next:"Siguiente"}
         },
         {
             target: '.step12',
             title:`Lista de ${role === "teacher"?"Estudiantes":"Materias"}`,
             content: 'Seleccione una opción para deplegar las notas correspondientes',
-            showProgress:true,
             locale:{next:"Siguiente", back:"Anterior"}
         },
         {
             target: '.step13-teacher',
             content: 'En la tabla puede editar las notas de los parciales y, en caso de que el/la estudiante tenga menos de 7 de promedio final, se despliegan las celdas de exámenes extra.',
-            showProgress:true,
             locale:{next:"Siguiente", back:"Anterior"}
         },
         {
             target: '.step13-student',
             content: 'En la tabla puede observar las notas de los parciales, quimestrales, nota final y exámentes extra en caso de tener un promedio menor a 7.',
-            showProgress:true,
             locale:{next:"Siguiente", back:"Anterior"}
         },
         {
             target: '.step14',
             content: 'Utilice los botones para navegar entre las diferentes tablas de calificaciones',
-            showProgress:true,
             locale:{next:"Siguiente", back:"Anterior"}
         },
         {
             target: '.step15',
             content: 'Al terminar de editar las notas, pulse el botón Guardar y la información se subirá al sistema.',
-            showProgress:true,
             locale:{next:"Siguiente", back:"Anterior", last:"Final"}
         },
       

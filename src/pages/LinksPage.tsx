@@ -20,13 +20,11 @@ const LinksPage: React.FC = () => {
             target: 'body',
             placement:'center',
             content: <h3>Bienvenido/a a la sección de enlaces</h3>,
-            showProgress:true,
             locale:{next:"Siguiente"}
         },
         {
           target: '.step15',
-          content: "Aquí encontrará todo lo referente a información de contacto con la institución",
-          showProgress:true,
+          content: "Aquí encontrará enlaces a la información de contacto de la institución",
           locale:{next:"Siguiente", last:"Final"}
       }
     
@@ -55,7 +53,7 @@ const LinksPage: React.FC = () => {
           
         
 
-        <IonCard>
+        <IonCard class='step15'>
       <IonCardHeader>
         <IonCardTitle>Enlaces</IonCardTitle>
       </IonCardHeader>

@@ -39,20 +39,17 @@ const ReportPage: React.FC = () => {
         target: 'body',
         placement:'center',
         content: <h2>Bienvenido/a la página de reportes</h2>,
-        showProgress:true,
         locale:{next:"Siguiente"}
       },
       {
         target: '.step8',
         title:"Materia",
         content: 'Seleccione la materia para generar un reporte en archivo PDF con las calificaciones',
-        showProgress:true,
         locale:{next:"Siguiente", back:"Anterior"}
       },
       {
         target: '.step9',
         content: 'Cuando se haya creado el reporte, haga clic en el botón de Generar reporte y el archivo se abrirá en su aplicación predeterminada para leer archivos PDF.',
-        showProgress:true,
         locale:{next:"Siguiente", back:"Anterior", last:"Final"}
       },
     

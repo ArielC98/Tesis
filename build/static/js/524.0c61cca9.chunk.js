@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunktesis=self.webpackChunktesis||[]).push([[524],{3524:function(e,t,n){n.r(t),n.d(t,{CallNumber:function(){return l}});var r=n(5671),u=n(3144),i=n(136),s=n(9388),l=function(e){(0,i.Z)(n,e);var t=(0,s.Z)(n);function n(){return(0,r.Z)(this,n),t.call(this,{name:"CallNumber",platforms:["web"]})}return(0,u.Z)(n,[{key:"showFilePicker",value:function(e){return Promise.reject("Method not implemented")}}]),n}(n(2488).Uw)}}]);
-//# sourceMappingURL=524.0c61cca9.chunk.js.map
