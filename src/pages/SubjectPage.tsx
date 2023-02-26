@@ -123,7 +123,7 @@ const SubjectPage: React.FC = () => {
       }).catch(()=> {showAlert({header:'Materia no disponible', buttons:[{text:"Ok"}]}); setIsLoading(false);})
     }
     else{
-      studentGrades(period).then((response) => {response.grades.map((subject) => {if(subject.subject_id === +id){subjects.unshift(subject)}else{subjects.push(subject)}});
+      studentGrades(period,localStorage.getItem("access_token")).then((response) => {response.grades.map((subject) => {if(subject.subject_id === +id){subjects.unshift(subject)}else{subjects.push(subject)}});
       setIsLoading(false);
       handleGrades({academicPeriod :period});
       
@@ -146,12 +146,12 @@ const SubjectPage: React.FC = () => {
     })
 
     if(role === "teacher"){
-      await teacherGrades(studentId,subjectId).then(response =>{setQuimEnd({quim1:response.finq1,quim2:response.finq2});grades.push(response.grades[0]);grades.shift();setSubjectName(response.grades[0].subject_name);
+      await teacherGrades(studentId,subjectId,localStorage.getItem("access_token")).then(response =>{setQuimEnd({quim1:response.finq1,quim2:response.finq2});grades.push(response.grades[0]);grades.shift();setSubjectName(response.grades[0].subject_name);
       dismiss(); setRepetir(true)});
     }
 
     else{
-        await studentGrades(academicPeriod).then(response => {
+        await studentGrades(academicPeriod, localStorage.getItem("access_token")).then(response => {
           if(subjectNameParam === ""){
           grades.push(response.grades.find(grade => grade.subject_id === +id  ))}
           else{
@@ -272,7 +272,8 @@ const SubjectPage: React.FC = () => {
         message: 'Cargando...',
       })
       Object.values(tempGrades).some(item=> {if(item === undefined){item = ""}});
-      await updateGrades(studentId,subjectId,tempGrades).then(response =>{dismiss();showAlert(response.message)}).catch(() => {dismiss();showAlert("Error en la actualizacion")});
+      await updateGrades(studentId,subjectId,localStorage.getItem("access_token"),tempGrades).then(response =>{console.log(response);
+       dismiss();showAlert(response.message)}).catch(() => {dismiss();showAlert("Error en la actualizacion")});
       
     }  
   }

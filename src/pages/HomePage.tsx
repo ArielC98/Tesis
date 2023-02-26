@@ -73,7 +73,7 @@ const HomePage: React.FC = () => {
   async function handleStudentGrades(period: string) {
     present({message:"Cargando materias..."});
     const materias = []
-    await studentGrades(period).then(response => {response.grades.map((subject) => {materias.push(subject);setIsLoading(false);setSubjectList(materias)});dismiss()}).catch(() => {showAlert("Periodo no disponible");dismiss()})
+    await studentGrades(period,localStorage.getItem("access_token")).then(response => {response.grades.map((subject) => {materias.push(subject);setIsLoading(false);setSubjectList(materias)});dismiss()}).catch(() => {showAlert("Periodo no disponible");dismiss()})
     
   }
   

@@ -161,7 +161,7 @@ const ReportPage: React.FC = () => {
       }
       else{
 
-        studentGrades(period).then(response => response.grades.map((subject) => {subjectList.push(subject)
+        studentGrades(period,localStorage.getItem("access_token")).then(response => response.grades.map((subject) => {subjectList.push(subject)
         })
         )
         
