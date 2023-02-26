@@ -28,6 +28,7 @@ const SubjectPage: React.FC = () => {
   const {id, period} = useParams<RouteParams>(); //return an object with the parameters passed in the URL
   const [count, setCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [{quim1,quim2}, setQuimEnd] = useState({quim1:"",quim2:""});
   const [grades] = useState([{}]);
   const [subjects] = useState([]);
   const [present, dismiss] = useIonLoading();
@@ -145,7 +146,7 @@ const SubjectPage: React.FC = () => {
     })
 
     if(role === "teacher"){
-      await teacherGrades(studentId,subjectId).then(response =>{grades.push(response.grades[0]);grades.shift();setSubjectName(response.grades[0].subject_name);
+      await teacherGrades(studentId,subjectId).then(response =>{setQuimEnd({quim1:response.finq1,quim2:response.finq2});grades.push(response.grades[0]);grades.shift();setSubjectName(response.grades[0].subject_name);
       dismiss(); setRepetir(true)});
     }
 
@@ -198,8 +199,16 @@ const SubjectPage: React.FC = () => {
   //Funcion para actualizar las calificaciones
   async function handleUpdate (studentId: string, subjectId: string) {
 
+    console.log(Date.parse(quim1),quim2);
+    const quim1Date = new Date(quim1);
+    const quim2Date = new Date(quim2);
+    const currentDate = new Date();
+
+    const quim1GradesAvailable = quim1Date.getTime() >= currentDate.getTime(); 
+    const quim2GradesAvailable = quim2Date.getTime() >= currentDate.getTime() && !quim1GradesAvailable; 
     //Se actualizan las unicas notas que deberian modificarse
-    
+
+
     const tempGrades = {
       p1q1:rowDataTeacher[0]?.puntaje,
       p2q1:rowDataTeacher[1]?.puntaje,
@@ -222,6 +231,31 @@ const SubjectPage: React.FC = () => {
     if(tempGrades.remedial === undefined){tempGrades.remedial = ""};
     if(tempGrades.gracia === undefined){tempGrades.gracia = ""};
 
+    // if(quim1GradesAvailable){
+    //   delete tempGrades.p1q2;
+    //   delete tempGrades.p2q2;
+    //   delete tempGrades.p3q2;
+    //   delete tempGrades.supletorio;
+    //   delete tempGrades.remedial;
+    //   delete tempGrades.gracia;
+    // }
+    // else if(quim2GradesAvailable){
+    //   delete tempGrades.p1q1;
+    //   delete tempGrades.p2q1;
+    //   delete tempGrades.p3q1;
+    //   delete tempGrades.supletorio;
+    //   delete tempGrades.remedial;
+    //   delete tempGrades.gracia;
+    // }
+    // else{
+    //   delete tempGrades.p1q1;
+    //   delete tempGrades.p2q1;
+    //   delete tempGrades.p3q1;
+    //   delete tempGrades.p1q2;
+    //   delete tempGrades.p2q2;
+    //   delete tempGrades.p3q2;
+    // }
+
     const isBetweenValues = (currentValue: number) => currentValue <= 10.00 && currentValue >= 0.00;
     const isNull = (currentValue) => currentValue === null  || currentValue === "" || currentValue === undefined;
 
@@ -232,6 +266,7 @@ const SubjectPage: React.FC = () => {
       
     }
     else{
+      console.log(tempGrades);
       
       present({
         message: 'Cargando...',
@@ -367,7 +402,7 @@ const SubjectPage: React.FC = () => {
             <IonCol></IonCol>
               <IonCol size='7'>
               <IonButton hidden = {role === "student"} className= {role === "teacher"?'step15':""}  expand= 'block' color="warning"
-                onClick={e =>  handleUpdate (students[count].id,id)}
+                onClick={() => handleUpdate (students[count].id,id)}
               >Guardar</IonButton>
               </IonCol>
               <IonCol></IonCol>
