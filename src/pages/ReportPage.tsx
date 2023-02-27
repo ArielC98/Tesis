@@ -114,7 +114,7 @@ const ReportPage: React.FC = () => {
     })
 
     if(role === "teacher"){
-    teacherReport(id).then(response => { 
+    teacherReport(id,localStorage.getItem('access_token')).then(response => { 
       
 
       
@@ -165,7 +165,7 @@ const ReportPage: React.FC = () => {
         })
         )
         
-        studentReport(period).then(response => { 
+        studentReport(period, localStorage.getItem("access_token")).then(response => { 
     
           
           info.push(response.information.name);

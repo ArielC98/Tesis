@@ -1,10 +1,10 @@
-export async function teacherReport(subjectId: string) {
+export async function teacherReport(subjectId: string, token:string) {
 
     return await fetch(`https://sismds.herokuapp.com/api/teacher/${subjectId}/report`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem("access_token")
+            'Authorization': 'Bearer ' + token
         }
     })
     .then(response => response.json()).then(response => response.data)
@@ -23,12 +23,12 @@ export async function reportFilters() {
     .then(response => response.json()).then(response => response.data)
 }
 
-export async function studentReport(period:string){
+export async function studentReport(period:string, token:string){
     return await fetch(`https://sismds.herokuapp.com/api/student/${period}/report`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem("access_token")
+            'Authorization': 'Bearer ' + token
         }
     })
     .then(response => response.json()).then(response => response.data)
