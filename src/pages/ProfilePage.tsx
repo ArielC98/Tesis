@@ -2,7 +2,7 @@ import { IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonImg, 
 import { useEffect, useState } from 'react';
 import Joyride,{ Step } from 'react-joyride';
 import { useAuth } from '../data/auth';
-import { userData, updateProfileData, updateProfilePic } from '../data/information';
+import { userData, updateProfileData, updateProfilePic } from '../data/profile';
 
 
 interface State{
@@ -109,17 +109,17 @@ const ProfilePage: React.FC = () => {
         })
 
         if(role === "teacher"){
-            await updateProfileData({
+            await updateProfileData(localStorage.getItem("access_token"),{
                 "personal_phone":mobilePhone,
                 "home_phone":homePhone,
                 "email":email,
                 "address":address
             }).then(()=>{dismiss();
             showAlert("Información actualizada con éxito")}).catch(() => {dismiss();showAlert("Error al actualizar datos")});
-            await updateProfilePic(image).catch(() => {dismiss();showAlert("Error al actualizar foto de perfil")});
+            await updateProfilePic(localStorage.getItem("access_token"),image).catch(() => {dismiss();showAlert("Error al actualizar foto de perfil")});
         }
         else{
-            await updateProfilePic(image).then(()=>{dismiss();
+            await updateProfilePic(localStorage.getItem("access_token"),image).then(()=>{dismiss();
                 showAlert("Información actualizada con éxito")}).catch(() => {dismiss();showAlert("Error al actualizar foto de perfil")});
             
         }
@@ -129,7 +129,7 @@ const ProfilePage: React.FC = () => {
     
 
     useEffect(() => {
-        const information = userData();
+        const information = userData(localStorage.getItem("access_token"));
         
         information.then(response => {
             setAvatar(response.data.avatar);

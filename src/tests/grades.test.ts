@@ -1,4 +1,3 @@
-import { loginUser } from "../data/auth";
 import { teacherGrades, updateGrades,studentGrades } from "../data/grades";
 
 

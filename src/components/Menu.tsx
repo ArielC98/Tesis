@@ -15,7 +15,7 @@ import {
 import { useLocation } from 'react-router-dom';
 import { archiveOutline, archiveSharp, bookmarkOutline, code, codeOutline, grid, gridOutline, heartOutline, heartSharp, home, homeOutline, link, linkOutline, list, mailOutline, mailSharp, newspaperOutline, paperPlaneOutline, paperPlaneSharp, person, personOutline, settings, settingsOutline, shareSocial, trashOutline, trashSharp, warningOutline, warningSharp } from 'ionicons/icons';
 import './Menu.css';
-import { userData } from '../data/information';
+import { userData } from '../data/profile';
 import { useEffect, useState } from 'react';
 import Joyride, { Step } from 'react-joyride';
 
@@ -81,7 +81,7 @@ const Menu: React.FC = () => {
 
   useEffect(() =>{
 
-    userData().then(response => {
+    userData(localStorage.getItem("access_token")).then(response => {
 
       setAvatar(response.data.avatar);
       setName(response.data.user.name);
