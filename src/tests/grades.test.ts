@@ -1,12 +1,14 @@
 import { teacherGrades, updateGrades,studentGrades } from "../data/grades";
 
 
+//para probar, usar access tokens generados en la sesion 
+
 describe('Notas de estudiantes', ()=>{
     test('Informacion de calificaciones del profesor', async() =>{
         
         const studentId = "48"
         const subjectId = "5"
-        const access_token = "1917|Dv1nOaTm2ZPFSoXyVwY94F5oJSxGSDS3b0hmIuVK"
+        const access_token = "1939|9NmDVuj6pNxgeu6GjZClesh4CMT0hTXPWjBgGkSo"
 
         return await teacherGrades(studentId,subjectId,access_token).then(value =>
     
@@ -17,7 +19,7 @@ describe('Notas de estudiantes', ()=>{
         
         const studentId = "48"
         const subjectId = "5"
-        const access_token = "1917|Dv1nOaTm2ZPFSoXyVwY94F5oJSxGSDS3b0hmIuVK"
+        const access_token = "1939|9NmDVuj6pNxgeu6GjZClesh4CMT0hTXPWjBgGkSo"
         const grades = {
             p1q1:"1.00",
             p2q1:"2.00",
@@ -37,7 +39,7 @@ describe('Notas de estudiantes', ()=>{
     })
     test("Informacion de calificaiones del estudiante", async() => {
         const academicPeriod = '1'
-        const acces_token ="1918|tIl1eU9Et1WpRV9SLOd5Twr3wCQYdA3nnQzm5VE3"
+        const acces_token ="1938|OoEiSwhJQLKiGP8sbJDp7yTzKeGcXzRRG9CpPxQM"
 
         return await studentGrades(academicPeriod,acces_token).then(value =>
             expect(value.grades.length).toBeGreaterThan(0)    

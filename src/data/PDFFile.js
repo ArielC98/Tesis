@@ -69,7 +69,7 @@ export const createPDF = (role, data, information) => {
         },
         images:{
             logo:{
-                url:"https://cdn-icons-png.flaticon.com/512/2231/2231696.png"
+                url:"https://scontent.fuio5-1.fna.fbcdn.net/v/t39.30808-6/271965798_399110665345469_3163107400069544356_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=dWkCiYNTIZcAX_9RUvC&_nc_ht=scontent.fuio5-1.fna&oh=00_AfCU8jRKtfZkgS-prlL8uUvftgOV8hczm07YSXDLOhpFGQ&oe=6403CD52"
                 
             }
         }

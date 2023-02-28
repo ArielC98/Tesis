@@ -1,5 +1,7 @@
 import {studentReport, teacherReport} from '../data/report';
 
+//para probar, usar access tokens generados en la sesion 
+
 describe('Reportes de calificaciones',()=>{
 
     const teacher_token = "1922|WbvE9YSXHy6NiA369a5lHcrC5irJ43cWjdJeXjWG"

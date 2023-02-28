@@ -116,12 +116,15 @@ const ProfilePage: React.FC = () => {
                 "address":address
             }).then(()=>{dismiss();
             showAlert("Información actualizada con éxito")}).catch(() => {dismiss();showAlert("Error al actualizar datos")});
-            await updateProfilePic(localStorage.getItem("access_token"),image).catch(() => {dismiss();showAlert("Error al actualizar foto de perfil")});
+            if(image !== undefined){
+                await updateProfilePic(localStorage.getItem("access_token"),image).catch(() => {dismiss();showAlert("Error al actualizar foto de perfil")});
+            }
         }
         else{
+            if(image !== undefined){
             await updateProfilePic(localStorage.getItem("access_token"),image).then(()=>{dismiss();
                 showAlert("Información actualizada con éxito")}).catch(() => {dismiss();showAlert("Error al actualizar foto de perfil")});
-            
+            }
         }
         
     }

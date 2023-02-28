@@ -199,7 +199,6 @@ const SubjectPage: React.FC = () => {
   //Funcion para actualizar las calificaciones
   async function handleUpdate (studentId: string, subjectId: string) {
 
-    console.log(Date.parse(quim1),quim2);
     const quim1Date = new Date(quim1);
     const quim2Date = new Date(quim2);
     const currentDate = new Date();
@@ -266,13 +265,12 @@ const SubjectPage: React.FC = () => {
       
     }
     else{
-      console.log(tempGrades);
       
       present({
         message: 'Cargando...',
       })
       Object.values(tempGrades).some(item=> {if(item === undefined){item = ""}});
-      await updateGrades(studentId,subjectId,localStorage.getItem("access_token"),tempGrades).then(response =>{console.log(response);
+      await updateGrades(studentId,subjectId,localStorage.getItem("access_token"),tempGrades).then(response =>{
        dismiss();showAlert(response.message)}).catch(() => {dismiss();showAlert("Error en la actualizacion")});
       
     }  

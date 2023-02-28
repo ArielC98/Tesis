@@ -1,5 +1,7 @@
 import{userData,updateProfileData} from '../data/profile'
 
+//para probar, usar access tokens generados en la sesion 
+
 describe('Perfil personal',()=>{
 
     const teacher_token = "1920|TmVtIsl9CWJhPxD3qPVZXqToTmbgtnDyAmknvSZn"
