@@ -57,5 +57,5 @@ Para instalar el proyecto, se debe:
     5. Ejecutar el comando 
 
 ```bash
-  ionic cap run adroid --livereload --external
+  ionic cap run android --livereload --external
 ```
