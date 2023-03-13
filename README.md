@@ -54,7 +54,7 @@ Para instalar el proyecto, se debe:
     4. Para visualizar cambios en tiempo real en un dispositivo móvil primero se debe configurar el dispositivo en Android Studio siguiendo los pasos del siguiente enlace:
 [Configurar un dispositivo físico en Android Studio](https://developer.android.com/studio/run/device?hl=es-419)
 
-    5. Ejebutar el comando 
+    5. Ejecutar el comando 
 
 ```bash
   ionic cap run adroid --livereload --external
