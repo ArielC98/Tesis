@@ -1,7 +1,7 @@
 import { loginUser } from "../data/auth";
 
-const credencialesProfesor = {"identification":"66666","password":"Sismds1?"}
 const credencialesEstudiante = {"identification":"4545454545","password":"Sismds1?"}
+const credencialesProfesor = {"identification":"66666","password":"Sismds1?"}
 
 describe('Inicio de sesion para profesor', () =>{
 

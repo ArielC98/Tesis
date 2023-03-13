@@ -4,8 +4,8 @@ import{userData,updateProfileData} from '../data/profile'
 
 describe('Perfil personal',()=>{
 
-    const teacher_token = "1920|TmVtIsl9CWJhPxD3qPVZXqToTmbgtnDyAmknvSZn"
-    const student_token = "1921|09BIsCeMrfJzyhKQpjQ5Oks6l1HQiQLFXBJaGo2q"
+    const teacher_token = "1960|B9et6w5QqglAiHpflFkLGVskgfO7oCFmQVZif6EQ"
+    const student_token = "1961|1LpMGBd69rYqWItx1w1hkiMAhBsv6sF8OmKUPak0"
 
     test('Informacion de usuario profesor',async()=>{
 

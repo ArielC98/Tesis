@@ -4,12 +4,12 @@ import {studentReport, teacherReport} from '../data/report';
 
 describe('Reportes de calificaciones',()=>{
 
-    const teacher_token = "1922|WbvE9YSXHy6NiA369a5lHcrC5irJ43cWjdJeXjWG"
-    const student_token = "1921|09BIsCeMrfJzyhKQpjQ5Oks6l1HQiQLFXBJaGo2q"
+    const teacher_token = "1963|SO4GrESeRBofF2xOFkaiTE9Wy5PQ1zqkUA9m6FQe"
+    const student_token = "1962|ixEnn2cXjpYSqBHvdWev3dPsFkhgGYcdEQydNgxp"
 
     test("Reporte de calificaciones del profesor", async () => {
 
-        return await teacherReport("5",teacher_token).then(value =>{
+        return await teacherReport("2",teacher_token).then(value =>{
 
             expect(value.grades.length).toBeGreaterThan(0)
 
